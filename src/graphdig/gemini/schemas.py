@@ -29,14 +29,40 @@ class GPanel(BaseModel):
     confidence: float = Field(description="0-1 confidence this is a data-bearing chart panel")
 
 
-class PanelsResponse(BaseModel):
+class TriageResponse(BaseModel):
+    """One-shot page understanding: classification + panels + metadata."""
+
     # plain int: Gemini's schema converter rejects integer Literal enums
     rotation_deg: int = Field(
-        description="clockwise rotation in degrees (0, 90, 180 or 270) needed so axis "
-                    "labels read horizontally; 0 if upright")
+        description="clockwise rotation in degrees (0, 90, 180 or 270) needed so text and "
+                    "axis labels read horizontally and upright; 0 if already upright")
+    chart_kind: Literal["line_chart", "multi_panel_line_chart", "bar_chart",
+                        "scatter", "table", "text_page", "other"] = Field(
+        description="what this page fundamentally is")
     page_kind: str = Field(default="", description="short free-text page characterization, "
                                                    "e.g. 'annual sheet with 12 monthly panels'")
+    y_axis_labels_present: bool = Field(
+        description="true if the vertical axis carries readable numeric tick labels")
+    value_labels_on_curve: bool = Field(
+        default=False,
+        description="true if numeric values are written directly along the curve/points "
+                    "instead of (or in addition to) an axis scale")
+    y_scale_guess: Literal["linear", "log", "unknown"] = "unknown"
     panels: list[GPanel]
+    # page-level metadata (was a separate call)
+    title: str = ""
+    station: str = Field(default="", description="measurement station / place name if stated")
+    year: int = Field(default=0, description="calendar year of the data; 0 if unknown")
+    date_range: str = Field(default="", description="covered period as printed, verbatim")
+    y_unit: str = Field(default="", description="declared measurement unit, verbatim")
+    unit_transition_present: bool = Field(
+        default=False, description="true if the unit system changes within this chart")
+    unit_transition_date: str = Field(
+        default="", description="ISO date of the unit change if visible, else ''")
+    language: str = ""
+    handwritten_annotations: bool = False
+    notes: str = Field(default="", description="anything a data curator should know")
+    confidence: float = 0.0
 
 
 class GTick(BaseModel):
@@ -63,25 +89,28 @@ class AxisCalResponse(BaseModel):
     confidence: float = Field(description="0-1 overall confidence in the readings")
 
 
-class MetadataResponse(BaseModel):
-    title: str = ""
-    station: str = Field(default="", description="measurement station / place name if stated")
-    year: int = Field(default=0, description="calendar year of the data; 0 if unknown")
-    date_range: str = Field(default="", description="covered period as printed, verbatim")
-    y_unit: str = Field(default="", description="declared measurement unit")
-    unit_transition_present: bool = Field(
-        default=False, description="true if the unit system changes within this chart")
-    unit_transition_date: str = Field(
-        default="", description="ISO date of the unit change if visible, else ''")
-    language: str = ""
-    handwritten_annotations: bool = False
-    notes: str = ""
-    confidence: float = 0.0
-
-
 class GPoint(BaseModel):
     x_1000: int
     y_1000: int
+
+
+class GCurveLabel(BaseModel):
+    x_1000: int = Field(description="x of the point on the curve this value belongs to")
+    y_1000: int = Field(description="y of the point on the curve this value belongs to")
+    value: float = Field(description="the handwritten/printed numeric value")
+    label_text: str = Field(default="", description="the label exactly as written")
+    legible: bool = True
+
+
+class CurveLabelsResponse(BaseModel):
+    """Values written along the curve - used to derive a pixel->value calibration when the
+    chart has no labelled axis."""
+
+    labels: list[GCurveLabel] = Field(description="EVERY legible numeric value written "
+                                                  "along the curve, with the curve point "
+                                                  "it belongs to")
+    unit_text: str = Field(default="", description="unit if stated anywhere, verbatim")
+    confidence: float = 0.0
 
 
 class BaselinePointsResponse(BaseModel):

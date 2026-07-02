@@ -22,8 +22,7 @@ from graphdig.gemini.schemas import (
     GPanel,
     GPoint,
     GTick,
-    MetadataResponse,
-    PanelsResponse,
+    TriageResponse,
 )
 from graphdig.geometry import Box1000, bbox_1000_to_px
 from graphdig.pipeline import Runner
@@ -44,11 +43,13 @@ def _canned_responses(spec):
                 x1=_to_1000(bx1, w), y1=_to_1000(by1, h))
     gplot = GBox(x0=_to_1000(px0, w), y0=_to_1000(py0, h),
                  x1=_to_1000(px1, w), y1=_to_1000(py1, h))
-    panels_resp = PanelsResponse(rotation_deg=0, page_kind="single synthetic chart",
-                                 panels=[GPanel(box=gbox, plot_area=gplot,
-                                                label="Synthetic Gauge",
-                                                x_start_label="1", x_end_label="31",
-                                                confidence=0.95)])
+    triage_resp = TriageResponse(
+        rotation_deg=0, chart_kind="line_chart", page_kind="single synthetic chart",
+        y_axis_labels_present=True, value_labels_on_curve=False, y_scale_guess="linear",
+        panels=[GPanel(box=gbox, plot_area=gplot, label="Synthetic Gauge",
+                       x_start_label="1", x_end_label="31", confidence=0.95)],
+        title="Synthetic Gauge 1848", station="Synthetic", year=1848, y_unit="mm",
+        language="de", confidence=0.9)
 
     # calibration ticks are reported in CROP coordinates: replicate the stage's crop math
     from graphdig.artifacts import Panel
@@ -67,9 +68,6 @@ def _canned_responses(spec):
                                x_kind="numeric", x_start_label="1", x_end_label="31",
                                confidence=0.9)
 
-    meta_resp = MetadataResponse(title="Synthetic Gauge 1848", station="Synthetic",
-                                 year=1848, y_unit="mm", language="de", confidence=0.9)
-
     # baseline: Gemini reports the printed zero line a few px off; CV must snap it back
     xs_1000 = np.linspace(30, 970, N_SAMPLE_POINTS).astype(int)
     base_points = [GPoint(x_1000=int(x),
@@ -79,9 +77,8 @@ def _canned_responses(spec):
                                        confidence=0.85)
 
     return {
-        "PANELS_V1_GENERIC": panels_resp,
+        "TRIAGE_V1_GENERIC": triage_resp,
         "CALIB_V1": cal_resp,
-        "META_V1": meta_resp,
         "BASELINE_V1": base_resp,
     }
 
@@ -91,7 +88,7 @@ def offline_run(tmp_path, synth_chart):
     input_path, spec = synth_chart
     cfg = RunConfig(input=input_path, out_parent=tmp_path / "runs",
                     profile_name="generic",
-                    stages=["ingest", "panels", "calibrate", "metadata", "baseline"],
+                    stages=["ingest", "triage", "calibrate", "baseline"],
                     baseline_enabled=True, workers=1)
     fake = FakeGeminiClient(_canned_responses(spec))
     rc = Runner(cfg, gemini_client=fake).run()
@@ -153,9 +150,9 @@ def test_baseline_cv_refinement_snaps_to_printed_line(offline_run):
 def test_low_confidence_panel_flagged(tmp_path, synth_chart):
     input_path, spec = synth_chart
     responses = _canned_responses(spec)
-    responses["PANELS_V1_GENERIC"].panels[0].confidence = 0.2
+    responses["TRIAGE_V1_GENERIC"].panels[0].confidence = 0.2
     cfg = RunConfig(input=input_path, out_parent=tmp_path / "runs2",
-                    profile_name="generic", stages=["ingest", "panels"], workers=1)
+                    profile_name="generic", stages=["ingest", "triage"], workers=1)
     rc = Runner(cfg, gemini_client=FakeGeminiClient(responses)).run()
     assert rc == 0
     run_dir = next((tmp_path / "runs2").iterdir())

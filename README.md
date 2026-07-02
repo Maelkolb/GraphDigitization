@@ -22,17 +22,19 @@ Reference data: [Zenodo 17296751](https://zenodo.org/records/17296751) (CC-BY-4.
 
 ```mermaid
 flowchart LR
-    A[scan] --> B[panels<br/><i>Gemini</i>]
-    B --> C[calibrate<br/><i>Gemini + least squares</i>]
-    B --> D[metadata<br/><i>Gemini</i>]
+    A[scan] --> B[triage<br/><i>Gemini</i><br/>chart kind, rotation,<br/>panels, metadata]
+    B --> C[calibrate<br/><i>Gemini + least squares</i><br/>axis ticks or curve labels]
     C --> E[baseline<br/><i>Gemini + CV, optional</i>]
     E --> F[preprocess<br/>crop + x-stretch 2.0]
     F --> G[extract<br/><i>LineFormer</i><br/>local CPU / Colab GPU]
     G --> H[select<br/>s&alpha; + Gemini pick]
     H --> I[series<br/>px &rarr; physical units]
-    I --> J[qc<br/><i>Gemini judge</i>]
+    I --> J[qc<br/><i>Gemini judge,<br/>auto-reselect on major</i>]
+    J -->|major: reject candidate| H
     J --> K[report + review flags]
 ```
+
+How it works in detail: [`docs/how_it_works.md`](docs/how_it_works.md).
 
 Every stage writes typed JSON artifacts into a run directory (resumable, inspectable,
 remotely executable) and everything below a confidence gate lands in `review/flags.json`

@@ -86,8 +86,8 @@ def evaluate_panels_on_pseudo_page(scan_id: str, year: int, out_dir: Path,
     """Run the panels stage (danube prompt) on a stitched pseudo-page. Live API."""
     from graphdig.config import GeminiConfig
     from graphdig.gemini.client import GeminiClient
-    from graphdig.gemini.prompts import panels_prompt
-    from graphdig.gemini.schemas import PanelsResponse
+    from graphdig.gemini.prompts import triage_prompt
+    from graphdig.gemini.schemas import TriageResponse
     from graphdig.geometry import Box1000, bbox_1000_to_px
 
     paths = paths or ZenodoPaths()
@@ -98,9 +98,9 @@ def evaluate_panels_on_pseudo_page(scan_id: str, year: int, out_dir: Path,
     page_path = out_dir / f"pseudo_{scan_id}.png"
     pseudo.image.save(page_path)
 
-    prompt_id, prompt = panels_prompt("danube")
+    prompt_id, prompt = triage_prompt("danube")
     result = client.generate_json(images=[pseudo.image], prompt=prompt,
-                                  schema=PanelsResponse, prompt_id=prompt_id,
+                                  schema=TriageResponse, prompt_id=prompt_id,
                                   thinking_level=cfg.thinking_panels,
                                   media_resolution="high")
     if not result.ok:

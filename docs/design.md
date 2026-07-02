@@ -8,10 +8,10 @@ replaces each with a Gemini 3.5 Flash call plus deterministic verification:
 
 | manual step (paper) | human cost | automated by |
 |---|---|---|
-| month/panel bounding boxes (`month_annotator`) | ~160 s/gauge-year | `stages/panels.py` + CV gridline edge snapping |
-| y-axis anchor extraction (2 anchors) | included above | `stages/calibrate.py`: Gemini reads ALL legible ticks, IRLS/MAD least-squares fit with R²/residual gates (self-verification the 2-anchor method cannot do) |
+| month/panel bounding boxes (`month_annotator`) | ~160 s/gauge-year | `stages/triage.py` (one-shot classification + panels + metadata) + CV gridline edge snapping |
+| y-axis anchor extraction (2 anchors) | included above | `stages/calibrate.py`: Gemini reads ALL legible ticks (or values written along the curve on axis-less charts), IRLS/MAD least-squares fit with R²/residual gates (self-verification the 2-anchor method cannot do) |
 | zero-line polyline (`baseline_annotator.py`) | ~27 s/page | `stages/baseline.py`: Gemini seeds k points, CV snaps them sub-pixel to the dark ridge |
-| candidate pick + inspection (`inspector.py`) | ~3 s/month | `stages/select.py` (paper's s_alpha Eq. 12) + `stages/qc.py` (Gemini judge, verdict ok/minor/major) |
+| candidate pick + inspection (`inspector.py`) | ~3 s/month | `stages/select.py` (paper's s_alpha Eq. 12) + `stages/qc.py` (Gemini judge; majors trigger automatic candidate reselection) |
 
 Confidence-gated human fallback everywhere: anything below a gate lands in
 `review/flags.json` instead of failing silently or being trusted blindly.
@@ -29,9 +29,11 @@ Confidence-gated human fallback everywhere: anything below a gate lands in
 ## Artifact-based staged pipeline
 
 ```
-ingest -> panels -> calibrate -> metadata -> [baseline] -> preprocess
-       -> extract -> select -> series -> qc -> report
+ingest -> triage -> calibrate -> [baseline] -> preprocess
+       -> extract -> select -> series -> qc (auto-reselect loop) -> report
 ```
+
+Full walk-through: `docs/how_it_works.md`.
 
 Each stage reads/writes JSON+PNG artifacts in a run directory (`outputs/runs/<run_id>/`):
 `manifest.json` (config, stage status), `panels.json`, `calibration.json`,

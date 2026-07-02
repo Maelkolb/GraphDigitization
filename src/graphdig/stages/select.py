@@ -34,7 +34,7 @@ def _n_slices(cal, tile_id: str) -> int:
     return FALLBACK_SLICES
 
 
-def _gemini_pick(ctx: Context, tile, viable) -> int | None:
+def gemini_pick(ctx: Context, tile, viable) -> int | None:
     tile_img = Image.open(ctx.run_dir / tile.path)
     overlay_path = ctx.run_dir / "overlays" / f"pick_{tile.tile_id}.png"
     draw_candidates(tile_img,
@@ -78,7 +78,7 @@ def run(ctx: Context) -> None:
                     and (viable[0].s_alpha or 0) - (viable[1].s_alpha or 0) < gates.pick_margin)
         if near_tie:
             try:
-                pick = _gemini_pick(ctx, tile, viable)
+                pick = gemini_pick(ctx, tile, viable)
             except Exception as exc:  # no API key / network: score selection stands
                 ctx.add_flag("select", f"Gemini pick unavailable ({exc}); using s_alpha",
                              panel_id=tile_id, severity="info")

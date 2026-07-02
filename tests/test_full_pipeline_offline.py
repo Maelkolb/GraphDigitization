@@ -48,7 +48,7 @@ def full_run(tmp_path, synth_chart):
     cfg1 = RunConfig(input=input_path, out_parent=tmp_path / "runs",
                      profile_name="generic", baseline_enabled=True, workers=1,
                      extractor="stub",
-                     stages=["ingest", "panels", "calibrate", "metadata", "baseline",
+                     stages=["ingest", "triage", "calibrate", "baseline",
                              "preprocess"])
     assert Runner(cfg1, gemini_client=fake).run() == 0
     run_dir = next((tmp_path / "runs").iterdir())

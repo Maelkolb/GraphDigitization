@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 from graphdig.profiles import PROFILES, Profile
 
 DEFAULT_STAGES = [
-    "ingest", "panels", "calibrate", "metadata", "baseline",
+    "ingest", "triage", "calibrate", "baseline",
     "preprocess", "extract", "select", "series", "qc", "report",
 ]
 
@@ -40,6 +40,8 @@ class Gates(BaseModel):
     alpha_coverage: float = 0.69  # paper Eq. 12
     pick_margin: float = 0.05  # invoke Gemini pick when top-2 s_alpha closer than this
     qc_block_on: tuple[str, ...] = ("major",)
+    qc_auto_reselect: bool = True  # major verdict -> reject candidate, reselect, re-judge
+    qc_max_reselect: int = 1  # bounded retries per panel
 
 
 class RunConfig(BaseModel):

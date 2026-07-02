@@ -10,23 +10,38 @@ COORD_RULES = (
     "x measured from the left edge, y from the top edge."
 )
 
-PANELS_V1_GENERIC = f"""You analyze scans of historical documents containing hand-drawn or printed line charts.
-Identify every chart panel on this page: a region with a value axis and a data curve.
-For each panel report its outer bounding box (including axis tick labels) and its inner
-plot area (the data region strictly inside the axes). Read the panel's title/label and the
-first and last tick labels of the horizontal axis, verbatim. If the page must be rotated for
-the axis labels to read horizontally, report the needed clockwise rotation and describe all
-boxes in the coordinates of the image AS SHOWN (unrotated).
-Ignore tables, text blocks, stamps, and decorative elements.
+TRIAGE_V1_GENERIC = f"""You analyze scans of historical documents containing charts.
+In ONE pass, characterize this page:
+1. Orientation: the clockwise rotation (0/90/180/270) needed so text and axis labels read
+   horizontally AND upright. Report 0 only if the page is already upright.
+2. Classification: what kind of page this is (line chart, multi-panel line chart, table,
+   text page, ...); whether the vertical axis carries readable numeric tick labels; whether
+   numeric values are written directly along the curve/points; linear or logarithmic scale.
+3. Panels: every chart panel (a region with a value axis and a data curve). For each report
+   its outer bounding box (including axis tick labels), its inner plot area (the data region
+   strictly inside the axes), the panel title/label verbatim, and the first and last tick
+   labels of the horizontal axis. Describe all boxes in the coordinates of the image AS
+   SHOWN (unrotated). Ignore tables, text blocks, stamps, and decorative elements.
+4. Metadata: title, station/place, calendar year, covered date range, declared measurement
+   unit, unit changes, document language, presence of handwritten annotations, and any notes
+   a data curator should know. Report only what is visible; use empty values otherwise.
 {COORD_RULES}"""
 
-PANELS_V1_DANUBE = f"""You analyze scans of nineteenth-century Bavarian river gauge charts.
+TRIAGE_V1_DANUBE = f"""You analyze scans of nineteenth-century Bavarian river gauge charts.
 A full annual sheet contains 12 monthly chart panels arranged left to right (January to
 December), each with a day grid and a hand-drawn water-level curve; a page may also be a
-single monthly tile (then report exactly one panel). For each panel report its outer bounding
-box and its inner plot area (the region between the first and last day gridline - precise
-horizontal edges matter: one gridline interval equals one day). Read the month/panel label
-and the first and last day labels of the horizontal axis, verbatim.
+single monthly tile (then report exactly one panel covering the chart area).
+In ONE pass, characterize this page:
+1. Orientation: clockwise rotation (0/90/180/270) needed so labels read horizontally and
+   upright; 0 if already upright.
+2. Classification: page kind; whether the vertical axis carries readable numeric tick
+   labels; whether values are written along the curve; linear or logarithmic scale.
+3. Panels: outer bounding box and inner plot area per panel (the region between the first
+   and last day gridline - precise horizontal edges matter: one gridline interval equals
+   one day), the month/panel label, and the first and last day labels, verbatim.
+4. Metadata: station, year, date range, unit (Bavarian Fuss before 1872-04-01, millimetres
+   after - if this sheet spans that date the change is visible at the March/April
+   boundary), language, handwritten annotations, curator notes.
 {COORD_RULES}"""
 
 CALIB_V1 = f"""This is one chart panel cropped from a historical scan.
@@ -40,17 +55,18 @@ Read the axis calibration:
 Report values exactly as printed - do not convert units.
 {COORD_RULES}"""
 
-META_V1 = """This is a scan of a historical chart page.
-Extract document metadata: title, measurement station or place, calendar year, covered date
-range, declared measurement unit, whether the unit system changes within the chart (and the
-change date if visible), document language, whether handwritten annotations are present, and
-any notes a data curator should know (damage, corrections, overwriting).
-Report only what is visible; use empty values when something is not stated."""
+CALIB_V1_RETRY = CALIB_V1 + """
+NOTE: a previous pass found no legible tick labels, but this chart is expected to carry
+them (possibly faint, handwritten, rotated, or at the panel edges). Look again carefully,
+including outside the plot frame; report every numeric label you can read with certainty."""
 
-META_V1_DANUBE = META_V1 + """
-Context: Bavarian Danube gauge sheets switched from Bavarian feet (Fuss) to millimetres on
-1872-04-01; if this sheet spans that date, the unit change should be visible at the
-March/April boundary."""
+CURVE_LABELS_V1 = f"""This is one chart panel cropped from a historical scan. The chart has
+numeric values written directly along the drawn curve (one value per marked point).
+Report EVERY legible value together with the position of the curve point it belongs to
+(the plotted point/marker, not the text itself). Mark values you cannot read with
+certainty as not legible instead of guessing. Include the measurement unit if stated
+anywhere on the panel.
+{COORD_RULES}"""
 
 BASELINE_V1 = f"""This is one chart panel cropped from a historical scan.
 The panel's printed zero/reference line is the horizontal gridline from which the curve's
@@ -72,22 +88,17 @@ extracted candidate curves drawn in distinct colors; the legend maps colors to c
 Pick the candidate that best follows the actually drawn data curve over the full width."""
 
 PROMPTS: dict[str, str] = {
-    "PANELS_V1_GENERIC": PANELS_V1_GENERIC,
-    "PANELS_V1_DANUBE": PANELS_V1_DANUBE,
+    "TRIAGE_V1_GENERIC": TRIAGE_V1_GENERIC,
+    "TRIAGE_V1_DANUBE": TRIAGE_V1_DANUBE,
     "CALIB_V1": CALIB_V1,
-    "META_V1": META_V1,
-    "META_V1_DANUBE": META_V1_DANUBE,
+    "CALIB_V1_RETRY": CALIB_V1_RETRY,
+    "CURVE_LABELS_V1": CURVE_LABELS_V1,
     "BASELINE_V1": BASELINE_V1,
     "QC_V1": QC_V1,
     "PICK_V1": PICK_V1,
 }
 
 
-def panels_prompt(variant: str) -> tuple[str, str]:
-    pid = "PANELS_V1_DANUBE" if variant == "danube" else "PANELS_V1_GENERIC"
-    return pid, PROMPTS[pid]
-
-
-def metadata_prompt(variant: str) -> tuple[str, str]:
-    pid = "META_V1_DANUBE" if variant == "danube" else "META_V1"
+def triage_prompt(variant: str) -> tuple[str, str]:
+    pid = "TRIAGE_V1_DANUBE" if variant == "danube" else "TRIAGE_V1_GENERIC"
     return pid, PROMPTS[pid]

@@ -28,17 +28,18 @@ def _client():
         pytest.skip(str(exc))
 
 
-def test_panels_on_forestry_chart():
-    from graphdig.gemini.prompts import panels_prompt
-    from graphdig.gemini.schemas import PanelsResponse
+def test_triage_on_forestry_chart():
+    from graphdig.gemini.prompts import triage_prompt
+    from graphdig.gemini.schemas import TriageResponse
 
     client = _client()
-    prompt_id, prompt = panels_prompt("generic")
+    prompt_id, prompt = triage_prompt("generic")
     result = client.generate_json(images=[SAMPLES / "forestry_A382_019.jpeg"],
-                                  prompt=prompt, schema=PanelsResponse,
+                                  prompt=prompt, schema=TriageResponse,
                                   prompt_id=prompt_id, thinking_level="high",
                                   media_resolution="high")
     assert result.ok, result.error
+    assert result.data.chart_kind in ("line_chart", "multi_panel_line_chart")
     assert len(result.data.panels) >= 1
     for p in result.data.panels:
         assert 0 <= p.box.x0 <= 1000 and 0 <= p.box.y1 <= 1000

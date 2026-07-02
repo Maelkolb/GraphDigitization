@@ -66,10 +66,22 @@ class Orientation(ArtifactModel):
     reason: str = ""
 
 
+class PageClassification(ArtifactModel):
+    """Triage verdict: what the page is and which digitization path applies."""
+
+    chart_kind: str = "line_chart"
+    page_kind: str = ""
+    y_axis_labels_present: bool = True
+    value_labels_on_curve: bool = False
+    y_scale_guess: Literal["linear", "log", "unknown"] = "unknown"
+    confidence: float = 0.0
+
+
 class PanelsArtifact(ArtifactModel):
     page_id: str
     image: ImageRef
     orientation: Orientation = Field(default_factory=Orientation)
+    classification: PageClassification = Field(default_factory=PageClassification)
     panels: list[Panel] = Field(default_factory=list)
     provenance: Provenance = Field(default_factory=Provenance)
 
@@ -228,6 +240,7 @@ class Selection(ArtifactModel):
 class TileLines(ArtifactModel):
     candidates: list[LineCandidate] = Field(default_factory=list)
     selected: Selection | None = None
+    rejected: list[int] = Field(default_factory=list)  # cand_ids vetoed by QC reselection
     error: str | None = None
 
 

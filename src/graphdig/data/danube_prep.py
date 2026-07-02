@@ -98,6 +98,6 @@ def prepare_run(scan_id: str, month: int, year: int,
                                    y_unit_declared=unit.canonical, confidence=1.0),
                   run_dir / "metadata.json")
 
-    for stage in ("ingest", "panels", "calibrate", "metadata"):
+    for stage in ("ingest", "triage", "calibrate"):
         stage_done(run_dir, manifest, stage)
     return run_dir
