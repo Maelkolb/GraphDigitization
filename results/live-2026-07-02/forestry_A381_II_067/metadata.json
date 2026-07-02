@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "title": "Fichten zur Probeflaeche No. 1 / No. 14",
+  "station": "Klingenbrunn",
+  "year": null,
+  "date_range": "",
+  "y_unit_declared": "",
+  "unit_transition": {
+    "schema_version": 1,
+    "present": true,
+    "date": null
+  },
+  "language": "German",
+  "handwritten_annotations": true,
+  "notes": "Two charts showing spruce tree growth (Fichten) for 'Probeflaeche No. 1' (200-year-old) and 'Probeflaeche No. 14' (115-year-old, Klingenbrunn). The horizontal axis shows a unit transition from 'Mil.' to 'Zoll' around values 17/18.",
+  "confidence": 0.9,
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "META_V1",
+    "thinking_level": "low",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 1174,
+      "candidates_token_count": 200,
+      "thoughts_token_count": 593,
+      "total_token_count": 1967
+    },
+    "timestamp": "2026-07-02T09:18:06.546389+00:00"
+  }
+}

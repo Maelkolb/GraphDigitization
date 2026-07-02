@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "major deviation: The red curve remains nearly flat along the bottom grid line, completely failing to follow the actual hand-drawn curve's trajectory and peaks.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p01.png"
+    }
+  ]
+}

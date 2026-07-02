@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "title": "Tannen, Fichten",
+  "station": "",
+  "year": null,
+  "date_range": "",
+  "y_unit_declared": "",
+  "unit_transition": {
+    "schema_version": 1,
+    "present": false,
+    "date": null
+  },
+  "language": "de",
+  "handwritten_annotations": false,
+  "notes": "The image contains two forestry growth or classification charts for 'Tannen' (firs) and 'Fichten' (spruces), marked as class III. u. IV.",
+  "confidence": 0.9,
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "META_V1",
+    "thinking_level": "low",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 1169,
+      "candidates_token_count": 136,
+      "thoughts_token_count": 573,
+      "total_token_count": 1878
+    },
+    "timestamp": "2026-07-02T09:17:15.996421+00:00"
+  }
+}

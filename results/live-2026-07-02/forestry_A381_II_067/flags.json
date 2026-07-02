@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p01",
+      "reason": "no usable axis fit (0 ticks)",
+      "severity": "blocking",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p02",
+      "reason": "no usable axis fit (0 ticks)",
+      "severity": "blocking",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p02",
+      "reason": "best candidate coverage 0.690 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01",
+      "reason": "no usable axis calibration",
+      "severity": "blocking",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p02",
+      "reason": "no usable axis calibration",
+      "severity": "blocking",
+      "artifact_ref": ""
+    }
+  ]
+}

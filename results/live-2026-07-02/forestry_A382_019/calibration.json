@@ -1,0 +1,610 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "y_axis": {
+        "schema_version": 1,
+        "scale": "linear",
+        "unit": {
+          "schema_version": 1,
+          "raw": "H",
+          "canonical": "H",
+          "to_mm": null
+        },
+        "ticks": [
+          {
+            "schema_version": 1,
+            "pixel": 137.302,
+            "value": 15.0,
+            "label_text": "15",
+            "legible": true,
+            "used": true,
+            "residual": -0.051066357668128504
+          },
+          {
+            "schema_version": 1,
+            "pixel": 162.503,
+            "value": 20.0,
+            "label_text": "20",
+            "legible": true,
+            "used": true,
+            "residual": 0.010654044396034124
+          },
+          {
+            "schema_version": 1,
+            "pixel": 188.573,
+            "value": 25.0,
+            "label_text": "25",
+            "legible": true,
+            "used": true,
+            "residual": -0.0979110569169066
+          },
+          {
+            "schema_version": 1,
+            "pixel": 213.774,
+            "value": 30.0,
+            "label_text": "30",
+            "legible": true,
+            "used": true,
+            "residual": -0.03619065485275286
+          },
+          {
+            "schema_version": 1,
+            "pixel": 238.97500000000002,
+            "value": 35.0,
+            "label_text": "35",
+            "legible": true,
+            "used": true,
+            "residual": 0.025529747211407994
+          },
+          {
+            "schema_version": 1,
+            "pixel": 264.176,
+            "value": 40.0,
+            "label_text": "40",
+            "legible": true,
+            "used": true,
+            "residual": 0.08725014927556884
+          },
+          {
+            "schema_version": 1,
+            "pixel": 290.24600000000004,
+            "value": 45.0,
+            "label_text": "45",
+            "legible": true,
+            "used": true,
+            "residual": -0.021314952037378987
+          },
+          {
+            "schema_version": 1,
+            "pixel": 315.447,
+            "value": 50.0,
+            "label_text": "50",
+            "legible": true,
+            "used": true,
+            "residual": 0.04040545002678897
+          },
+          {
+            "schema_version": 1,
+            "pixel": 340.648,
+            "value": 55.0,
+            "label_text": "55",
+            "legible": true,
+            "used": true,
+            "residual": 0.10212585209094271
+          },
+          {
+            "schema_version": 1,
+            "pixel": 366.71799999999996,
+            "value": 60.0,
+            "label_text": "60",
+            "legible": true,
+            "used": true,
+            "residual": -0.006439249221990906
+          },
+          {
+            "schema_version": 1,
+            "pixel": 391.919,
+            "value": 65.0,
+            "label_text": "65",
+            "legible": true,
+            "used": true,
+            "residual": 0.055281152842155734
+          },
+          {
+            "schema_version": 1,
+            "pixel": 417.989,
+            "value": 70.0,
+            "label_text": "70",
+            "legible": true,
+            "used": true,
+            "residual": -0.05328394847077789
+          },
+          {
+            "schema_version": 1,
+            "pixel": 443.19,
+            "value": 75.0,
+            "label_text": "75",
+            "legible": true,
+            "used": true,
+            "residual": 0.008436453593375859
+          },
+          {
+            "schema_version": 1,
+            "pixel": 468.391,
+            "value": 80.0,
+            "label_text": "80",
+            "legible": true,
+            "used": true,
+            "residual": 0.0701568556575296
+          },
+          {
+            "schema_version": 1,
+            "pixel": 494.46099999999996,
+            "value": 85.0,
+            "label_text": "85",
+            "legible": true,
+            "used": true,
+            "residual": -0.038408245655389806
+          },
+          {
+            "schema_version": 1,
+            "pixel": 519.662,
+            "value": 90.0,
+            "label_text": "90",
+            "legible": true,
+            "used": true,
+            "residual": 0.02331215640874973
+          },
+          {
+            "schema_version": 1,
+            "pixel": 545.732,
+            "value": 95.0,
+            "label_text": "95",
+            "legible": true,
+            "used": true,
+            "residual": -0.08525294490418389
+          },
+          {
+            "schema_version": 1,
+            "pixel": 570.933,
+            "value": 100.0,
+            "label_text": "100",
+            "legible": true,
+            "used": true,
+            "residual": -0.023532542840030146
+          },
+          {
+            "schema_version": 1,
+            "pixel": 596.134,
+            "value": 105.0,
+            "label_text": "105",
+            "legible": true,
+            "used": true,
+            "residual": 0.0381878592241236
+          },
+          {
+            "schema_version": 1,
+            "pixel": 622.204,
+            "value": 110.0,
+            "label_text": "110",
+            "legible": true,
+            "used": true,
+            "residual": -0.07037724208879581
+          },
+          {
+            "schema_version": 1,
+            "pixel": 647.405,
+            "value": 115.0,
+            "label_text": "115",
+            "legible": true,
+            "used": true,
+            "residual": -0.008656840024642065
+          },
+          {
+            "schema_version": 1,
+            "pixel": 672.606,
+            "value": 120.0,
+            "label_text": "120",
+            "legible": true,
+            "used": true,
+            "residual": 0.05306356203951168
+          },
+          {
+            "schema_version": 1,
+            "pixel": 698.676,
+            "value": 125.0,
+            "label_text": "125",
+            "legible": true,
+            "used": true,
+            "residual": -0.05550153927345036
+          },
+          {
+            "schema_version": 1,
+            "pixel": 723.877,
+            "value": 130.0,
+            "label_text": "130",
+            "legible": true,
+            "used": true,
+            "residual": 0.006218862790746016
+          },
+          {
+            "schema_version": 1,
+            "pixel": 749.078,
+            "value": 135.0,
+            "label_text": "135",
+            "legible": true,
+            "used": true,
+            "residual": 0.06793926485488555
+          },
+          {
+            "schema_version": 1,
+            "pixel": 775.148,
+            "value": 140.0,
+            "label_text": "140",
+            "legible": true,
+            "used": true,
+            "residual": -0.04062583645804807
+          }
+        ],
+        "fit": {
+          "schema_version": 1,
+          "method": "irls_mad",
+          "slope": 0.19595570008872035,
+          "intercept": -11.854043175913352,
+          "scale": "linear",
+          "r2": 0.9999979800028758,
+          "rmse_value": 0.05329747607465078,
+          "n_ticks": 26,
+          "n_used": 26,
+          "n_rejected": 0
+        },
+        "anchor_equivalent": {
+          "schema_version": 1,
+          "c_low": 775.148,
+          "v_low": 140.04062583645805,
+          "c_high": 137.302,
+          "v_high": 15.051066357668129
+        },
+        "confidence": 1.0,
+        "flags": []
+      },
+      "x_axis": {
+        "schema_version": 1,
+        "kind": "numeric",
+        "start": "34",
+        "end": "0",
+        "n_samples": null,
+        "ticks": [],
+        "fit": null,
+        "confidence": 1.0,
+        "flags": []
+      },
+      "review_required": false
+    },
+    "p02": {
+      "schema_version": 1,
+      "y_axis": {
+        "schema_version": 1,
+        "scale": "linear",
+        "unit": {
+          "schema_version": 1,
+          "raw": "",
+          "canonical": "unknown",
+          "to_mm": null
+        },
+        "ticks": [
+          {
+            "schema_version": 1,
+            "pixel": 798.28,
+            "value": 0.0,
+            "label_text": "0",
+            "legible": true,
+            "used": true,
+            "residual": -0.09585613947751881
+          },
+          {
+            "schema_version": 1,
+            "pixel": 822.92,
+            "value": 5.0,
+            "label_text": "5",
+            "legible": true,
+            "used": true,
+            "residual": -0.07761538247771682
+          },
+          {
+            "schema_version": 1,
+            "pixel": 847.56,
+            "value": 10.0,
+            "label_text": "10",
+            "legible": true,
+            "used": true,
+            "residual": -0.05937462547791483
+          },
+          {
+            "schema_version": 1,
+            "pixel": 872.2,
+            "value": 15.0,
+            "label_text": "15",
+            "legible": true,
+            "used": true,
+            "residual": -0.041133868478112845
+          },
+          {
+            "schema_version": 1,
+            "pixel": 896.84,
+            "value": 20.0,
+            "label_text": "20",
+            "legible": true,
+            "used": true,
+            "residual": -0.022893111478310857
+          },
+          {
+            "schema_version": 1,
+            "pixel": 921.48,
+            "value": 25.0,
+            "label_text": "25",
+            "legible": true,
+            "used": true,
+            "residual": -0.004652354478508869
+          },
+          {
+            "schema_version": 1,
+            "pixel": 946.12,
+            "value": 30.0,
+            "label_text": "30",
+            "legible": true,
+            "used": true,
+            "residual": 0.01358840252129312
+          },
+          {
+            "schema_version": 1,
+            "pixel": 970.76,
+            "value": 35.0,
+            "label_text": "35",
+            "legible": true,
+            "used": true,
+            "residual": 0.03182915952112353
+          },
+          {
+            "schema_version": 1,
+            "pixel": 995.4000000000001,
+            "value": 40.0,
+            "label_text": "40",
+            "legible": true,
+            "used": true,
+            "residual": 0.050069916520897095
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1020.04,
+            "value": 45.0,
+            "label_text": "45",
+            "legible": true,
+            "used": true,
+            "residual": 0.0683106735207275
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1044.68,
+            "value": 50.0,
+            "label_text": "50",
+            "legible": true,
+            "used": true,
+            "residual": 0.08655143052050107
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1069.32,
+            "value": 55.0,
+            "label_text": "55",
+            "legible": true,
+            "used": true,
+            "residual": 0.10479218752033148
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1093.96,
+            "value": 60.0,
+            "label_text": "60",
+            "legible": true,
+            "used": true,
+            "residual": 0.12303294452013347
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1119.48,
+            "value": 65.0,
+            "label_text": "65",
+            "legible": true,
+            "used": true,
+            "residual": -0.036646271444368494
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1144.12,
+            "value": 70.0,
+            "label_text": "70",
+            "legible": true,
+            "used": true,
+            "residual": -0.018405514444538085
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1168.76,
+            "value": 75.0,
+            "label_text": "75",
+            "legible": true,
+            "used": true,
+            "residual": -0.00016475744473609666
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1193.4,
+            "value": 80.0,
+            "label_text": "80",
+            "legible": true,
+            "used": true,
+            "residual": 0.01807599955503747
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1218.04,
+            "value": 85.0,
+            "label_text": "85",
+            "legible": true,
+            "used": true,
+            "residual": 0.03631675655486788
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1242.68,
+            "value": 90.0,
+            "label_text": "90",
+            "legible": true,
+            "used": true,
+            "residual": 0.05455751355466987
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1267.32,
+            "value": 95.0,
+            "label_text": "95",
+            "legible": true,
+            "used": true,
+            "residual": 0.07279827055447186
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1292.8400000000001,
+            "value": 100.0,
+            "label_text": "100",
+            "legible": true,
+            "used": true,
+            "residual": -0.08688094541003011
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1317.48,
+            "value": 105.0,
+            "label_text": "105",
+            "legible": true,
+            "used": true,
+            "residual": -0.0686401884101997
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1342.12,
+            "value": 110.0,
+            "label_text": "110",
+            "legible": true,
+            "used": true,
+            "residual": -0.05039943141036929
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1366.76,
+            "value": 115.0,
+            "label_text": "115",
+            "legible": true,
+            "used": true,
+            "residual": -0.03215867441059572
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1391.4,
+            "value": 120.0,
+            "label_text": "120",
+            "legible": true,
+            "used": true,
+            "residual": -0.013917917410822156
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1416.04,
+            "value": 125.0,
+            "label_text": "125",
+            "legible": true,
+            "used": true,
+            "residual": 0.004322839589008254
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1440.68,
+            "value": 130.0,
+            "label_text": "130",
+            "legible": true,
+            "used": true,
+            "residual": 0.02256359658878182
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1465.32,
+            "value": 135.0,
+            "label_text": "135",
+            "legible": true,
+            "used": true,
+            "residual": 0.04080435358861223
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1490.84,
+            "value": 140.0,
+            "label_text": "140",
+            "legible": true,
+            "used": true,
+            "residual": -0.11887486237583289
+          }
+        ],
+        "fit": {
+          "schema_version": 1,
+          "method": "irls_mad",
+          "slope": 0.2021817874594235,
+          "intercept": -161.30182115363107,
+          "scale": "linear",
+          "r2": 0.999997893366204,
+          "rmse_value": 0.06071745336346856,
+          "n_ticks": 29,
+          "n_used": 29,
+          "n_rejected": 0
+        },
+        "anchor_equivalent": {
+          "schema_version": 1,
+          "c_low": 1490.84,
+          "v_low": 140.11887486237583,
+          "c_high": 798.28,
+          "v_high": 0.09585613947751881
+        },
+        "confidence": 0.98,
+        "flags": []
+      },
+      "x_axis": {
+        "schema_version": 1,
+        "kind": "numeric",
+        "start": "30",
+        "end": "0",
+        "n_samples": null,
+        "ticks": [],
+        "fit": null,
+        "confidence": 0.98,
+        "flags": []
+      },
+      "review_required": false
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "CALIB_V1",
+    "thinking_level": "high",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 1253,
+      "candidates_token_count": 2356,
+      "thoughts_token_count": 5650,
+      "total_token_count": 9259
+    },
+    "timestamp": "2026-07-02T09:17:01.186606+00:00"
+  }
+}

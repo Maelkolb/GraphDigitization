@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "major",
+      "issues": [
+        "wrong_line_followed",
+        "vertical_offset",
+        "peak_missed"
+      ],
+      "reason": "The red curve remains nearly flat along the bottom grid line, completely failing to follow the actual hand-drawn curve's trajectory and peaks.",
+      "suggested_action": "reextract",
+      "confidence": 0.95,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2268,
+      "candidates_token_count": 69,
+      "thoughts_token_count": 537,
+      "total_token_count": 2874
+    },
+    "timestamp": "2026-07-02T09:14:36.258648+00:00"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "y_axis": {
+        "schema_version": 1,
+        "scale": "linear",
+        "unit": {
+          "schema_version": 1,
+          "raw": "",
+          "canonical": "unknown",
+          "to_mm": null
+        },
+        "ticks": [],
+        "fit": null,
+        "anchor_equivalent": null,
+        "confidence": 0.95,
+        "flags": [
+          "unusable"
+        ]
+      },
+      "x_axis": {
+        "schema_version": 1,
+        "kind": "numeric",
+        "start": "Mit 0.",
+        "end": "33 Zoll.",
+        "n_samples": null,
+        "ticks": [],
+        "fit": null,
+        "confidence": 0.95,
+        "flags": [
+          "numeric_extent_unparsed"
+        ]
+      },
+      "review_required": true
+    },
+    "p02": {
+      "schema_version": 1,
+      "y_axis": {
+        "schema_version": 1,
+        "scale": "linear",
+        "unit": {
+          "schema_version": 1,
+          "raw": "",
+          "canonical": "unknown",
+          "to_mm": null
+        },
+        "ticks": [],
+        "fit": null,
+        "anchor_equivalent": null,
+        "confidence": 0.9,
+        "flags": [
+          "unusable"
+        ]
+      },
+      "x_axis": {
+        "schema_version": 1,
+        "kind": "numeric",
+        "start": "Mst. 0",
+        "end": "Zoll",
+        "n_samples": null,
+        "ticks": [],
+        "fit": null,
+        "confidence": 0.9,
+        "flags": [
+          "numeric_extent_unparsed"
+        ]
+      },
+      "review_required": true
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "CALIB_V1",
+    "thinking_level": "high",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 1268,
+      "candidates_token_count": 430,
+      "thoughts_token_count": 1869,
+      "total_token_count": 3567
+    },
+    "timestamp": "2026-07-02T09:17:59.964045+00:00"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "minor",
+      "issues": [
+        "vertical_offset",
+        "noise"
+      ],
+      "reason": "The extracted curve shows minor vertical deviation and noise, particularly on the left half where it stays slightly above the hand-drawn line.",
+      "suggested_action": "review",
+      "confidence": 0.9,
+      "overlay": "overlays/curve_p01.png"
+    },
+    "p02": {
+      "schema_version": 1,
+      "verdict": "minor",
+      "issues": [
+        "missing_segment"
+      ],
+      "reason": "The overlay is missing the initial segment of the curve on the left, but otherwise follows the drawn line accurately.",
+      "suggested_action": "review",
+      "confidence": 4.0,
+      "overlay": "overlays/curve_p02.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2250,
+      "candidates_token_count": 48,
+      "thoughts_token_count": 717,
+      "total_token_count": 3015
+    },
+    "timestamp": "2026-07-02T09:17:36.119343+00:00"
+  }
+}
