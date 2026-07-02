@@ -212,16 +212,22 @@ def run(ctx: Context) -> None:
     gates = ctx.cfg.gates
     viable_gate = _viable_gate(ctx)
     tiles_by_id = {t.tile_id: t for t in tiles_art.tiles}
-    n_series = max(1, cls.n_series)
-    labels = cls.series_labels or [f"series {i + 1}" for i in range(n_series)]
-
     panels_by_id = {p.panel_id: p for p in panels_art.panels}
+
+    def census(panel) -> tuple[int, list[str]]:
+        """Panel-level series census beats the page-level classification."""
+        n = max(1, panel.n_series or cls.n_series)
+        labels = (panel.series_labels or cls.series_labels
+                  or [f"series {i + 1}" for i in range(n)])
+        return n, labels[:max(n, 1)] if len(labels) >= n else labels
+
     for tile_id, tl in lines.tiles.items():
         if tl.error or not tl.candidates:
             continue
         tile = tiles_by_id[tile_id]
+        panel = panels_by_id[tile.panel_id]
         n = _n_slices(cal, tile_id)
-        x_lo, x_hi = _plot_extent_in_tile(tile, panels_by_id[tile.panel_id])
+        x_lo, x_hi = _plot_extent_in_tile(tile, panel)
         for c in tl.candidates:
             pts = np.asarray(c.points_px_tile, dtype=float).reshape(-1, 2)
             c.coverage = coverage(pts, x_lo, x_hi, n)
@@ -232,13 +238,16 @@ def run(ctx: Context) -> None:
             tl.selected = tl.selections[0]
             continue
 
+        n_series, labels = census(panel)
         ranked = sorted(tl.candidates, key=lambda c: -(c.s_alpha or 0.0))
         viable = [c for c in ranked if c.viable]
         pool = viable or ranked
 
         if n_series == 1:
             selection = _select_single(ctx, tile, ranked, viable, gates)
-            selection.series_label = labels[0] if cls.series_labels else ""
+            selection.series_label = (labels[0]
+                                      if (panel.series_labels or cls.series_labels)
+                                      else "")
             tl.selections = [selection]
         else:
             tl.selections = _select_multi(ctx, tile, pool, n_series, labels, gates)

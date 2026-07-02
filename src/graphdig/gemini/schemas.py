@@ -26,6 +26,11 @@ class GPanel(BaseModel):
     label: str = Field(default="", description="panel title/label text if any, verbatim")
     x_start_label: str = Field(default="", description="leftmost x-axis tick label, verbatim")
     x_end_label: str = Field(default="", description="rightmost x-axis tick label, verbatim")
+    n_series: int = Field(default=0, description="number of distinct data curves in THIS "
+                                                 "panel; 0 if same as the page default")
+    series_labels: list[str] = Field(default_factory=list,
+                                     description="this panel's series names if they "
+                                                 "differ from the page-level ones")
     confidence: float = Field(description="0-1 confidence this is a data-bearing chart panel")
 
 

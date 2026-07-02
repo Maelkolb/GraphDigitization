@@ -47,6 +47,8 @@ class Panel(ArtifactModel):
     panel_id: str
     label: str = ""
     month: int | None = None  # calendar month identity (danube annual sheets)
+    n_series: int | None = None  # panel-level series census (None = page default)
+    series_labels: list[str] = Field(default_factory=list)
     bbox_px: BoxPx
     plot_area_px: BoxPx | None = None
     x_edge_refined: bool = False

@@ -37,6 +37,21 @@ from graphdig.runs import create_run_dir, init_manifest, save_manifest, sha256_f
 from graphdig.units import danube_unit_for
 
 
+def _station_name(scan_id: str, paths: ZenodoPaths | None = None) -> str:
+    """Human gauge name from gauges.csv (fallback: the DocID prefix)."""
+    from graphdig.data.gt_loaders import gauge_id_for_scan, load_gauges
+
+    paths = paths or ZenodoPaths()
+    try:
+        gauges = load_gauges(paths.gauges)
+        hit = gauges[gauges["gauge_id"] == gauge_id_for_scan(scan_id)]
+        if not hit.empty:
+            return str(hit["gauge_name"].iloc[0])
+    except Exception:
+        pass
+    return scan_id[:2]
+
+
 def tile_anchor_rows(ann, month: int, tile_w: int, tile_h: int) -> tuple[float, float]:
     """The LOW/HIGH anchor pixel rows mapped from full-page into monthly-tile coords.
 
@@ -139,7 +154,7 @@ def prepare_run(scan_id: str, month: int, year: int,
                         n_samples=(d1 - d0).days + 1, confidence=1.0),
     )
     save_artifact(CalibrationArtifact(panels={"p01": cal}), run_dir / "calibration.json")
-    save_artifact(MetadataArtifact(station=scan_id[:2], year=year,
+    save_artifact(MetadataArtifact(station=_station_name(scan_id, paths), year=year,
                                    y_unit_declared=unit.canonical, confidence=1.0),
                   run_dir / "metadata.json")
 

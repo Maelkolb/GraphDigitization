@@ -104,6 +104,8 @@ def _to_panels(resp: TriageResponse, width: int, height: int,
         plot = _clamp_plot_area(plot, bbox)
         panels.append(Panel(
             panel_id="", label=gp.label, bbox_px=bbox, plot_area_px=plot,
+            n_series=gp.n_series or None,
+            series_labels=[s for s in gp.series_labels if s],
             x_extent_hint=XExtentHint(kind="unknown", start_label=gp.x_start_label,
                                       end_label=gp.x_end_label),
             confidence=gp.confidence,
@@ -352,6 +354,10 @@ def run(ctx: Context) -> None:
         ctx.add_flag("triage", f"multi-series chart: {classification.n_series} curves "
                      f"({', '.join(classification.series_labels) or 'unlabelled'})",
                      severity="info")
+    if classification.n_series == 1 and len(classification.series_labels) > 1:
+        ctx.add_flag("triage", "series census inconsistent: 1 curve reported but "
+                     f"{len(classification.series_labels)} legend labels "
+                     "(a curve may have been missed)", severity="info")
     if resp.chart_kind not in DIGITIZABLE_KINDS:
         ctx.add_flag("triage", f"page classified as '{resp.chart_kind}' - "
                      "not a digitizable line chart", severity="blocking")

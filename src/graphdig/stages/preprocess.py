@@ -37,6 +37,9 @@ def run(ctx: Context) -> None:
                                Image.BICUBIC)
         tile_path = ctx.run_dir / "tiles" / f"{panel.panel_id}.png"
         crop.convert("RGB").save(tile_path)
+        # downstream stages (select slicing, QC keying) assume tile_id == panel_id;
+        # a future multi-tile-per-panel change must revisit those call sites
+        assert panel.panel_id and "_s" not in panel.panel_id
         art.tiles.append(Tile(
             tile_id=panel.panel_id,
             path=f"tiles/{panel.panel_id}.png",

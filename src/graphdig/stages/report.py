@@ -124,16 +124,19 @@ def run(ctx: Context) -> None:
             if tl.error:
                 lines_out.append(f"| {tid} | ERROR: {tl.error} | | | | | |")
                 continue
-            sel = tl.selected
-            chosen = next((c for c in tl.candidates
-                           if sel and c.cand_id == sel.cand_id), None)
-            if chosen:
+            selections = tl.selections or ([tl.selected] if tl.selected else [])
+            if not selections:
+                lines_out.append(f"| {tid} | {len(tl.candidates)} | none | | | | |")
+            for sel in selections:  # one row per digitized series
+                chosen = next((c for c in tl.candidates if c.cand_id == sel.cand_id),
+                              None)
+                if chosen is None:
+                    continue
+                name = f"{tid} {sel.series_label}".strip()
                 lines_out.append(
-                    f"| {tid} | {len(tl.candidates)} | {chosen.cand_id} "
+                    f"| {name} | {len(tl.candidates)} | {chosen.cand_id} "
                     f"| {chosen.confidence:.3f} | {(chosen.coverage or 0):.3f} "
                     f"| {(chosen.s_alpha or 0):.3f} | {sel.method} |")
-            else:
-                lines_out.append(f"| {tid} | {len(tl.candidates)} | none | | | | |")
         lines_out.append("")
 
     if series:
