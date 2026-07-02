@@ -30,8 +30,8 @@ from graphdig.artifacts import (
     UnitTransition,
     XExtentHint,
 )
-from graphdig.gemini.prompts import triage_prompt
-from graphdig.gemini.schemas import TriageResponse
+from graphdig.gemini.prompts import PROMPTS, triage_prompt
+from graphdig.gemini.schemas import OrientationResponse, TriageResponse
 from graphdig.geometry import Box1000, BoxPx, bbox_1000_to_px
 from graphdig.pipeline import Context
 from graphdig.render import draw_panels
@@ -54,6 +54,42 @@ def _detect(ctx: Context, img: Image.Image, prompt_id: str, prompt: str):
 
 def _norm_rotation(deg: int) -> int:
     return round((deg % 360) / 90) * 90 % 360
+
+
+def _orientation_composite(img: Image.Image, cell: int = 560) -> Image.Image:
+    """2x2 grid of the page in all four rotations, labeled 0/90/180/270."""
+    from PIL import ImageDraw, ImageFont
+
+    header = 46
+    canvas = Image.new("RGB", (2 * cell, 2 * (cell + header)), (255, 255, 255))
+    draw = ImageDraw.Draw(canvas)
+    try:
+        font = ImageFont.truetype("arial.ttf", 36)
+    except OSError:
+        font = ImageFont.load_default()
+    for i, deg in enumerate((0, 90, 180, 270)):
+        rot = img if deg == 0 else img.rotate(-deg, expand=True)
+        rot = rot.copy()
+        rot.thumbnail((cell, cell))
+        cx, cy = (i % 2) * cell, (i // 2) * (cell + header)
+        draw.text((cx + cell // 2 - 30, cy + 4), str(deg), fill=(200, 30, 30), font=font)
+        canvas.paste(rot, (cx + (cell - rot.width) // 2, cy + header))
+    return canvas
+
+
+def _orientation_check(ctx: Context, img: Image.Image) -> int:
+    """Dedicated 4-way upright comparison - more reliable than asking about a single
+    view (a lone triage pass sometimes misses rotation entirely)."""
+    result = ctx.gemini.generate_json(
+        images=[_orientation_composite(img)], prompt=PROMPTS["ORIENT_V1"],
+        schema=OrientationResponse, prompt_id="ORIENT_V1",
+        thinking_level="low", media_resolution="high",
+    )
+    if not result.ok:
+        ctx.add_flag("triage", f"orientation check failed ({result.error}); "
+                     "relying on triage rotation only", severity="info")
+        return 0
+    return _norm_rotation(result.data.rotation_deg)
 
 
 def _to_panels(resp: TriageResponse, width: int, height: int,
@@ -120,8 +156,15 @@ def run(ctx: Context) -> None:
 
     prompt_id, prompt = triage_prompt(ctx.cfg.profile.panel_prompt_variant)
 
-    # iterative orientation: rotate until triage reports upright (max 3 turns)
+    # dedicated 4-way upright check first (cheap, low thinking), then triage as backstop
     total_rotation = 0
+    if ctx.cfg.profile.check_orientation:
+        deg = _orientation_check(ctx, img)
+        if deg:
+            total_rotation = deg
+            img = img.rotate(-deg, expand=True)  # PIL rotates counter-clockwise
+
+    # iterative refinement: rotate until triage also reports upright (max 3 turns)
     result = _detect(ctx, img, prompt_id, prompt)
     for _turn in range(MAX_ROTATION_TURNS):
         deg = _norm_rotation(result.data.rotation_deg)

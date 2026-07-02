@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "title": "",
+  "station": "30",
+  "year": 1848,
+  "date_range": "",
+  "y_unit_declared": "bavarian_foot",
+  "unit_transition": {
+    "schema_version": 1,
+    "present": false,
+    "date": null
+  },
+  "language": "",
+  "handwritten_annotations": false,
+  "notes": "",
+  "confidence": 1.0,
+  "provenance": {
+    "schema_version": 1,
+    "model": "",
+    "prompt_id": "",
+    "thinking_level": "",
+    "attempts": 1,
+    "usage": {},
+    "timestamp": "2026-07-02T19:47:03.156194+00:00"
+  }
+}

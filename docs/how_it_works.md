@@ -34,9 +34,10 @@ Normalizes the input image to PNG under `pages/`, records dimensions + sha256 in
 ### 2. triage — "decide what kind of graph it is"
 **One** Gemini call (prompt `TRIAGE_V1_*`) classifies the whole page and finds its parts:
 
-- **orientation**: rotation needed so labels read upright — applied *iteratively*
-  (rotate, re-triage, repeat up to 3 turns), which also catches upside-down pages that a
-  single pass would leave at 180°;
+- **orientation**: a dedicated 4-way check first (the page is shown in all four rotations
+  side by side and Gemini names the upright one — far more reliable than judging a single
+  view), then the triage loop itself acts as backstop (rotate, re-triage, up to 3 turns).
+  Skipped for the danube profile, whose material is consistently upright;
 - **chart_kind** (`line_chart`, `multi_panel_line_chart`, `table`, `text_page`, …) — a
   non-chart page raises a blocking review flag instead of being force-digitized;
 - **calibration mode evidence**: does the y-axis carry readable numeric labels

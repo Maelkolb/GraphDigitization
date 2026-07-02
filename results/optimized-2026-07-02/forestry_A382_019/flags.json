@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p01",
+      "reason": "best candidate coverage 0.840 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p02",
+      "reason": "best candidate coverage 0.910 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01",
+      "reason": "16 empty slice(s): 1, 2, 3, 4, 5...",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p02",
+      "reason": "9 empty slice(s): 2, 3, 4, 5, 6...",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p02",
+      "reason": "minor deviation: The extracted curve shows a slight vertical deviation, running just above the original drawn line through the middle section.",
+      "severity": "warning",
+      "artifact_ref": "overlays/curve_p02.png"
+    }
+  ]
+}

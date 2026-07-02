@@ -13,6 +13,7 @@ class Profile(BaseModel):
     danube_units: bool = False  # enforce foot/mm transition rule by date
     panel_prompt_variant: str = "generic"  # selects prompt flavor in gemini/prompts.py
     refine_x_edges: bool = False  # snap panel x-edges to printed gridlines (day grids)
+    check_orientation: bool = True  # dedicated 4-way upright check before triage
 
 
 DANUBE = Profile(
@@ -23,6 +24,7 @@ DANUBE = Profile(
     danube_units=True,
     panel_prompt_variant="danube",
     refine_x_edges=True,
+    check_orientation=False,  # archival tiles/sheets are consistently upright
 )
 
 GENERIC = Profile(name="generic")

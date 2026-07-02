@@ -29,6 +29,13 @@ class GPanel(BaseModel):
     confidence: float = Field(description="0-1 confidence this is a data-bearing chart panel")
 
 
+class OrientationResponse(BaseModel):
+    rotation_deg: int = Field(description="the grid label (0, 90, 180 or 270) of the "
+                                          "version that reads upright")
+    reason: str = ""
+    confidence: float = 0.0
+
+
 class TriageResponse(BaseModel):
     """One-shot page understanding: classification + panels + metadata."""
 

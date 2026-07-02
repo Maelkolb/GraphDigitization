@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "title": "Fichten & Tannen",
+  "station": "",
+  "year": null,
+  "date_range": "",
+  "y_unit_declared": "",
+  "unit_transition": {
+    "schema_version": 1,
+    "present": false,
+    "date": null
+  },
+  "language": "German",
+  "handwritten_annotations": true,
+  "notes": "Handwritten curves, values, and titles on a printed grid. X-axis scale in inches (\").",
+  "confidence": 1.0,
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "TRIAGE_V1_GENERIC",
+    "thinking_level": "high",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 1390,
+      "candidates_token_count": 531,
+      "thoughts_token_count": 1728,
+      "total_token_count": 3649
+    },
+    "timestamp": "2026-07-02T19:49:59.152631+00:00"
+  }
+}

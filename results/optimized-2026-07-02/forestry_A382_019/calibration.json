@@ -1,0 +1,587 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "y_axis": {
+        "schema_version": 1,
+        "scale": "linear",
+        "unit": {
+          "schema_version": 1,
+          "raw": "",
+          "canonical": "unknown",
+          "to_mm": null
+        },
+        "ticks": [
+          {
+            "schema_version": 1,
+            "pixel": 151.64,
+            "value": 140.0,
+            "label_text": "140",
+            "legible": true,
+            "used": true,
+            "residual": 0.7052515869464742
+          },
+          {
+            "schema_version": 1,
+            "pixel": 177.16,
+            "value": 135.0,
+            "label_text": "135",
+            "legible": true,
+            "used": true,
+            "residual": 0.5496309073293162
+          },
+          {
+            "schema_version": 1,
+            "pixel": 202.68,
+            "value": 130.0,
+            "label_text": "130",
+            "legible": true,
+            "used": true,
+            "residual": 0.39401022771218663
+          },
+          {
+            "schema_version": 1,
+            "pixel": 228.2,
+            "value": 125.0,
+            "label_text": "125",
+            "legible": true,
+            "used": true,
+            "residual": 0.23838954809504287
+          },
+          {
+            "schema_version": 1,
+            "pixel": 253.72,
+            "value": 120.0,
+            "label_text": "120",
+            "legible": true,
+            "used": true,
+            "residual": 0.0827688684778991
+          },
+          {
+            "schema_version": 1,
+            "pixel": 280.12,
+            "value": 115.0,
+            "label_text": "115",
+            "legible": true,
+            "used": true,
+            "residual": 0.09419575163259708
+          },
+          {
+            "schema_version": 1,
+            "pixel": 305.64,
+            "value": 110.0,
+            "label_text": "110",
+            "legible": true,
+            "used": true,
+            "residual": -0.061424927984546684
+          },
+          {
+            "schema_version": 1,
+            "pixel": 331.16,
+            "value": 105.0,
+            "label_text": "105",
+            "legible": true,
+            "used": true,
+            "residual": -0.21704560760167624
+          },
+          {
+            "schema_version": 1,
+            "pixel": 357.56,
+            "value": 100.0,
+            "label_text": "100",
+            "legible": true,
+            "used": true,
+            "residual": -0.20561872444699247
+          },
+          {
+            "schema_version": 1,
+            "pixel": 383.08000000000004,
+            "value": 95.0,
+            "label_text": "95",
+            "legible": true,
+            "used": true,
+            "residual": -0.361239404064122
+          },
+          {
+            "schema_version": 1,
+            "pixel": 409.47999999999996,
+            "value": 90.0,
+            "label_text": "90",
+            "legible": true,
+            "used": true,
+            "residual": -0.3498125209094525
+          },
+          {
+            "schema_version": 1,
+            "pixel": 435.0,
+            "value": 85.0,
+            "label_text": "85",
+            "legible": true,
+            "used": true,
+            "residual": -0.5054332005265962
+          },
+          {
+            "schema_version": 1,
+            "pixel": 461.4,
+            "value": 80.0,
+            "label_text": "80",
+            "legible": true,
+            "used": true,
+            "residual": -0.4940063173719125
+          },
+          {
+            "schema_version": 1,
+            "pixel": 487.8,
+            "value": 75.0,
+            "label_text": "75",
+            "legible": true,
+            "used": true,
+            "residual": -0.4825794342172145
+          },
+          {
+            "schema_version": 1,
+            "pixel": 515.08,
+            "value": 70.0,
+            "label_text": "70",
+            "legible": true,
+            "used": true,
+            "residual": -0.3041049882907032
+          },
+          {
+            "schema_version": 1,
+            "pixel": 541.48,
+            "value": 65.0,
+            "label_text": "65",
+            "legible": true,
+            "used": true,
+            "residual": -0.29267810513601944
+          },
+          {
+            "schema_version": 1,
+            "pixel": 567.88,
+            "value": 60.0,
+            "label_text": "60",
+            "legible": true,
+            "used": true,
+            "residual": -0.2812512219813499
+          },
+          {
+            "schema_version": 1,
+            "pixel": 594.28,
+            "value": 55.0,
+            "label_text": "55",
+            "legible": true,
+            "used": true,
+            "residual": -0.2698243388266661
+          },
+          {
+            "schema_version": 1,
+            "pixel": 621.5600000000001,
+            "value": 50.0,
+            "label_text": "50",
+            "legible": true,
+            "used": true,
+            "residual": -0.09134989290014062
+          },
+          {
+            "schema_version": 1,
+            "pixel": 647.9599999999999,
+            "value": 45.0,
+            "label_text": "45",
+            "legible": true,
+            "used": true,
+            "residual": -0.07992300974548527
+          },
+          {
+            "schema_version": 1,
+            "pixel": 675.24,
+            "value": 40.0,
+            "label_text": "40",
+            "legible": true,
+            "used": true,
+            "residual": 0.09855143618105444
+          },
+          {
+            "schema_version": 1,
+            "pixel": 701.64,
+            "value": 35.0,
+            "label_text": "35",
+            "legible": true,
+            "used": true,
+            "residual": 0.10997831933570978
+          },
+          {
+            "schema_version": 1,
+            "pixel": 728.9200000000001,
+            "value": 30.0,
+            "label_text": "30",
+            "legible": true,
+            "used": true,
+            "residual": 0.2884527652622353
+          },
+          {
+            "schema_version": 1,
+            "pixel": 755.3199999999999,
+            "value": 25.0,
+            "label_text": "25",
+            "legible": true,
+            "used": true,
+            "residual": 0.29987964841691905
+          },
+          {
+            "schema_version": 1,
+            "pixel": 782.6,
+            "value": 20.0,
+            "label_text": "20",
+            "legible": true,
+            "used": true,
+            "residual": 0.47835409434341614
+          },
+          {
+            "schema_version": 1,
+            "pixel": 809.88,
+            "value": 15.0,
+            "label_text": "15",
+            "legible": true,
+            "used": true,
+            "residual": 0.6568285402699416
+          }
+        ],
+        "fit": {
+          "schema_version": 1,
+          "method": "irls_mad",
+          "slope": -0.1898267758770714,
+          "intercept": 168.08008070705264,
+          "scale": "linear",
+          "r2": 0.9999095890715163,
+          "rmse_value": 0.35656748054226445,
+          "n_ticks": 26,
+          "n_used": 26,
+          "n_rejected": 0
+        },
+        "anchor_equivalent": {
+          "schema_version": 1,
+          "c_low": 809.88,
+          "v_low": 14.343171459730058,
+          "c_high": 151.64,
+          "v_high": 139.29474841305353
+        },
+        "confidence": 0.95,
+        "flags": []
+      },
+      "x_axis": {
+        "schema_version": 1,
+        "kind": "numeric",
+        "start": "0",
+        "end": "30\"",
+        "n_samples": null,
+        "ticks": [],
+        "fit": null,
+        "confidence": 0.95,
+        "flags": [
+          "numeric_extent_unparsed"
+        ]
+      },
+      "review_required": false
+    },
+    "p02": {
+      "schema_version": 1,
+      "y_axis": {
+        "schema_version": 1,
+        "scale": "linear",
+        "unit": {
+          "schema_version": 1,
+          "raw": "",
+          "canonical": "unknown",
+          "to_mm": null
+        },
+        "ticks": [
+          {
+            "schema_version": 1,
+            "pixel": 891.76,
+            "value": 140.0,
+            "label_text": "140",
+            "legible": true,
+            "used": true,
+            "residual": 0.03584724833186215
+          },
+          {
+            "schema_version": 1,
+            "pixel": 918.42,
+            "value": 135.0,
+            "label_text": "135",
+            "legible": true,
+            "used": true,
+            "residual": 0.026539865088835768
+          },
+          {
+            "schema_version": 1,
+            "pixel": 945.0799999999999,
+            "value": 130.0,
+            "label_text": "130",
+            "legible": true,
+            "used": true,
+            "residual": 0.01723248184580939
+          },
+          {
+            "schema_version": 1,
+            "pixel": 971.74,
+            "value": 125.0,
+            "label_text": "125",
+            "legible": true,
+            "used": true,
+            "residual": 0.00792509860278301
+          },
+          {
+            "schema_version": 1,
+            "pixel": 998.4,
+            "value": 120.0,
+            "label_text": "120",
+            "legible": true,
+            "used": true,
+            "residual": -0.0013822846402433697
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1025.06,
+            "value": 115.0,
+            "label_text": "115",
+            "legible": true,
+            "used": true,
+            "residual": -0.010689667883269749
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1051.72,
+            "value": 110.0,
+            "label_text": "110",
+            "legible": true,
+            "used": true,
+            "residual": -0.019997051126267706
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1078.38,
+            "value": 105.0,
+            "label_text": "105",
+            "legible": true,
+            "used": true,
+            "residual": -0.029304434369265664
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1105.04,
+            "value": 100.0,
+            "label_text": "100",
+            "legible": true,
+            "used": true,
+            "residual": -0.038611817612320465
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1131.7,
+            "value": 95.0,
+            "label_text": "95",
+            "legible": true,
+            "used": true,
+            "residual": -0.04791920085531842
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1158.3600000000001,
+            "value": 90.0,
+            "label_text": "90",
+            "legible": true,
+            "used": true,
+            "residual": -0.05722658409831638
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1185.02,
+            "value": 85.0,
+            "label_text": "85",
+            "legible": true,
+            "used": true,
+            "residual": -0.06653396734137118
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1211.68,
+            "value": 80.0,
+            "label_text": "80",
+            "legible": true,
+            "used": true,
+            "residual": -0.07584135058436914
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1239.2,
+            "value": 75.0,
+            "label_text": "75",
+            "legible": true,
+            "used": true,
+            "residual": 0.07584135058411334
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1265.8600000000001,
+            "value": 70.0,
+            "label_text": "70",
+            "legible": true,
+            "used": true,
+            "residual": 0.06653396734111539
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1292.52,
+            "value": 65.0,
+            "label_text": "65",
+            "legible": true,
+            "used": true,
+            "residual": 0.057226584098060584
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1319.1799999999998,
+            "value": 60.0,
+            "label_text": "60",
+            "legible": true,
+            "used": true,
+            "residual": 0.047919200855005784
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1345.8400000000001,
+            "value": 55.0,
+            "label_text": "55",
+            "legible": true,
+            "used": true,
+            "residual": 0.03861181761203625
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1372.5,
+            "value": 50.0,
+            "label_text": "50",
+            "legible": true,
+            "used": true,
+            "residual": 0.02930443436900987
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1399.1599999999999,
+            "value": 45.0,
+            "label_text": "45",
+            "legible": true,
+            "used": true,
+            "residual": 0.019997051125926646
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1425.82,
+            "value": 40.0,
+            "label_text": "40",
+            "legible": true,
+            "used": true,
+            "residual": 0.01068966788295711
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1452.48,
+            "value": 35.0,
+            "label_text": "35",
+            "legible": true,
+            "used": true,
+            "residual": 0.001382284639930731
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1479.1399999999999,
+            "value": 30.0,
+            "label_text": "30",
+            "legible": true,
+            "used": true,
+            "residual": -0.007925098603095648
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1505.8,
+            "value": 25.0,
+            "label_text": "25",
+            "legible": true,
+            "used": true,
+            "residual": -0.017232481846122027
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1532.46,
+            "value": 20.0,
+            "label_text": "20",
+            "legible": true,
+            "used": true,
+            "residual": -0.026539865089091563
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1559.12,
+            "value": 15.0,
+            "label_text": "15",
+            "legible": true,
+            "used": true,
+            "residual": -0.035847248332174786
+          }
+        ],
+        "fit": {
+          "schema_version": 1,
+          "method": "irls_mad",
+          "slope": -0.1871977725715296,
+          "intercept": 306.8996384200554,
+          "scale": "linear",
+          "r2": 0.999998853215706,
+          "rmse_value": 0.04015800559533642,
+          "n_ticks": 26,
+          "n_used": 26,
+          "n_rejected": 0
+        },
+        "anchor_equivalent": {
+          "schema_version": 1,
+          "c_low": 1559.12,
+          "v_low": 15.035847248332175,
+          "c_high": 891.76,
+          "v_high": 139.96415275166814
+        },
+        "confidence": 0.95,
+        "flags": []
+      },
+      "x_axis": {
+        "schema_version": 1,
+        "kind": "numeric",
+        "start": "0",
+        "end": "34\"",
+        "n_samples": null,
+        "ticks": [],
+        "fit": null,
+        "confidence": 0.95,
+        "flags": [
+          "numeric_extent_unparsed"
+        ]
+      },
+      "review_required": false
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "CALIB_V1",
+    "thinking_level": "high",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 1253,
+      "candidates_token_count": 2350,
+      "thoughts_token_count": 5802,
+      "total_token_count": 9405
+    },
+    "timestamp": "2026-07-02T19:50:35.719707+00:00"
+  }
+}

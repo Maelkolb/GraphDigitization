@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "page_id": "300026_M09",
+  "image": {
+    "schema_version": 1,
+    "path": "pages/300026_M09.png",
+    "width": 693,
+    "height": 532,
+    "sha256": "1c3f42bd8f07b49eb88965e146363b653cc37e98f35c3e7747a6cd8575f59312"
+  },
+  "orientation": {
+    "schema_version": 1,
+    "rotation_applied_deg": 0,
+    "reason": ""
+  },
+  "classification": {
+    "schema_version": 1,
+    "chart_kind": "line_chart",
+    "page_kind": "",
+    "y_axis_labels_present": true,
+    "value_labels_on_curve": false,
+    "y_scale_guess": "unknown",
+    "confidence": 0.0
+  },
+  "panels": [
+    {
+      "schema_version": 1,
+      "panel_id": "p01",
+      "label": "M09",
+      "bbox_px": {
+        "x": 0,
+        "y": 0,
+        "w": 693,
+        "h": 532
+      },
+      "plot_area_px": {
+        "x": 5,
+        "y": 5,
+        "w": 683,
+        "h": 522
+      },
+      "x_edge_refined": false,
+      "x_extent_hint": {
+        "schema_version": 1,
+        "kind": "unknown",
+        "start_label": "",
+        "end_label": ""
+      },
+      "confidence": 1.0,
+      "flags": [
+        "seeded_from_annotations"
+      ]
+    }
+  ],
+  "provenance": {
+    "schema_version": 1,
+    "model": "",
+    "prompt_id": "",
+    "thinking_level": "",
+    "attempts": 1,
+    "usage": {},
+    "timestamp": "2026-07-02T19:47:03.155192+00:00"
+  }
+}

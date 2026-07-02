@@ -10,6 +10,11 @@ COORD_RULES = (
     "x measured from the left edge, y from the top edge."
 )
 
+ORIENT_V1 = """The image shows the SAME scanned page four times in a 2x2 grid, rotated
+clockwise by the amount written above each version (0, 90, 180, 270).
+Which version is upright, i.e. its text and axis labels read horizontally left-to-right?
+Answer with that version's label."""
+
 TRIAGE_V1_GENERIC = f"""You analyze scans of historical documents containing charts.
 In ONE pass, characterize this page:
 1. Orientation: the clockwise rotation (0/90/180/270) needed so text and axis labels read
@@ -88,6 +93,7 @@ extracted candidate curves drawn in distinct colors; the legend maps colors to c
 Pick the candidate that best follows the actually drawn data curve over the full width."""
 
 PROMPTS: dict[str, str] = {
+    "ORIENT_V1": ORIENT_V1,
     "TRIAGE_V1_GENERIC": TRIAGE_V1_GENERIC,
     "TRIAGE_V1_DANUBE": TRIAGE_V1_DANUBE,
     "CALIB_V1": CALIB_V1,

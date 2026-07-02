@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "y_axis": {
+        "schema_version": 1,
+        "scale": "linear",
+        "unit": {
+          "schema_version": 1,
+          "raw": "bavarian_foot",
+          "canonical": "bavarian_foot",
+          "to_mm": 291.859
+        },
+        "ticks": [
+          {
+            "schema_version": 1,
+            "pixel": 1033.0009169999998,
+            "value": -1.0,
+            "label_text": "anchor_low",
+            "legible": true,
+            "used": true,
+            "residual": null
+          },
+          {
+            "schema_version": 1,
+            "pixel": 571.0007789999995,
+            "value": 4.0,
+            "label_text": "anchor_high",
+            "legible": true,
+            "used": true,
+            "residual": null
+          }
+        ],
+        "fit": {
+          "schema_version": 1,
+          "method": "human_anchors",
+          "slope": -0.010822507589813742,
+          "intercept": 10.179660264517054,
+          "scale": "linear",
+          "r2": 1.0,
+          "rmse_value": 0.0,
+          "n_ticks": 2,
+          "n_used": 2,
+          "n_rejected": 0
+        },
+        "anchor_equivalent": {
+          "schema_version": 1,
+          "c_low": 1033.0009169999998,
+          "v_low": -1.0,
+          "c_high": 571.0007789999995,
+          "v_high": 4.0
+        },
+        "confidence": 1.0,
+        "flags": [
+          "seeded_from_annotations"
+        ]
+      },
+      "x_axis": {
+        "schema_version": 1,
+        "kind": "date",
+        "start": "1848-09-01",
+        "end": "1848-09-30",
+        "n_samples": 30,
+        "ticks": [],
+        "fit": null,
+        "confidence": 1.0,
+        "flags": []
+      },
+      "review_required": false
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "",
+    "prompt_id": "",
+    "thinking_level": "",
+    "attempts": 1,
+    "usage": {},
+    "timestamp": "2026-07-02T19:47:03.156194+00:00"
+  }
+}

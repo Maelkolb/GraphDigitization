@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "ok",
+      "issues": [],
+      "reason": "The extracted curve follows the hand-drawn trend line accurately across the entire grid, correctly ignoring the surrounding scatter points.",
+      "suggested_action": "accept",
+      "confidence": 0.9,
+      "overlay": "overlays/curve_p01.png"
+    },
+    "p02": {
+      "schema_version": 1,
+      "verdict": "minor",
+      "issues": [
+        "vertical_offset"
+      ],
+      "reason": "The extracted curve shows a slight vertical deviation, running just above the original drawn line through the middle section.",
+      "suggested_action": "review",
+      "confidence": 0.75,
+      "overlay": "overlays/curve_p02.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2292,
+      "candidates_token_count": 49,
+      "thoughts_token_count": 522,
+      "total_token_count": 2863
+    },
+    "timestamp": "2026-07-02T19:50:52.749487+00:00"
+  }
+}

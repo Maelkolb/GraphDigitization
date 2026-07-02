@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "page_id": "forestry_A382_019_rot270",
+  "image": {
+    "schema_version": 1,
+    "path": "pages/forestry_A382_019_rot270.png",
+    "width": 974,
+    "height": 1652,
+    "sha256": ""
+  },
+  "orientation": {
+    "schema_version": 1,
+    "rotation_applied_deg": 270,
+    "reason": "triage: labels not upright"
+  },
+  "classification": {
+    "schema_version": 1,
+    "chart_kind": "multi_panel_line_chart",
+    "page_kind": "two vertical panels showing growth curves for different tree species",
+    "y_axis_labels_present": true,
+    "value_labels_on_curve": true,
+    "y_scale_guess": "linear",
+    "confidence": 1.0
+  },
+  "panels": [
+    {
+      "schema_version": 1,
+      "panel_id": "p01",
+      "label": "Fichten\nVII.4.a.",
+      "bbox_px": {
+        "x": 56,
+        "y": 99,
+        "w": 908,
+        "h": 760
+      },
+      "plot_area_px": {
+        "x": 86,
+        "y": 126,
+        "w": 855,
+        "h": 692
+      },
+      "x_edge_refined": false,
+      "x_extent_hint": {
+        "schema_version": 1,
+        "kind": "unknown",
+        "start_label": "1",
+        "end_label": "30\""
+      },
+      "confidence": 1.0,
+      "flags": []
+    },
+    {
+      "schema_version": 1,
+      "panel_id": "p02",
+      "label": "Tannen\nVII.4.a.",
+      "bbox_px": {
+        "x": 56,
+        "y": 851,
+        "w": 908,
+        "h": 743
+      },
+      "plot_area_px": {
+        "x": 86,
+        "y": 856,
+        "w": 855,
+        "h": 697
+      },
+      "x_edge_refined": false,
+      "x_extent_hint": {
+        "schema_version": 1,
+        "kind": "unknown",
+        "start_label": "1",
+        "end_label": "34\""
+      },
+      "confidence": 1.0,
+      "flags": []
+    }
+  ],
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "TRIAGE_V1_GENERIC",
+    "thinking_level": "high",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 1390,
+      "candidates_token_count": 531,
+      "thoughts_token_count": 1728,
+      "total_token_count": 3649
+    },
+    "timestamp": "2026-07-02T19:49:59.152631+00:00"
+  }
+}

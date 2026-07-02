@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "major",
+      "issues": [
+        "wrong_line_followed",
+        "peak_missed"
+      ],
+      "reason": "The red curve is almost flat near the bottom and completely fails to follow the actual hand-drawn curve's shape and peaks.",
+      "suggested_action": "reextract",
+      "confidence": 0.95,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2268,
+      "candidates_token_count": 80,
+      "thoughts_token_count": 630,
+      "total_token_count": 2978
+    },
+    "timestamp": "2026-07-02T19:47:24.896882+00:00"
+  }
+}

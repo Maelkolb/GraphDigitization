@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p02",
+      "reason": "axis fit r2=0.9935 below gate 0.995",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p02",
+      "reason": "relative fit residual 0.025 above gate",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p01",
+      "reason": "best candidate coverage 0.750 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p02",
+      "reason": "best candidate coverage 0.380 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01",
+      "reason": "25 empty slice(s): 1, 2, 3, 4, 5...",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p02",
+      "reason": "62 empty slice(s): 1, 2, 3, 4, 5...",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "major verdict but no alternative candidate left",
+      "severity": "blocking",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "major deviation persists: The digitized red curve deviates significantly from the smooth hand-drawn curve, exhibiting erratic spikes and drops to the baseline in the lower half.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p01.png"
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p02",
+      "reason": "major verdict but no alternative candidate left",
+      "severity": "blocking",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p02",
+      "reason": "major deviation persists: The extracted red curve has a large, artificial vertical spike near the center fold of the page that is not present on the original smooth curve.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p02.png"
+    }
+  ]
+}

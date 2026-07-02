@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "title": "Fichten zur Probeflaeche",
+  "station": "Klingenbrunn",
+  "year": null,
+  "date_range": "",
+  "y_unit_declared": "",
+  "unit_transition": {
+    "schema_version": 1,
+    "present": false,
+    "date": null
+  },
+  "language": "German",
+  "handwritten_annotations": true,
+  "notes": "No vertical axis line or tick marks are present; data values are annotated directly next to the curves. The horizontal axis is marked in Mil and Zoll.",
+  "confidence": 0.95,
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "TRIAGE_V1_GENERIC",
+    "thinking_level": "high",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 1395,
+      "candidates_token_count": 568,
+      "thoughts_token_count": 2235,
+      "total_token_count": 4198
+    },
+    "timestamp": "2026-07-02T19:46:06.089434+00:00"
+  }
+}

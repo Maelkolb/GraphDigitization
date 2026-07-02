@@ -1,0 +1,562 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "y_axis": {
+        "schema_version": 1,
+        "scale": "linear",
+        "unit": {
+          "schema_version": 1,
+          "raw": "Zoll.",
+          "canonical": "bavarian_zoll",
+          "to_mm": 24.321583333333333
+        },
+        "ticks": [
+          {
+            "schema_version": 1,
+            "pixel": 702.288,
+            "value": 2.2,
+            "label_text": "2.2",
+            "legible": true,
+            "used": true,
+            "residual": 5.559141691219634
+          },
+          {
+            "schema_version": 1,
+            "pixel": 698.748,
+            "value": 3.8,
+            "label_text": "3.8",
+            "legible": true,
+            "used": true,
+            "residual": 5.295954037497142
+          },
+          {
+            "schema_version": 1,
+            "pixel": 691.668,
+            "value": 6.0,
+            "label_text": "6.0",
+            "legible": true,
+            "used": true,
+            "residual": 3.76957873005216
+          },
+          {
+            "schema_version": 1,
+            "pixel": 683.88,
+            "value": 9.0,
+            "label_text": "9.0",
+            "legible": true,
+            "used": true,
+            "residual": 2.6705658918626796
+          },
+          {
+            "schema_version": 1,
+            "pixel": 673.968,
+            "value": 12.9,
+            "label_text": "12.9",
+            "legible": true,
+            "used": true,
+            "residual": 1.3536404614397046
+          },
+          {
+            "schema_version": 1,
+            "pixel": 662.64,
+            "value": 18.0,
+            "label_text": "18.0",
+            "legible": true,
+            "used": true,
+            "residual": 0.49143996952778934
+          },
+          {
+            "schema_version": 1,
+            "pixel": 651.312,
+            "value": 24.0,
+            "label_text": "24.0",
+            "legible": true,
+            "used": true,
+            "residual": 0.5292394776158176
+          },
+          {
+            "schema_version": 1,
+            "pixel": 637.86,
+            "value": 30.7,
+            "label_text": "30.7",
+            "legible": true,
+            "used": true,
+            "residual": 0.1491263934703504
+          },
+          {
+            "schema_version": 1,
+            "pixel": 622.992,
+            "value": 38.6,
+            "label_text": "38.6",
+            "legible": true,
+            "used": true,
+            "residual": 0.22373824783588958
+          },
+          {
+            "schema_version": 1,
+            "pixel": 606.0,
+            "value": 47.0,
+            "label_text": "47.0",
+            "legible": true,
+            "used": true,
+            "residual": -0.31956249003201265
+          },
+          {
+            "schema_version": 1,
+            "pixel": 586.884,
+            "value": 55.4,
+            "label_text": "55.4",
+            "legible": true,
+            "used": true,
+            "residual": -1.9807758201334096
+          },
+          {
+            "schema_version": 1,
+            "pixel": 567.768,
+            "value": 65.5,
+            "label_text": "65.5",
+            "legible": true,
+            "used": true,
+            "residual": -1.9419891502348605
+          },
+          {
+            "schema_version": 1,
+            "pixel": 547.2360000000001,
+            "value": 76.0,
+            "label_text": "76.-",
+            "legible": true,
+            "used": true,
+            "residual": -2.2484775418252525
+          },
+          {
+            "schema_version": 1,
+            "pixel": 525.996,
+            "value": 87.3,
+            "label_text": "87.3",
+            "legible": true,
+            "used": true,
+            "residual": -2.1276034641602024
+          },
+          {
+            "schema_version": 1,
+            "pixel": 504.048,
+            "value": 98.2,
+            "label_text": "98.2",
+            "legible": true,
+            "used": true,
+            "residual": -2.779366917239585
+          },
+          {
+            "schema_version": 1,
+            "pixel": 480.68399999999997,
+            "value": 110.5,
+            "label_text": "110.5",
+            "legible": true,
+            "used": true,
+            "residual": -2.77640543180803
+          },
+          {
+            "schema_version": 1,
+            "pixel": 455.904,
+            "value": 122.0,
+            "label_text": "122.0",
+            "legible": true,
+            "used": true,
+            "residual": -4.31871900786544
+          },
+          {
+            "schema_version": 1,
+            "pixel": 431.832,
+            "value": 134.7,
+            "label_text": "134.7",
+            "legible": true,
+            "used": true,
+            "residual": -4.288395053178334
+          },
+          {
+            "schema_version": 1,
+            "pixel": 407.05199999999996,
+            "value": 148.0,
+            "label_text": "148.0",
+            "legible": true,
+            "used": true,
+            "residual": -4.030708629235761
+          },
+          {
+            "schema_version": 1,
+            "pixel": 382.272,
+            "value": 161.5,
+            "label_text": "161.5",
+            "legible": true,
+            "used": true,
+            "residual": -3.5730222052931424
+          },
+          {
+            "schema_version": 1,
+            "pixel": 356.784,
+            "value": 175.7,
+            "label_text": "175.7",
+            "legible": true,
+            "used": true,
+            "residual": -2.787973312095062
+          },
+          {
+            "schema_version": 1,
+            "pixel": 331.296,
+            "value": 189.0,
+            "label_text": "189.0",
+            "legible": true,
+            "used": true,
+            "residual": -2.90292441889693
+          },
+          {
+            "schema_version": 1,
+            "pixel": 305.1,
+            "value": 203.4,
+            "label_text": "203.4",
+            "legible": true,
+            "used": true,
+            "residual": -2.2905130564433307
+          },
+          {
+            "schema_version": 1,
+            "pixel": 252.708,
+            "value": 233.7,
+            "label_text": "233.7",
+            "legible": true,
+            "used": true,
+            "residual": 0.43430966846383967
+          },
+          {
+            "schema_version": 1,
+            "pixel": 225.804,
+            "value": 249.0,
+            "label_text": "249.0",
+            "legible": true,
+            "used": true,
+            "residual": 1.574083500172975
+          },
+          {
+            "schema_version": 1,
+            "pixel": 198.89999999999998,
+            "value": 265.5,
+            "label_text": "265.5",
+            "legible": true,
+            "used": true,
+            "residual": 3.9138573318820704
+          },
+          {
+            "schema_version": 1,
+            "pixel": 171.288,
+            "value": 281.2,
+            "label_text": "281.2",
+            "legible": true,
+            "used": true,
+            "residual": 5.080993632846685
+          },
+          {
+            "schema_version": 1,
+            "pixel": 144.38400000000001,
+            "value": 297.6,
+            "label_text": "297.6",
+            "legible": true,
+            "used": true,
+            "residual": 7.320767464555843
+          }
+        ],
+        "fit": {
+          "schema_version": 1,
+          "method": "irls_mad",
+          "slope": -0.526324195966804,
+          "intercept": 366.27202524591524,
+          "scale": "linear",
+          "r2": 0.9987409396591297,
+          "rmse_value": 3.2755992149887376,
+          "n_ticks": 28,
+          "n_used": 28,
+          "n_rejected": 0
+        },
+        "anchor_equivalent": {
+          "schema_version": 1,
+          "c_low": 702.288,
+          "v_low": -3.3591416912196337,
+          "c_high": 144.38400000000001,
+          "v_high": 290.2792325354442
+        },
+        "confidence": 1.0,
+        "flags": [
+          "curve_labels"
+        ]
+      },
+      "x_axis": {
+        "schema_version": 1,
+        "kind": "unknown",
+        "start": "Mil 0.",
+        "end": "33 Zoll",
+        "n_samples": null,
+        "ticks": [],
+        "fit": null,
+        "confidence": 1.0,
+        "flags": []
+      },
+      "review_required": false
+    },
+    "p02": {
+      "schema_version": 1,
+      "y_axis": {
+        "schema_version": 1,
+        "scale": "linear",
+        "unit": {
+          "schema_version": 1,
+          "raw": "Zoll",
+          "canonical": "bavarian_zoll",
+          "to_mm": 24.321583333333333
+        },
+        "ticks": [
+          {
+            "schema_version": 1,
+            "pixel": 1300.07,
+            "value": 2.8,
+            "label_text": "2.8",
+            "legible": true,
+            "used": true,
+            "residual": 4.773416758624921
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1294.44,
+            "value": 6.1,
+            "label_text": "6.1",
+            "legible": true,
+            "used": true,
+            "residual": 5.47583733792303
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1285.995,
+            "value": 11.0,
+            "label_text": "11.0",
+            "legible": true,
+            "used": true,
+            "residual": 6.47946820686991
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1267.979,
+            "value": 16.7,
+            "label_text": "16.7",
+            "legible": true,
+            "used": true,
+            "residual": 3.86721406062345
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1253.341,
+            "value": 22.0,
+            "label_text": "22.0",
+            "legible": true,
+            "used": true,
+            "residual": 2.4135075667982164
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1235.325,
+            "value": 28.5,
+            "label_text": "28.5",
+            "legible": true,
+            "used": true,
+            "residual": 0.6012534205517568
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1215.62,
+            "value": 36.4,
+            "label_text": "36.4",
+            "legible": true,
+            "used": true,
+            "residual": -0.5902745519053738
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1194.789,
+            "value": 41.0,
+            "label_text": "41.0",
+            "legible": true,
+            "used": true,
+            "residual": -5.601318408502834
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1174.521,
+            "value": 52.4,
+            "label_text": "52.4",
+            "legible": true,
+            "used": true,
+            "residual": -3.5526043230300743
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1152.564,
+            "value": 60.0,
+            "label_text": "60.0",
+            "legible": true,
+            "used": true,
+            "residual": -6.0831640637678674
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1129.481,
+            "value": 70.1,
+            "label_text": "70.1",
+            "legible": true,
+            "used": true,
+            "residual": -6.633239688646228
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1106.3980000000001,
+            "value": 86.2,
+            "label_text": "86.2",
+            "legible": true,
+            "used": true,
+            "residual": -1.18331531352446
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1082.752,
+            "value": 90.0,
+            "label_text": "90.0",
+            "legible": true,
+            "used": true,
+            "residual": -8.29314888047304
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1059.106,
+            "value": 101.6,
+            "label_text": "101.6",
+            "legible": true,
+            "used": true,
+            "residual": -7.60298244742151
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1034.897,
+            "value": 118.2,
+            "label_text": "118.2",
+            "legible": true,
+            "used": true,
+            "residual": -2.172573956440189
+          },
+          {
+            "schema_version": 1,
+            "pixel": 1011.251,
+            "value": 130.0,
+            "label_text": "130.0",
+            "legible": true,
+            "used": true,
+            "residual": -1.282407523388656
+          },
+          {
+            "schema_version": 1,
+            "pixel": 987.042,
+            "value": 142.5,
+            "label_text": "142.5",
+            "legible": true,
+            "used": true,
+            "residual": 0.04800096759265671
+          },
+          {
+            "schema_version": 1,
+            "pixel": 962.833,
+            "value": 155.5,
+            "label_text": "155.5",
+            "legible": true,
+            "used": true,
+            "residual": 1.8784094585739695
+          },
+          {
+            "schema_version": 1,
+            "pixel": 938.624,
+            "value": 167.7,
+            "label_text": "167.7",
+            "legible": true,
+            "used": true,
+            "residual": 2.908817949555271
+          },
+          {
+            "schema_version": 1,
+            "pixel": 914.415,
+            "value": 181.8,
+            "label_text": "181.8",
+            "legible": true,
+            "used": true,
+            "residual": 5.839226440536606
+          },
+          {
+            "schema_version": 1,
+            "pixel": 889.643,
+            "value": 196.1,
+            "label_text": "196.1",
+            "legible": true,
+            "used": true,
+            "residual": 8.709876989447736
+          }
+        ],
+        "fit": {
+          "schema_version": 1,
+          "method": "irls_mad",
+          "slope": -0.46138177987602486,
+          "intercept": 597.8551938047987,
+          "scale": "linear",
+          "r2": 0.9934985343693746,
+          "rmse_value": 4.867489993125472,
+          "n_ticks": 21,
+          "n_used": 21,
+          "n_rejected": 0
+        },
+        "anchor_equivalent": {
+          "schema_version": 1,
+          "c_low": 1300.07,
+          "v_low": -1.9734167586249214,
+          "c_high": 889.643,
+          "v_high": 187.39012301055226
+        },
+        "confidence": 0.95,
+        "flags": [
+          "curve_labels",
+          "low_r2:0.9935",
+          "high_residual"
+        ]
+      },
+      "x_axis": {
+        "schema_version": 1,
+        "kind": "unknown",
+        "start": "Mil 0",
+        "end": "27 Zoll",
+        "n_samples": null,
+        "ticks": [],
+        "fit": null,
+        "confidence": 0.95,
+        "flags": []
+      },
+      "review_required": false
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "CURVE_LABELS_V1",
+    "thinking_level": "high",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 1221,
+      "candidates_token_count": 1452,
+      "thoughts_token_count": 7130,
+      "total_token_count": 9803
+    },
+    "timestamp": "2026-07-02T19:46:44.898307+00:00"
+  }
+}

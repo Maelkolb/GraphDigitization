@@ -184,15 +184,24 @@ def _build_x_axis(kind: str, start_label: str, end_label: str, panel: Panel,
         else:
             x.flags.append("dates_unparsed")
     elif x.kind == "numeric":
-        try:
-            n0, n1 = float(start_label), float(end_label)
-            if n0 != n1 and float(abs(n1 - n0)).is_integer():
+        n0, n1 = _lenient_float(start_label), _lenient_float(end_label)
+        if n0 is not None and n1 is not None and n0 != n1:
+            x.start, x.end = f"{n0:g}", f"{n1:g}"
+            if float(abs(n1 - n0)).is_integer():
                 x.n_samples = int(abs(n1 - n0)) + 1  # descending extents supported
-                if n1 < n0:
-                    x.flags.append("descending")
-        except ValueError:
+            if n1 < n0:
+                x.flags.append("descending")
+        else:
             x.flags.append("numeric_extent_unparsed")
     return x
+
+
+def _lenient_float(label: str) -> float | None:
+    """First number in a label, tolerating unit marks like '30"' or '34 Zoll'."""
+    import re
+
+    m = re.search(r"-?\d+(?:[.,]\d+)?", label)
+    return float(m.group(0).replace(",", ".")) if m else None
 
 
 # --------------------------------------------------------------------------- stage

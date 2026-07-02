@@ -76,7 +76,10 @@ def _canned_responses(spec):
     base_resp = BaselinePointsResponse(line_visible=True, points=base_points,
                                        confidence=0.85)
 
+    from graphdig.gemini.schemas import OrientationResponse
+
     return {
+        "ORIENT_V1": OrientationResponse(rotation_deg=0, confidence=0.95),
         "TRIAGE_V1_GENERIC": triage_resp,
         "CALIB_V1": cal_resp,
         "BASELINE_V1": base_resp,

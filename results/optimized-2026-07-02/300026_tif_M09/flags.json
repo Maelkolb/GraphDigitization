@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "QC rejected candidate; reselected cand 45",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "major deviation persists: The red curve is almost flat near the bottom and completely fails to follow the actual hand-drawn curve's shape and peaks.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p01.png"
+    }
+  ]
+}
