@@ -121,12 +121,35 @@ def _to_panels(resp: TriageResponse, width: int, height: int,
         p.flags.append("low_confidence")
     if low:
         flags.append(f"{len(low)} panel(s) below confidence gate")
-    # reading order: row bands, then left to right
-    band = max(1, max(p.bbox_px.h for p in kept) // 2) if kept else 1
-    kept.sort(key=lambda p: (p.bbox_px.y // band, p.bbox_px.x))
+    kept = _reading_order(kept)
     for i, p in enumerate(kept, start=1):
         p.panel_id = f"p{i:02d}"
     return kept, flags
+
+
+def _reading_order(panels: list[Panel]) -> list[Panel]:
+    """Rows by VERTICAL OVERLAP, then left-to-right.
+
+    Panels in one visual row can have wildly different heights and top edges (annual
+    sheets are bottom-aligned; each month's chart is only as tall as its values need),
+    so neither top-edge banding nor center distance is reliable. Two panels share a row
+    when their y-ranges overlap by more than half the smaller height - checked against
+    EVERY member of the row, not just its first panel.
+    """
+    def y_overlap(a: Panel, b: Panel) -> float:
+        return (min(a.bbox_px.bottom, b.bbox_px.bottom)
+                - max(a.bbox_px.y, b.bbox_px.y))
+
+    rows: list[list[Panel]] = []
+    for p in sorted(panels, key=lambda p: p.bbox_px.y + p.bbox_px.h / 2):
+        for row in rows:
+            if any(y_overlap(p, q) > 0.5 * min(p.bbox_px.h, q.bbox_px.h) for q in row):
+                row.append(p)
+                break
+        else:
+            rows.append([p])
+    rows.sort(key=lambda row: min(p.bbox_px.y + p.bbox_px.h / 2 for p in row))
+    return [p for row in rows for p in sorted(row, key=lambda p: p.bbox_px.x)]
 
 
 def _clamp_plot_area(plot: BoxPx, bbox: BoxPx) -> BoxPx:
@@ -161,14 +184,23 @@ def _assign_month_spans(panels: list[Panel], year: int | None, ctx: Context) -> 
 
     parsed = 0
     for p in panels:
-        if p.month:  # hint-assigned months are authoritative
-            continue
+        label_month = None
         for line in p.label.splitlines():
-            m = month_from_name(line.strip())
-            if m:
-                p.month = m
-                parsed += 1
+            label_month = month_from_name(line.strip())
+            if label_month:
                 break
+        if p.month:  # hint-assigned months are authoritative - but verify vs labels
+            if label_month and label_month != p.month:
+                p.flags.append("month_hint_label_mismatch")
+                ctx.add_flag("triage",
+                             f"hint says month {p.month} but the panel label reads "
+                             f"'{p.label.splitlines()[0] if p.label else ''}' "
+                             f"(month {label_month})", panel_id=p.panel_id,
+                             severity="warning")
+            continue
+        if label_month:
+            p.month = label_month
+            parsed += 1
     months = [p.month for p in panels if p.month]
     ordered = all(a < b for a, b in itertools.pairwise(months))
     if len(panels) > 1 and (len(months) < max(1, round(0.66 * len(panels)))
@@ -275,8 +307,25 @@ def _validate_month_widths(panels: list[Panel], year: int, ctx: Context) -> None
                          panel_id=p.panel_id, severity="warning")
 
 
+def _nearest_peak(strength: np.ndarray, edge: int, lo: int, hi: int) -> int:
+    """The strong column NEAREST the proposed edge (never the strongest in the window:
+    interior day gridlines are often darker than the true boundary and would hijack an
+    argmax, shifting every date in the panel)."""
+    window = strength[lo:hi]
+    if window.size < 3:
+        return edge
+    threshold = window.max() * 0.5
+    peaks = [i for i in range(1, len(window) - 1)
+             if window[i] >= threshold
+             and window[i] >= window[i - 1] and window[i] >= window[i + 1]]
+    if not peaks:
+        return edge
+    best = min(peaks, key=lambda i: abs(lo + i - edge))
+    return lo + best
+
+
 def _refine_x_edges(page: Image.Image, panels: list[Panel]) -> None:
-    """Snap plot-area left/right edges to the strongest vertical gridline nearby."""
+    """Snap plot-area left/right edges to the nearest strong vertical gridline."""
     import cv2
 
     gray = np.asarray(page.convert("L"), dtype=np.float32)
@@ -287,13 +336,10 @@ def _refine_x_edges(page: Image.Image, panels: list[Panel]) -> None:
         if area is None or area.w < 4 * window:
             continue
         col_strength = sobel[area.y:area.bottom].sum(axis=0)
-        new_edges = {}
-        for name, edge in (("left", area.x), ("right", area.right)):
-            lo, hi = max(0, edge - window), min(page.width, edge + window + 1)
-            if hi - lo >= 3:
-                new_edges[name] = lo + int(np.argmax(col_strength[lo:hi]))
-        left = new_edges.get("left", area.x)
-        right = new_edges.get("right", area.right)
+        left = _nearest_peak(col_strength, area.x, max(0, area.x - window),
+                             min(page.width, area.x + window + 1))
+        right = _nearest_peak(col_strength, area.right, max(0, area.right - window),
+                              min(page.width, area.right + window + 1))
         if right - left > 2 * window:
             p.plot_area_px = BoxPx(x=left, y=area.y, w=right - left, h=area.h)
             p.x_edge_refined = True

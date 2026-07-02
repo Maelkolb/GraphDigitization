@@ -68,21 +68,29 @@ def pseudo_page_hints(pseudo: PseudoPage,
                       paths: ZenodoPaths | None = None) -> Hints:
     """Calibration + layout hints in PSEUDO-PAGE coordinates.
 
-    The y-anchors are the dataset's LOW/HIGH annotation rows, mapped through the January
-    tile (tile row + paste offset). All 12 panels share the scale, so global anchors
-    suffice.
+    The original sheet shares one value grid, but each tile was cut with its OWN
+    vertical crop and then bottom-aligned on the pseudo page - so the value-to-row
+    mapping differs per panel. Anchors therefore go into per-panel hints, each mapped
+    through its month's tile placement. (Real full sheets don't have this artifact;
+    global anchors suffice there.)
     """
     paths = paths or ZenodoPaths()
     ann: MonthAnnotations = load_month_yolo(paths.month_yolo(pseudo.scan_id))
-    jan = pseudo.extents[0]
-    c_low_t, c_high_t = tile_anchor_rows(ann, 1, jan.w, jan.h)
     unit = danube_unit_for(month_span(pseudo.year, 1)[0])
+    panels = []
+    for m in range(1, 13):
+        ext = pseudo.extents[m - 1]
+        c_low_t, c_high_t = tile_anchor_rows(ann, m, ext.w, ext.h)
+        panels.append(PanelHint(
+            index=m, month=m,
+            y_anchors=[YAnchorHint(pixel=c_low_t + ext.y, value=ann.low_value),
+                       YAnchorHint(pixel=c_high_t + ext.y, value=ann.high_value)]))
+    jan = panels[0].y_anchors
     return Hints(
         station=pseudo.scan_id[:2], year=pseudo.year, unit=unit.canonical,
         y_scale="linear", rotation_deg=0, expected_panels=12, panel_layout="row",
-        y_anchors=[YAnchorHint(pixel=c_low_t + jan.y, value=ann.low_value),
-                   YAnchorHint(pixel=c_high_t + jan.y, value=ann.high_value)],
-        panels=[PanelHint(index=m, month=m) for m in range(1, 13)],
+        y_anchors=list(jan),  # global fallback = January mapping
+        panels=panels,
         notes=f"pseudo-page from Zenodo tiles, scan {pseudo.scan_id}",
     )
 

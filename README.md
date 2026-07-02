@@ -54,6 +54,14 @@ uv run graphdig fetch-data --small        # annotations, ground truth, series (~
 uv run graphdig fetch-data --tiles 210018 # monthly tiles via ranged zip reads
 uv run graphdig danube-prep 210018 1839 --run   # seeded from the published annotations*
 uv run graphdig evaluate series --runs "outputs/runs/*210018*"
+
+# FULL annual sheet (12 panels segmented + digitized + stitched to a year series):
+uv run graphdig pseudo-page 210018 1839 --run   # stitched stand-in from the tiles
+uv run graphdig evaluate fullpage --runs "outputs/runs/*pseudo*"
+# real sheets: uv run graphdig run sheet.tif --profile danube --hints hints.json
+
+# user hints (station/year/unit/anchors/... override+validate Gemini readings):
+uv run graphdig run chart.png --hints my_hints.json
 ```
 
 \* the published monthly tiles carry no axis labels (they live on the unpublished page

@@ -150,6 +150,51 @@ judged again (bounded by `qc_max_reselect`). Unrecoverable majors stay as blocki
 `overlays/reconstruction_<pid>.png` — original scan above, digitized series below on a
 shared x-axis (ground truth overlaid in evaluations).
 
+## User hints (`--hints hints.json`)
+
+Operators often know things the scan cannot say: the station, the year, the unit, a
+manually measured axis anchor. A strict-schema hints file (`graphdig/hints.py`; typos
+error instead of vanishing) injects that knowledge anywhere in the pipeline: metadata
+fields, series census, scale, rotation (skips the orientation checks), expected panel
+count, per-panel months/extents, panel bboxes (the manual escape hatch when segmentation
+fails), and **y-anchors** `[(pixel, value), ...]` that become the calibration fit
+(`method="user_anchors"`, confidence 1.0). Hints override Gemini, but disagreements are
+always recorded (`hint_mismatch:<field>` / `hint_gemini_mismatch` flags) — nothing is
+silently discarded. The hints file is copied into the run dir so resumed and remote runs
+see identical inputs. `danube-prep` and pseudo-pages are now just hint generators over
+the Zenodo annotations.
+
+## Full annual sheets
+
+A full hydrograph sheet (12 monthly panels) runs through the same stages with the danube
+profile: triage detects the panels in calendar order (month identities from the labels,
+positional fallback), repairs over/under-segmentation (multi-month boxes split at the
+strongest interior gridline seams, slivers dropped), validates each panel's width against
+its month's day count (day-shift guard), and snaps plot edges to gridlines. Calibration
+reads labels per panel with page-margin crop retries for the edge panels; panels whose
+labels are unreadable inherit the best-supported fit on the page (`shared_y_scale` donor
+propagation with cross-panel consistency checks). The series stage stitches all monthly
+series into `series/annual.csv` (join gaps/overlaps flagged) with a full-year figure.
+
+Because the reference dataset publishes only monthly tiles, full-page behavior is
+validated on **stitched pseudo-pages** (`graphdig pseudo-page <scan> <year> --run`,
+truth + hints sidecars generated) and measured by `graphdig evaluate fullpage`:
+segmentation IoU, edge error in days, and per-month series accuracy vs pixel GT.
+Real sheets take the identical path: `graphdig run sheet.tif --profile danube`.
+
+## Extraction backends and the fallback chain
+
+| backend | what it is | when |
+|---|---|---|
+| `lineformer_local` / `colab_bundle` | LineFormer instance segmentation (dense polylines) | default; dense curves |
+| `gemini_points` | Gemini traces each named series at k sampled x positions (visibility-honest: gaps stay gaps) | sparse charts; faint/dotted/bundled curves where segmentation fails |
+| `stub` | sidecar JSON | tests/dry runs |
+
+`--extractor-fallback gemini_points` arms the QC loop's last resort: when a major verdict
+survives reselection, the fallback backend's candidates are merged once per tile and
+selection retries. `graphdig evaluate extractors --gauge-months ... --backends ...`
+benchmarks backends head-to-head against the Danube ground truth.
+
 ## Trust model: confidence gates and review flags
 
 Nothing below a gate fails silently and nothing uncertain is presented as certain: every

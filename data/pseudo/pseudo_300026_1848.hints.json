@@ -1,0 +1,277 @@
+{
+  "station": "30",
+  "year": 1848,
+  "unit": "bavarian_foot",
+  "y_scale": "linear",
+  "n_series": null,
+  "series_labels": [],
+  "rotation_deg": 0,
+  "expected_panels": 12,
+  "panel_layout": "row",
+  "y_anchors": [
+    {
+      "pixel": 1919.0000690000002,
+      "value": -1.0
+    },
+    {
+      "pixel": 1456.9999309999998,
+      "value": 4.0
+    }
+  ],
+  "baseline_visible": null,
+  "panels": [
+    {
+      "index": 1,
+      "month": 1,
+      "label": "",
+      "bbox_px": null,
+      "plot_area_px": null,
+      "x_start": "",
+      "x_end": "",
+      "n_series": null,
+      "series_labels": [],
+      "y_anchors": [
+        {
+          "pixel": 1919.0000690000002,
+          "value": -1.0
+        },
+        {
+          "pixel": 1456.9999309999998,
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "month": 2,
+      "label": "",
+      "bbox_px": null,
+      "plot_area_px": null,
+      "x_start": "",
+      "x_end": "",
+      "n_series": null,
+      "series_labels": [],
+      "y_anchors": [
+        {
+          "pixel": 1945.9975709999999,
+          "value": -1.0
+        },
+        {
+          "pixel": 1483.9974329999995,
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "month": 3,
+      "label": "",
+      "bbox_px": null,
+      "plot_area_px": null,
+      "x_start": "",
+      "x_end": "",
+      "n_series": null,
+      "series_labels": [],
+      "y_anchors": [
+        {
+          "pixel": 2331.0006449999996,
+          "value": -1.0
+        },
+        {
+          "pixel": 1869.0005069999993,
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "month": 4,
+      "label": "",
+      "bbox_px": null,
+      "plot_area_px": null,
+      "x_start": "",
+      "x_end": "",
+      "n_series": null,
+      "series_labels": [],
+      "y_anchors": [
+        {
+          "pixel": 2440.499115,
+          "value": -1.0
+        },
+        {
+          "pixel": 1978.4989769999997,
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "month": 5,
+      "label": "",
+      "bbox_px": null,
+      "plot_area_px": null,
+      "x_start": "",
+      "x_end": "",
+      "n_series": null,
+      "series_labels": [],
+      "y_anchors": [
+        {
+          "pixel": 2392.000071,
+          "value": -1.0
+        },
+        {
+          "pixel": 1929.9999329999996,
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "month": 6,
+      "label": "",
+      "bbox_px": null,
+      "plot_area_px": null,
+      "x_start": "",
+      "x_end": "",
+      "n_series": null,
+      "series_labels": [],
+      "y_anchors": [
+        {
+          "pixel": 2422.999543,
+          "value": -1.0
+        },
+        {
+          "pixel": 1960.9994049999996,
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "month": 7,
+      "label": "",
+      "bbox_px": null,
+      "plot_area_px": null,
+      "x_start": "",
+      "x_end": "",
+      "n_series": null,
+      "series_labels": [],
+      "y_anchors": [
+        {
+          "pixel": 2487.9997049999997,
+          "value": -1.0
+        },
+        {
+          "pixel": 2025.9995669999994,
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "month": 8,
+      "label": "",
+      "bbox_px": null,
+      "plot_area_px": null,
+      "x_start": "",
+      "x_end": "",
+      "n_series": null,
+      "series_labels": [],
+      "y_anchors": [
+        {
+          "pixel": 2502.998537,
+          "value": -1.0
+        },
+        {
+          "pixel": 2040.9983989999996,
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "month": 9,
+      "label": "",
+      "bbox_px": null,
+      "plot_area_px": null,
+      "x_start": "",
+      "x_end": "",
+      "n_series": null,
+      "series_labels": [],
+      "y_anchors": [
+        {
+          "pixel": 2425.000917,
+          "value": -1.0
+        },
+        {
+          "pixel": 1963.0007789999995,
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "month": 10,
+      "label": "",
+      "bbox_px": null,
+      "plot_area_px": null,
+      "x_start": "",
+      "x_end": "",
+      "n_series": null,
+      "series_labels": [],
+      "y_anchors": [
+        {
+          "pixel": 2302.000987,
+          "value": -1.0
+        },
+        {
+          "pixel": 1840.0008489999996,
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "month": 11,
+      "label": "",
+      "bbox_px": null,
+      "plot_area_px": null,
+      "x_start": "",
+      "x_end": "",
+      "n_series": null,
+      "series_labels": [],
+      "y_anchors": [
+        {
+          "pixel": 2276.997559,
+          "value": -1.0
+        },
+        {
+          "pixel": 1814.9974209999996,
+          "value": 4.0
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "month": 12,
+      "label": "",
+      "bbox_px": null,
+      "plot_area_px": null,
+      "x_start": "",
+      "x_end": "",
+      "n_series": null,
+      "series_labels": [],
+      "y_anchors": [
+        {
+          "pixel": 1996.0002709999999,
+          "value": -1.0
+        },
+        {
+          "pixel": 1534.0001329999996,
+          "value": 4.0
+        }
+      ]
+    }
+  ],
+  "notes": "pseudo-page from Zenodo tiles, scan 300026"
+}

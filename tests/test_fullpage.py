@@ -81,6 +81,41 @@ def test_single_panel_keeps_hint_month(tmp_path):
     assert panels[0].x_extent_hint.start_label == "1849-06-01"
 
 
+def test_reading_order_bottom_aligned_heights(tmp_path):
+    """Bottom-aligned panels with very different heights are ONE row, x-ordered.
+
+    Regression guard for the pseudo-page scramble: top-edge banding put tall panels
+    into different 'rows' and shuffled the calendar order.
+    """
+    from graphdig.stages.triage import _reading_order
+
+    # real failure case: heights from the 210018 pseudo-page incl. the extremes
+    # (February's tile spans the full height, November's barely a third)
+    heights = [454, 947, 592, 548, 754, 394, 359, 457, 335, 371, 359, 273]
+    panels = []
+    for i, h in enumerate(heights):
+        p = _panel(f"x{i}", 700 * (11 - i), 690)  # reversed x on purpose
+        p.bbox_px = BoxPx(x=700 * (11 - i), y=947 - h, w=690, h=h)
+        panels.append(p)
+    ordered = _reading_order(panels)
+    assert [p.bbox_px.x for p in ordered] == sorted(p.bbox_px.x for p in panels)
+
+    # genuinely stacked panels (forestry A382 layout) stay two rows, top first
+    top = _panel("a", 10, 900)
+    top.bbox_px = BoxPx(x=10, y=58, w=901, h=751)
+    bottom = _panel("b", 10, 900)
+    bottom.bbox_px = BoxPx(x=10, y=809, w=901, h=760)
+    assert [p.bbox_px.y for p in _reading_order([bottom, top])] == [58, 809]
+
+
+def test_month_hint_label_mismatch_flag(tmp_path):
+    ctx = _ctx(tmp_path)
+    p = _panel("p04", 300, 90, label="September", month=4)  # hint says April
+    _assign_month_spans([p], 1849, ctx)
+    assert p.month == 4  # hint stays authoritative
+    assert "month_hint_label_mismatch" in p.flags
+
+
 # ------------------------------------------------------------- panel reconciliation
 
 def test_reconcile_splits_double_month_box(tmp_path):
