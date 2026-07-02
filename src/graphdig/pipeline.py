@@ -90,7 +90,7 @@ def get_stage(name: str):
     import importlib
 
     module = importlib.import_module(f"graphdig.stages.{name}")
-    return getattr(module, "run")
+    return module.run
 
 
 class Runner:

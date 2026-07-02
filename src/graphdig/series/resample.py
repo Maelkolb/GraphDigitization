@@ -37,6 +37,23 @@ def last_point_per_slice(points: np.ndarray, x0: float, x1: float, n: int) -> np
     return out
 
 
+def last_index_per_slice(points: np.ndarray, x0: float, x1: float, n: int) -> np.ndarray:
+    """(n,) int array with the input index of the max-x point per slice; -1 if empty.
+
+    Same selection rule as last_point_per_slice, but returns indices so callers can carry
+    parallel per-point data (e.g. corrected and uncorrected y) through the resampling.
+    """
+    pts = np.asarray(points, dtype=float).reshape(-1, 2)
+    out = np.full(n, -1, dtype=int)
+    inside = np.where((pts[:, 0] >= x0) & (pts[:, 0] <= x1))[0]
+    if inside.size == 0:
+        return out
+    order = inside[np.argsort(pts[inside, 0], kind="stable")]
+    idx = _slice_indices(pts[order, 0], x0, x1, n)
+    out[idx] = order
+    return out
+
+
 def coverage(points: np.ndarray, x0: float, x1: float, n: int) -> float:
     """Fraction of the n slices that contain at least one predicted point (paper: 'coverage')."""
     sampled = last_point_per_slice(points, x0, x1, n)

@@ -69,7 +69,7 @@ def run(ctx: Context) -> None:
         refined = refine_points_cv(gray, seeds)
         points = []
         big_deltas = 0
-        for (sx, _sy), (x, y, delta) in zip(seeds, refined, strict=True):
+        for (_sx, _sy), (x, y, delta) in zip(seeds, refined, strict=True):
             if abs(delta) > MAX_REFINE_DELTA:
                 big_deltas += 1
             points.append(BaselinePoint(x=x, y=y, refined=delta != 0.0, residual_px=delta))

@@ -5,8 +5,8 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-from conftest import FakeGeminiClient
 
+from conftest import FakeGeminiClient
 from graphdig.artifacts import (
     BaselineArtifact,
     CalibrationArtifact,
@@ -106,7 +106,7 @@ def test_panels_artifact(offline_run):
     assert len(art.panels) == 1
     p = art.panels[0]
     assert p.panel_id == "p01"
-    bx0, by0, bx1, by1 = spec.bbox
+    bx0, _by0, bx1, _by1 = spec.bbox
     assert abs(p.bbox_px.x - bx0) <= 2 and abs(p.bbox_px.right - bx1) <= 2
     assert (run_dir / "overlays" / "panels.png").exists()
 

@@ -84,7 +84,7 @@ def make_synthetic_chart(spec: SynthChart | None = None) -> tuple[Image.Image, S
     # the data curve
     xs = np.arange(x0, x1)
     ys = spec.curve_y(xs)
-    d.line(list(zip(xs.tolist(), ys.tolist())), fill=(40, 40, 120), width=3)
+    d.line(list(zip(xs.tolist(), ys.tolist(), strict=False)), fill=(40, 40, 120), width=3)
 
     d.text((spec.width // 2 - 60, 40), "Synthetic Gauge 1848", fill=(30, 30, 30))
     return img, spec
