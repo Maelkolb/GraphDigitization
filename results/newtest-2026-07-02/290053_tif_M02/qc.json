@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "major",
+      "issues": [
+        "wrong_line_followed",
+        "missing_segment"
+      ],
+      "reason": "The red curve traces a horizontal grid line on the left and right instead of following the actual data curve.",
+      "suggested_action": "reextract",
+      "confidence": 0.8,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2316,
+      "candidates_token_count": 48,
+      "thoughts_token_count": 349,
+      "total_token_count": 2713
+    },
+    "timestamp": "2026-07-02T20:15:11.531756+00:00"
+  }
+}

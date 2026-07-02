@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "triage",
+      "panel_id": "",
+      "reason": "no axis labels and no curve labels: absolute calibration impossible from this image alone (relative digitization only)",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p01",
+      "reason": "no usable axis fit (0 calibration points)",
+      "severity": "blocking",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01",
+      "reason": "no usable axis calibration",
+      "severity": "blocking",
+      "artifact_ref": ""
+    }
+  ]
+}

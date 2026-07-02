@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "minor deviation: The extracted curve slightly cuts below the two sharpest peaks towards the right.",
+      "severity": "warning",
+      "artifact_ref": "overlays/curve_p01.png"
+    }
+  ]
+}

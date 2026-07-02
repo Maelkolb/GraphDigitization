@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "major",
+      "issues": [
+        "wrong_line_followed",
+        "noise",
+        "vertical_offset"
+      ],
+      "reason": "The red curve diverges significantly from the smooth curve 'a', tracking background grid lines and noise instead.",
+      "suggested_action": "reextract",
+      "confidence": 0.9,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2268,
+      "candidates_token_count": 57,
+      "thoughts_token_count": 205,
+      "total_token_count": 2530
+    },
+    "timestamp": "2026-07-02T20:17:22.934578+00:00"
+  }
+}

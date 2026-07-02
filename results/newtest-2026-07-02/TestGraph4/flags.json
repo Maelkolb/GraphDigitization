@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p01",
+      "reason": "axis fit r2=0.3656 below gate 0.995",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p01",
+      "reason": "relative fit residual 0.246 above gate",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p01",
+      "reason": "best candidate coverage 0.960 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01",
+      "reason": "4 empty slice(s): 1, 2, 3, 4",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "minor deviation: The tracking starts on the lower curve before transitioning to the upper curve at the beginning.",
+      "severity": "warning",
+      "artifact_ref": "overlays/curve_p01.png"
+    }
+  ]
+}

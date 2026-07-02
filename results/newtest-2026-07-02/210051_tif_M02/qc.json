@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "ok",
+      "issues": [],
+      "reason": "The red curve tracks the original hand-drawn curve extremely well with no noticeable deviations.",
+      "suggested_action": "accept",
+      "confidence": 0.95,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2268,
+      "candidates_token_count": 51,
+      "thoughts_token_count": 538,
+      "total_token_count": 2857
+    },
+    "timestamp": "2026-07-02T20:12:10.423635+00:00"
+  }
+}

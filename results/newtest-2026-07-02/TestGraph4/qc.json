@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "minor",
+      "issues": [
+        "wrong_line_followed"
+      ],
+      "reason": "The tracking starts on the lower curve before transitioning to the upper curve at the beginning.",
+      "suggested_action": "review",
+      "confidence": 0.8,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2322,
+      "candidates_token_count": 62,
+      "thoughts_token_count": 1279,
+      "total_token_count": 3663
+    },
+    "timestamp": "2026-07-02T20:15:11.461844+00:00"
+  }
+}

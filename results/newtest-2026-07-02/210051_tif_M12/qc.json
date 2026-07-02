@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "ok",
+      "issues": [],
+      "reason": "The red curve accurately tracks the dark blue upper boundary of the line across the entire chart within one grid tick.",
+      "suggested_action": "accept",
+      "confidence": 0.95,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2236,
+      "candidates_token_count": 56,
+      "thoughts_token_count": 269,
+      "total_token_count": 2561
+    },
+    "timestamp": "2026-07-02T20:15:00.261108+00:00"
+  }
+}

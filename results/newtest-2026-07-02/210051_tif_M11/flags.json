@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "QC rejected candidate; reselected cand 36",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "minor deviation: The red curve follows the hand-drawn line well, with only slight vertical offsets in the trough around the sixth grid column.",
+      "severity": "warning",
+      "artifact_ref": "overlays/curve_p01.png"
+    }
+  ]
+}

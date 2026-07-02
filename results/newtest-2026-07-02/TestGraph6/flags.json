@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "QC rejected candidate; reselected cand 82",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "major deviation persists: The red curve diverges significantly from the smooth curve 'a', tracking background grid lines and noise instead.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p01.png"
+    }
+  ]
+}

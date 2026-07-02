@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p01",
+      "reason": "axis fit r2=0.9922 below gate 0.995",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p01",
+      "reason": "relative fit residual 0.027 above gate",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p01",
+      "reason": "best candidate coverage 0.790 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01",
+      "reason": "21 empty slice(s): 69, 77, 78, 79, 80...",
+      "severity": "warning",
+      "artifact_ref": ""
+    }
+  ]
+}

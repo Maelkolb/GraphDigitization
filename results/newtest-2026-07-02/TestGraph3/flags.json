@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "minor deviation: The overlay tracks the top solid curve well but includes an incorrect vertical segment along the left border.",
+      "severity": "warning",
+      "artifact_ref": "overlays/curve_p01.png"
+    }
+  ]
+}

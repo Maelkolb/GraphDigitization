@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "minor",
+      "issues": [
+        "peak_missed"
+      ],
+      "reason": "The extracted curve slightly cuts below the two sharpest peaks towards the right.",
+      "suggested_action": "review",
+      "confidence": 4.5,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2274,
+      "candidates_token_count": 59,
+      "thoughts_token_count": 457,
+      "total_token_count": 2790
+    },
+    "timestamp": "2026-07-02T20:13:11.633740+00:00"
+  }
+}

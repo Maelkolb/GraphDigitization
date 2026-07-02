@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "ok",
+      "issues": [],
+      "reason": "The red curve closely tracks the hand-drawn blue curve across the entire segment within one grid tick.",
+      "suggested_action": "accept",
+      "confidence": 0.8,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2216,
+      "candidates_token_count": 53,
+      "thoughts_token_count": 333,
+      "total_token_count": 2602
+    },
+    "timestamp": "2026-07-02T20:12:24.352134+00:00"
+  }
+}

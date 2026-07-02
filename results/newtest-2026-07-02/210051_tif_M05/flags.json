@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "minor deviation: The red curve follows the general path well but exhibits minor vertical offsets from the center of the drawn line in several segments.",
+      "severity": "warning",
+      "artifact_ref": "overlays/curve_p01.png"
+    }
+  ]
+}

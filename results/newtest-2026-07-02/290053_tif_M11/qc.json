@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "ok",
+      "issues": [],
+      "reason": "The extracted curve follows the original data line closely with negligible deviations well within one grid unit.",
+      "suggested_action": "accept",
+      "confidence": 0.9,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2268,
+      "candidates_token_count": 51,
+      "thoughts_token_count": 372,
+      "total_token_count": 2691
+    },
+    "timestamp": "2026-07-02T20:17:06.420851+00:00"
+  }
+}

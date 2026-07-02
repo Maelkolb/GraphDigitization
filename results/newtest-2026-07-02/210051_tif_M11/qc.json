@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "minor",
+      "issues": [
+        "vertical_offset"
+      ],
+      "reason": "The red curve follows the hand-drawn line well, with only slight vertical offsets in the trough around the sixth grid column.",
+      "suggested_action": "review",
+      "confidence": 0.9,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2292,
+      "candidates_token_count": 68,
+      "thoughts_token_count": 490,
+      "total_token_count": 2850
+    },
+    "timestamp": "2026-07-02T20:14:44.358967+00:00"
+  }
+}

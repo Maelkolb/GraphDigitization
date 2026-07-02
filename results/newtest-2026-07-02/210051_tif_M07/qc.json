@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "ok",
+      "issues": [],
+      "reason": "The extracted red curve follows the hand-drawn blue line accurately across the entire image.",
+      "suggested_action": "accept",
+      "confidence": 0.9,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2252,
+      "candidates_token_count": 50,
+      "thoughts_token_count": 379,
+      "total_token_count": 2681
+    },
+    "timestamp": "2026-07-02T20:13:34.626847+00:00"
+  }
+}

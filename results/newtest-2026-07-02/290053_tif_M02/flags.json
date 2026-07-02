@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "QC rejected candidate; reselected cand 46",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "major deviation persists: The red curve traces a horizontal grid line on the left and right instead of following the actual data curve.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p01.png"
+    }
+  ]
+}

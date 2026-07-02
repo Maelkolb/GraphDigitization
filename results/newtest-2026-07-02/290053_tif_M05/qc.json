@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "ok",
+      "issues": [],
+      "reason": "The red curve follows the hand-drawn blue line perfectly across the entire chart segment.",
+      "suggested_action": "accept",
+      "confidence": 0.75,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2270,
+      "candidates_token_count": 36,
+      "thoughts_token_count": 461,
+      "total_token_count": 2767
+    },
+    "timestamp": "2026-07-02T20:15:47.404976+00:00"
+  }
+}

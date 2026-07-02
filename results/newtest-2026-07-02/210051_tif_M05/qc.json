@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "minor",
+      "issues": [
+        "vertical_offset"
+      ],
+      "reason": "The red curve follows the general path well but exhibits minor vertical offsets from the center of the drawn line in several segments.",
+      "suggested_action": "review",
+      "confidence": 0.9,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2292,
+      "candidates_token_count": 45,
+      "thoughts_token_count": 830,
+      "total_token_count": 3167
+    },
+    "timestamp": "2026-07-02T20:13:00.605894+00:00"
+  }
+}

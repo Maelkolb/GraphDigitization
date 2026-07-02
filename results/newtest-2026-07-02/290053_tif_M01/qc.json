@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "ok",
+      "issues": [],
+      "reason": "The extracted curve follows the hand-drawn line very closely within one grid tick.",
+      "suggested_action": "accept",
+      "confidence": 0.9,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2292,
+      "candidates_token_count": 49,
+      "thoughts_token_count": 363,
+      "total_token_count": 2704
+    },
+    "timestamp": "2026-07-02T20:14:44.358967+00:00"
+  }
+}

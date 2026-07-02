@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "minor",
+      "issues": [
+        "extra_segment",
+        "noise"
+      ],
+      "reason": "The overlay tracks the top solid curve well but includes an incorrect vertical segment along the left border.",
+      "suggested_action": "review",
+      "confidence": 4.0,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2308,
+      "candidates_token_count": 65,
+      "thoughts_token_count": 421,
+      "total_token_count": 2794
+    },
+    "timestamp": "2026-07-02T20:13:02.196039+00:00"
+  }
+}

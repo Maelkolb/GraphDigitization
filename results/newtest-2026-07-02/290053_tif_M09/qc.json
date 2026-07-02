@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "ok",
+      "issues": [],
+      "reason": "The extracted red curve accurately traces the upper boundary of the blue shaded line across the entire tile with no noticeable deviations.",
+      "suggested_action": "accept",
+      "confidence": 0.95,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2312,
+      "candidates_token_count": 48,
+      "thoughts_token_count": 198,
+      "total_token_count": 2558
+    },
+    "timestamp": "2026-07-02T20:16:35.611415+00:00"
+  }
+}

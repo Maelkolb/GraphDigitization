@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "ok",
+      "issues": [],
+      "reason": "The red curve accurately tracks the top boundary of the hand-drawn curve across the entire image.",
+      "suggested_action": "accept",
+      "confidence": 0.8,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2236,
+      "candidates_token_count": 52,
+      "thoughts_token_count": 590,
+      "total_token_count": 2878
+    },
+    "timestamp": "2026-07-02T20:16:25.823020+00:00"
+  }
+}

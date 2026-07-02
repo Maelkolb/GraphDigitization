@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "verdict": "minor",
+      "issues": [
+        "vertical_offset"
+      ],
+      "reason": "The red overlay exhibits a minor vertical offset, running slightly above the actual line along the flatter right-hand section.",
+      "suggested_action": "review",
+      "confidence": 0.8,
+      "overlay": "overlays/curve_p01.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2220,
+      "candidates_token_count": 50,
+      "thoughts_token_count": 476,
+      "total_token_count": 2746
+    },
+    "timestamp": "2026-07-02T20:15:26.160358+00:00"
+  }
+}
