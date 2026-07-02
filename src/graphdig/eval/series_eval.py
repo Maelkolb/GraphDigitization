@@ -46,18 +46,30 @@ def evaluate_month(run_dir: Path, scan_id: str, month: int,
                    paths: ZenodoPaths | None = None,
                    panel_id: str = "p01",
                    value_column: str = "value_native") -> SeriesEvalRow | None:
-    """Compare one gauge-month run against GT. value_column="value_native" assumes the
-    calibration read grid units (the GT GAUGELEVEL scale is grid-unit based)."""
+    """Compare one gauge-month run against GT.
+
+    Predictions in grid units (value_native) are converted to the GT level scale via the
+    per-page affine derived from the human anchors (see calibration_eval), so RMSE/MAE
+    are directly comparable with the paper's numbers.
+    """
+    from graphdig.data.gt_loaders import load_month_yolo
+    from graphdig.eval.calibration_eval import _grid_to_gt_affine, _human_fit
+
     paths = paths or ZenodoPaths()
     pred = load_run_series(run_dir, panel_id)
-    gt = load_gt_pixels(paths.gt_pixels(scan_id))
-    gt = gt[[d.month == month for d in gt["DATE"]]]
+    gt_all = load_gt_pixels(paths.gt_pixels(scan_id))
+    gt = gt_all[[d.month == month for d in gt_all["DATE"]]]
     if gt.empty or pred.empty:
         return None
     merged = pred.merge(gt, left_on="date", right_on="DATE", how="inner")
     if merged.empty:
         return None
     y_pred = pd.to_numeric(merged[value_column], errors="coerce").to_numpy(dtype=float)
+    if value_column == "value_native":
+        yolo = paths.month_yolo(scan_id)
+        if yolo.exists():
+            a, b = _grid_to_gt_affine(_human_fit(load_month_yolo(yolo)), gt_all)
+            y_pred = a * y_pred + b
     y_true = merged["GAUGELEVEL"].to_numpy(dtype=float)
     m = all_metrics(y_true, y_pred)
     return SeriesEvalRow(

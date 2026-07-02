@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
 
 
 def _cmd_run(args: argparse.Namespace) -> int:
@@ -49,6 +50,28 @@ def _cmd_evaluate(args: argparse.Namespace) -> int:
     from graphdig.eval.report import evaluate_cli
 
     return evaluate_cli(args)
+
+
+def _cmd_danube_prep(args: argparse.Namespace) -> int:
+    from graphdig.config import RunConfig
+    from graphdig.data.danube_prep import prepare_run
+    from graphdig.pipeline import Runner
+
+    months = ([int(m) for m in args.months.split(",")] if args.months
+              else list(range(1, 13)))
+    cfg = RunConfig(out_parent=Path(args.out), profile_name="danube",
+                    extractor=args.extractor, baseline_enabled=False,
+                    workers=args.workers)
+    rc = 0
+    for month in months:
+        run_dir = prepare_run(args.scan_id, month, args.year, cfg)
+        print(f"seeded run: {run_dir}")
+        if args.run:
+            run_cfg = cfg.model_copy(update={
+                "run_dir": run_dir,
+                "stages": ["preprocess", "extract", "select", "series", "qc", "report"]})
+            rc = max(rc, Runner(run_cfg).run())
+    return rc
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -89,6 +112,20 @@ def build_parser() -> argparse.ArgumentParser:
     imp.add_argument("run_dir")
     imp.add_argument("results", help="results zip produced by the Colab notebook")
     imp.set_defaults(func=_cmd_import_results)
+
+    dp = sub.add_parser("danube-prep",
+                        help="seed run(s) for Danube tiles from the published human "
+                             "annotations (tiles carry no axis labels)")
+    dp.add_argument("scan_id", help="e.g. 210018")
+    dp.add_argument("year", type=int)
+    dp.add_argument("--months", default=None, help="e.g. '1,2,6' (default: all 12)")
+    dp.add_argument("--out", default="outputs/runs")
+    dp.add_argument("--extractor", choices=["lineformer_local", "colab_bundle", "stub"],
+                    default="lineformer_local")
+    dp.add_argument("--workers", type=int, default=4)
+    dp.add_argument("--run", action="store_true",
+                    help="immediately run the remaining stages after seeding")
+    dp.set_defaults(func=_cmd_danube_prep)
 
     ev = sub.add_parser("evaluate", help="evaluate against ground truth")
     ev.add_argument("component", choices=["panels", "calibration", "series", "all"])

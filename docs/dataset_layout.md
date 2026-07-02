@@ -32,6 +32,12 @@ below was verified against the actual files during Phase 3 reconnaissance.
 - **No full annual pages are published** — only monthly tiles. Full-page panel detection is
   therefore evaluated on stitched pseudo-pages (12 tiles concatenated) and on the forestry
   sample charts; the paper-style month-bbox IoU eval is approximated in tile space.
+- **Monthly tiles carry no axis labels whatsoever** (verified visually: grid + curve only;
+  the value labels live on the unpublished page margins). Gemini tick-reading therefore
+  cannot run on Danube tiles at all — Danube end-to-end runs are seeded from the published
+  human annotations via `graphdig danube-prep` (mirroring the paper's own production
+  setup), and Gemini calibration is evaluated on label-bearing charts (forestry samples,
+  synthetic fixtures, full-page scans).
 - `gt.zip` `C_X` values continue across months (e.g. Jan 1 at ~552 for 210018 while the
   January tile starts near page x≈600) — treat them as **full-page** coordinates and verify
   per page against the month bbox before use (`calibration_eval` does this).

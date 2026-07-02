@@ -12,7 +12,7 @@ $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
 
 Write-Host "== creating .venvs/lineformer (Python 3.10) =="
-uv venv .venvs/lineformer --python 3.10
+uv venv .venvs/lineformer --python 3.10 --seed --clear
 $py = Join-Path $root ".venvs/lineformer/Scripts/python.exe"
 
 Write-Host "== installing pinned torch 1.13.1 (CPU) =="

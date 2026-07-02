@@ -7,7 +7,7 @@ cd "$(dirname "$0")/.."
 DEVICE="${DEVICE:-cpu}"   # cpu | cu117
 
 echo "== creating .venvs/lineformer (Python 3.10) =="
-uv venv .venvs/lineformer --python 3.10
+uv venv .venvs/lineformer --python 3.10 --seed --clear
 PY=".venvs/lineformer/bin/python"
 
 echo "== installing pinned torch 1.13.1 ($DEVICE) =="

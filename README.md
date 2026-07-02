@@ -1,42 +1,94 @@
 # GraphDigitization
 
-Automated digitization of historical line charts (hydrographs, forestry yield curves, …) by
-combining a multimodal LLM with a transformer line-extraction model:
+Automated digitization of historical line charts (hydrographs, forestry yield curves, …):
+a multimodal LLM does the *semantic* reading that human annotators used to do by hand,
+a transformer line-extraction model does the *pixel* work, and plain math turns pixels
+into physical units — a fully digitized series with provenance and confidence.
 
-- **Gemini 3.5 Flash** does the *semantic* work that human annotators previously did by hand:
-  chart panel detection, y-axis tick reading and calibration, metadata extraction, baseline
-  (zero-line) localization, and visual quality control.
-- **[LineFormer](https://github.com/TheJaeLal/LineFormer)** (ICDAR 2023) does the *pixel* work:
+- **Gemini 3.5 Flash**: chart panel detection, axis tick reading + unit detection,
+  metadata extraction, zero-line localization, visual quality control, near-tie candidate
+  arbitration.
+- **[LineFormer](https://github.com/TheJaeLal/LineFormer)** (Lal et al., ICDAR 2023):
   polyline instance segmentation of the drawn curve.
-- Plain Python does the *math*: least-squares axis fits with outlier rejection, warp correction,
-  resampling, and evaluation metrics.
+- **Plain Python**: least-squares axis calibration with outlier rejection, warp
+  correction, resampling, unit conversion, evaluation metrics.
 
-The pipeline automates the manual annotation steps of the HWLR workflow described in
-Rehbein, *Reconstructing nineteenth-century Danube river water levels with transformer-based
-computer vision* (Earth Syst. Sci. Data 18, 1783–1811, 2026), and generalizes it to arbitrary
-historical line charts. Reference data: [Zenodo 17296751](https://zenodo.org/records/17296751)
-(CC-BY-4.0).
+The pipeline automates the manual steps of the HWLR workflow from Rehbein,
+*Reconstructing nineteenth-century Danube river water levels with transformer-based
+computer vision* (Earth Syst. Sci. Data 18, 1783–1811, 2026) — its conclusion names
+"monthly panel detection and y axis anchor extraction" as the remaining manual
+bottlenecks — and generalizes it to arbitrary historical line charts.
+Reference data: [Zenodo 17296751](https://zenodo.org/records/17296751) (CC-BY-4.0).
 
-> Status: under construction — see `docs/design.md` for the architecture.
+```mermaid
+flowchart LR
+    A[scan] --> B[panels<br/><i>Gemini</i>]
+    B --> C[calibrate<br/><i>Gemini + least squares</i>]
+    B --> D[metadata<br/><i>Gemini</i>]
+    C --> E[baseline<br/><i>Gemini + CV, optional</i>]
+    E --> F[preprocess<br/>crop + x-stretch 2.0]
+    F --> G[extract<br/><i>LineFormer</i><br/>local CPU / Colab GPU]
+    G --> H[select<br/>s&alpha; + Gemini pick]
+    H --> I[series<br/>px &rarr; physical units]
+    I --> J[qc<br/><i>Gemini judge</i>]
+    J --> K[report + review flags]
+```
+
+Every stage writes typed JSON artifacts into a run directory (resumable, inspectable,
+remotely executable) and everything below a confidence gate lands in `review/flags.json`
+for targeted human verification. See `docs/design.md`.
 
 ## Quick start
 
 ```bash
-uv sync                                     # main environment (Python 3.12)
-cp .env.example .env                        # add your GEMINI_API_KEY
+uv sync
+cp .env.example .env                      # add your GEMINI_API_KEY
+
+# generic chart (panel detection + axis calibration fully automated):
 uv run graphdig run data/samples/forestry_A382_019.jpeg --profile generic
+
+# Danube reference data:
+uv run graphdig fetch-data --small        # annotations, ground truth, series (~25 MB)
+uv run graphdig fetch-data --tiles 210018 # monthly tiles via ranged zip reads
+uv run graphdig danube-prep 210018 1839 --run   # seeded from the published annotations*
+uv run graphdig evaluate series --runs "outputs/runs/*210018*"
 ```
 
-LineFormer runs in a separate pinned environment (old torch/mmdet stack):
+\* the published monthly tiles carry no axis labels (they live on the unpublished page
+margins), so Danube runs take calibration from the dataset's human annotations — exactly
+what the paper's production used — while extraction, selection, series building and QC
+run automated. Gemini calibration is exercised on charts that carry their labels
+(e.g. the bundled forestry samples). See `docs/dataset_layout.md`.
 
-```powershell
-./scripts/setup_lineformer_env.ps1          # local CPU inference (py3.10 venv)
+## LineFormer backends
+
+| backend | when | setup |
+|---|---|---|
+| `lineformer_local` | few pages, no GPU needed | `./scripts/setup_lineformer_env.ps1` (or `.sh`) — isolated py3.10 venv, torch 1.13.1 CPU |
+| `colab_bundle` | batch runs on GPU | `graphdig export-job` → `notebooks/lineformer_colab.ipynb` → `graphdig import-results` (see `docs/colab.md`) |
+| `stub` | tests / dry runs | none |
+
+Local GPU is deliberately unsupported: LineFormer's pinned CUDA 11.7 stack cannot run on
+Blackwell-generation cards. LineFormer publishes no license, so its code is cloned into
+gitignored `external/`, never vendored.
+
+## Pilot results (automated, no human in the loop)
+
+First real gauge-month (Neu-Ulm, February 1839): peak-aware score **0.984** vs the
+paper's human-picked candidate **0.989** on the same month (Pearson r 0.999), with
+s_α-selection over 99 LineFormer candidates. Full pilot tables land in `outputs/eval/`
+via `graphdig evaluate`.
+
+## Development
+
+```bash
+uv run pytest            # offline suite (73 tests): unit math, synthetic-chart pipeline,
+                         # ranged-zip server, bundle round trip
+uv run pytest -m live    # needs GEMINI_API_KEY: live prompt smoke tests
+uv run ruff check .
 ```
-
-or on GPU via `notebooks/lineformer_colab.ipynb` (export a job bundle with
-`graphdig export-job`, run it on Colab, then `graphdig import-results`).
 
 ## License
 
-MIT for this repository. LineFormer is cloned as an external dependency (no license published);
-its code is never vendored here. Zenodo dataset content is CC-BY-4.0 (Rehbein, 2025).
+MIT for this repository. LineFormer remains under its authors' terms (no license
+published). Zenodo dataset content is CC-BY-4.0 (Rehbein, 2025).
