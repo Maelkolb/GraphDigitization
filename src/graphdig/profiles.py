@@ -12,6 +12,7 @@ class Profile(BaseModel):
     daily_sampling: bool = False  # x is calendar time, resample to one point per day
     danube_units: bool = False  # enforce foot/mm transition rule by date
     panel_prompt_variant: str = "generic"  # selects prompt flavor in gemini/prompts.py
+    refine_x_edges: bool = False  # snap panel x-edges to printed gridlines (day grids)
 
 
 DANUBE = Profile(
@@ -21,6 +22,7 @@ DANUBE = Profile(
     daily_sampling=True,
     danube_units=True,
     panel_prompt_variant="danube",
+    refine_x_edges=True,
 )
 
 GENERIC = Profile(name="generic")
