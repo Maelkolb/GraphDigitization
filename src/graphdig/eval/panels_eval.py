@@ -11,35 +11,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from PIL import Image
-
 from graphdig.data.gt_loaders import ZenodoPaths
+from graphdig.data.pseudo_page import PseudoPage, build_pseudo_page
 from graphdig.dates import days_in_month
 from graphdig.geometry import BoxPx
-
-
-@dataclass
-class PseudoPage:
-    image: Image.Image
-    scan_id: str
-    year: int
-    extents: list[BoxPx]  # true tile extent per month (index 0 = January)
-
-
-def build_pseudo_page(scan_id: str, year: int,
-                      paths: ZenodoPaths | None = None) -> PseudoPage:
-    paths = paths or ZenodoPaths()
-    tiles = [Image.open(paths.tile(scan_id, m)) for m in range(1, 13)]
-    height = max(t.height for t in tiles)
-    width = sum(t.width for t in tiles)
-    page = Image.new("RGB", (width, height), (235, 230, 220))
-    extents: list[BoxPx] = []
-    x = 0
-    for t in tiles:
-        page.paste(t, (x, height - t.height))  # bottom-aligned like the originals
-        extents.append(BoxPx(x=x, y=height - t.height, w=t.width, h=t.height))
-        x += t.width
-    return PseudoPage(image=page, scan_id=scan_id, year=year, extents=extents)
 
 
 @dataclass

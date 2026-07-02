@@ -30,7 +30,7 @@ def _eval_calibration(out: Path, lines: list[str]) -> None:
               "", "Full table: `calibration_eval.csv`", ""]
 
 
-def _eval_panels(out: Path, lines: list[str]) -> None:
+def _eval_panels(out: Path, lines: list[str], scan_ids: list[str] | None = None) -> None:
     import pandas as pd
 
     from graphdig.data.gt_loaders import GT_SCAN_IDS, ZenodoPaths, load_gt_pixels
@@ -38,7 +38,7 @@ def _eval_panels(out: Path, lines: list[str]) -> None:
 
     paths = ZenodoPaths()
     rows = []
-    for scan_id in GT_SCAN_IDS[:3]:  # one pseudo-page per gauge is representative
+    for scan_id in scan_ids or GT_SCAN_IDS[:3]:
         year = load_gt_pixels(paths.gt_pixels(scan_id))["DATE"].iloc[0].year
         rows += [r.__dict__ for r in
                  evaluate_panels_on_pseudo_page(scan_id, year, out / "panels")]
@@ -93,13 +93,32 @@ def evaluate_cli(args) -> int:
     out = _out_dir(args)
     lines: list[str] = [f"# GraphDigitization evaluation — {date.today().isoformat()}", ""]
     component = args.component
+    scan_ids = ([s.strip() for s in args.scan_ids.split(",")]
+                if getattr(args, "scan_ids", None) else None)
     try:
         if component in ("calibration", "all"):
             _eval_calibration(out, lines)
         if component in ("panels", "all"):
-            _eval_panels(out, lines)
+            _eval_panels(out, lines, scan_ids)
         if component in ("series", "all"):
             _eval_series(out, lines, args.runs)
+        if component == "fullpage":
+            from graphdig.eval.fullpage_eval import evaluate_fullpage_cli, summarize
+
+            if not args.runs:
+                lines += ["## Fullpage: skipped (pass --runs <glob of run dirs>)", ""]
+            else:
+                rows = evaluate_fullpage_cli(args.runs, out)
+                if rows:
+                    s = summarize(rows)
+                    lines += ["## Full-page runs vs truth", "",
+                              f"- panels detected: {s['detected']}/{s['months']}",
+                              f"- mean IoU: {s['mean_iou']:.3f}",
+                              f"- median |edge error|: "
+                              f"{s['median_abs_edge_days']:.2f} days",
+                              f"- peak score mean/median: {s['mean_peak_score']:.3f} / "
+                              f"{s['median_peak_score']:.3f}",
+                              "", "Full table: `fullpage_eval.csv`", ""]
     finally:
         (out / "report.md").write_text("\n".join(lines), encoding="utf-8")
         print(f"evaluation report: {out / 'report.md'}")

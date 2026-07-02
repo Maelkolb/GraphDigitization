@@ -145,7 +145,7 @@ def run(ctx: Context) -> None:
         if annual:
             plot_rel = _annual_plot(ctx, annual)
             lines_out.append("### Annual series (stitched from all monthly panels)")
-            for key, ps in annual:
+            for _key, ps in annual:
                 label = f" **{ps.series_label}**" if ps.series_label else ""
                 lines_out.append(f"-{label} csv: `{ps.csv_path}` "
                                  f"({ps.n} days, {len(ps.gaps)} gaps)")

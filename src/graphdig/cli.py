@@ -52,6 +52,21 @@ def _cmd_evaluate(args: argparse.Namespace) -> int:
     return evaluate_cli(args)
 
 
+def _cmd_pseudo_page(args: argparse.Namespace) -> int:
+    from graphdig.config import RunConfig
+    from graphdig.data.pseudo_page import write_pseudo_page
+    from graphdig.pipeline import Runner
+
+    png, hints_path, truth_path = write_pseudo_page(args.scan_id, args.year, args.out)
+    print(f"pseudo page: {png}\nhints: {hints_path}\ntruth: {truth_path}")
+    if not args.run:
+        return 0
+    cfg = RunConfig(input=png, out_parent=Path(args.run_out), profile_name="danube",
+                    hints_path=hints_path, extractor=args.extractor,
+                    baseline_enabled=args.baseline, workers=args.workers)
+    return Runner(cfg).run()
+
+
 def _cmd_danube_prep(args: argparse.Namespace) -> int:
     from graphdig.config import RunConfig
     from graphdig.data.danube_prep import prepare_run
@@ -115,6 +130,21 @@ def build_parser() -> argparse.ArgumentParser:
     imp.add_argument("results", help="results zip produced by the Colab notebook")
     imp.set_defaults(func=_cmd_import_results)
 
+    pp = sub.add_parser("pseudo-page",
+                        help="stitch a full annual pseudo-page from Zenodo tiles "
+                             "(+ hints/truth files), optionally run the pipeline on it")
+    pp.add_argument("scan_id", help="e.g. 210018")
+    pp.add_argument("year", type=int)
+    pp.add_argument("--out", default="data/pseudo")
+    pp.add_argument("--run", action="store_true")
+    pp.add_argument("--run-out", default="outputs/runs")
+    pp.add_argument("--extractor", choices=["lineformer_local", "colab_bundle", "stub"],
+                    default="lineformer_local")
+    pp.add_argument("--baseline", action="store_true", default=False,
+                    help="enable the baseline stage (extra Gemini calls)")
+    pp.add_argument("--workers", type=int, default=4)
+    pp.set_defaults(func=_cmd_pseudo_page)
+
     dp = sub.add_parser("danube-prep",
                         help="seed run(s) for Danube tiles from the published human "
                              "annotations (tiles carry no axis labels)")
@@ -130,8 +160,11 @@ def build_parser() -> argparse.ArgumentParser:
     dp.set_defaults(func=_cmd_danube_prep)
 
     ev = sub.add_parser("evaluate", help="evaluate against ground truth")
-    ev.add_argument("component", choices=["panels", "calibration", "series", "all"])
+    ev.add_argument("component",
+                    choices=["panels", "calibration", "series", "fullpage", "all"])
     ev.add_argument("--runs", default=None, help="run directory glob for series eval")
+    ev.add_argument("--scan-ids", default=None,
+                    help="comma-separated scan ids for the panels eval")
     ev.add_argument("--out", default=None, help="output directory (default outputs/eval/<date>)")
     ev.set_defaults(func=_cmd_evaluate)
 
