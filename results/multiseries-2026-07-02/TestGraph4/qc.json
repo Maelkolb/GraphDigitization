@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01_s1": {
+      "schema_version": 1,
+      "verdict": "major",
+      "issues": [
+        "vertical_offset",
+        "wrong_line_followed"
+      ],
+      "reason": "The overlay starts on the lower curve, switches to the upper curve, and exhibits significant vertical offsets in several segments where it does not follow either line closely.",
+      "suggested_action": "reextract",
+      "confidence": 90.0,
+      "overlay": "overlays/curve_p01_s1.png"
+    },
+    "p01_s2": {
+      "schema_version": 1,
+      "verdict": "ok",
+      "issues": [],
+      "reason": "The extracted curve accurately tracks the lower data curve across the entire chart within one grid tick.",
+      "suggested_action": "accept",
+      "confidence": 0.9,
+      "overlay": "overlays/curve_p01_s2.png"
+    },
+    "p01_s3": {
+      "schema_version": 1,
+      "verdict": "ok",
+      "issues": [],
+      "reason": "The extracted curve follows the colorless corpuscles data line closely across the entire length of the chart.",
+      "suggested_action": "accept",
+      "confidence": 0.9,
+      "overlay": "overlays/curve_p01_s3.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2339,
+      "candidates_token_count": 52,
+      "thoughts_token_count": 397,
+      "total_token_count": 2788
+    },
+    "timestamp": "2026-07-02T21:25:40.892943+00:00"
+  }
+}

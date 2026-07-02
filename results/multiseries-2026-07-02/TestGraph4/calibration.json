@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01": {
+      "schema_version": 1,
+      "y_axis": {
+        "schema_version": 1,
+        "scale": "linear",
+        "unit": {
+          "schema_version": 1,
+          "raw": "",
+          "canonical": "unknown",
+          "to_mm": null
+        },
+        "ticks": [
+          {
+            "schema_version": 1,
+            "pixel": 496.319,
+            "value": 500000.0,
+            "label_text": "500,000",
+            "legible": true,
+            "used": true,
+            "residual": -942.7191621148959
+          },
+          {
+            "schema_version": 1,
+            "pixel": 459.605,
+            "value": 1000000.0,
+            "label_text": "1,000,000",
+            "legible": true,
+            "used": true,
+            "residual": 2366.4420910822228
+          },
+          {
+            "schema_version": 1,
+            "pixel": 385.544,
+            "value": 2000000.0,
+            "label_text": "2,000,000",
+            "legible": true,
+            "used": true,
+            "residual": 421.12944667134434
+          },
+          {
+            "schema_version": 1,
+            "pixel": 311.483,
+            "value": 3000000.0,
+            "label_text": "3,000,000",
+            "legible": true,
+            "used": true,
+            "residual": -1524.183197739534
+          },
+          {
+            "schema_version": 1,
+            "pixel": 237.42200000000003,
+            "value": 4000000.0,
+            "label_text": "4,000,000",
+            "legible": true,
+            "used": true,
+            "residual": -3469.4958421504125
+          },
+          {
+            "schema_version": 1,
+            "pixel": 163.994,
+            "value": 5000000.0,
+            "label_text": "5,000,000",
+            "legible": true,
+            "used": true,
+            "residual": 3148.826664244756
+          }
+        ],
+        "fit": {
+          "schema_version": 1,
+          "method": "irls_mad",
+          "slope": -13528.649527341126,
+          "intercept": 7215468.523922536,
+          "scale": "linear",
+          "r2": 0.9999979654731322,
+          "rmse_value": 2270.8941990747167,
+          "n_ticks": 6,
+          "n_used": 6,
+          "n_rejected": 0
+        },
+        "anchor_equivalent": {
+          "schema_version": 1,
+          "c_low": 496.319,
+          "v_low": 500942.7191621149,
+          "c_high": 163.994,
+          "v_high": 4996851.173335755
+        },
+        "confidence": 1.0,
+        "flags": [
+          "dual_axis:magnitude_split",
+          "dual_axis:right_scale_used"
+        ]
+      },
+      "x_axis": {
+        "schema_version": 1,
+        "kind": "date",
+        "start": "FEB.",
+        "end": "OCT.",
+        "n_samples": null,
+        "ticks": [],
+        "fit": null,
+        "confidence": 1.0,
+        "flags": [
+          "dates_unparsed"
+        ]
+      },
+      "review_required": false
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "CALIB_V1",
+    "thinking_level": "high",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 1266,
+      "candidates_token_count": 2037,
+      "thoughts_token_count": 3784,
+      "total_token_count": 7087
+    },
+    "timestamp": "2026-07-02T21:25:02.699027+00:00"
+  }
+}

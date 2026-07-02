@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "triage",
+      "panel_id": "",
+      "reason": "multi-series chart: 3 curves (A Geryk-Ölluftpumpe mit Schwungrad, B Kapselpumpe mit Motorbetrieb, C Kapselpumpe mit Handbetrieb)",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01_s1",
+      "reason": "2 empty slice(s): 19, 20",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01_s2",
+      "reason": "2 empty slice(s): 19, 20",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01_s3",
+      "reason": "2 empty slice(s): 19, 20",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01_s1",
+      "reason": "minor deviation: The red curve follows curve C very closely but is missing the initial segment near the origin.",
+      "severity": "warning",
+      "artifact_ref": "overlays/curve_p01_s1.png"
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01_s2",
+      "reason": "QC rejected candidate; reselected cand 18",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01_s2",
+      "reason": "2 empty slice(s): 19, 20",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01_s2",
+      "reason": "major deviation persists: The extracted curve incorrectly jumps from curve B to curve A near x=14 and follows it to the end.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p01_s2.png"
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01_s3",
+      "reason": "QC rejected candidate; reselected cand 75",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01_s3",
+      "reason": "2 empty slice(s): 19, 20",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01_s3",
+      "reason": "major deviation persists: The red curve exhibits severe noise and jagged spikes in the middle section instead of smoothly following curve 'a'.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p01_s3.png"
+    }
+  ]
+}

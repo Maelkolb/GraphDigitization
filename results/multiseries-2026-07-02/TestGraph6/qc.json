@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01_s1": {
+      "schema_version": 1,
+      "verdict": "minor",
+      "issues": [
+        "missing_segment"
+      ],
+      "reason": "The red curve follows curve C very closely but is missing the initial segment near the origin.",
+      "suggested_action": "review",
+      "confidence": 0.9,
+      "overlay": "overlays/curve_p01_s1.png"
+    },
+    "p01_s2": {
+      "schema_version": 1,
+      "verdict": "major",
+      "issues": [
+        "wrong_line_followed"
+      ],
+      "reason": "The extracted curve incorrectly jumps from curve B to curve A near x=14 and follows it to the end.",
+      "suggested_action": "reextract",
+      "confidence": 0.95,
+      "overlay": "overlays/curve_p01_s2.png"
+    },
+    "p01_s3": {
+      "schema_version": 1,
+      "verdict": "major",
+      "issues": [
+        "noise"
+      ],
+      "reason": "The red curve exhibits severe noise and jagged spikes in the middle section instead of smoothly following curve 'a'.",
+      "suggested_action": "reextract",
+      "confidence": 0.8,
+      "overlay": "overlays/curve_p01_s3.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2295,
+      "candidates_token_count": 48,
+      "thoughts_token_count": 489,
+      "total_token_count": 2832
+    },
+    "timestamp": "2026-07-02T21:26:56.365965+00:00"
+  }
+}

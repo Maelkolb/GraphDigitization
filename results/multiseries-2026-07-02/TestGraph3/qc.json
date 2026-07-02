@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "panels": {
+    "p01_s1": {
+      "schema_version": 1,
+      "verdict": "ok",
+      "issues": [],
+      "reason": "The extracted curve follows the solid line representing the 14-18 years group with high precision throughout the entire chart.",
+      "suggested_action": "accept",
+      "confidence": 0.95,
+      "overlay": "overlays/curve_p01_s1.png"
+    },
+    "p01_s2": {
+      "schema_version": 1,
+      "verdict": "major",
+      "issues": [
+        "wrong_line_followed"
+      ],
+      "reason": "The extracted curve tracks along the absolute bottom margin of the image instead of following the dashed line representing 'under 14 år'.",
+      "suggested_action": "reextract",
+      "confidence": 0.8,
+      "overlay": "overlays/curve_p01_s2.png"
+    }
+  },
+  "provenance": {
+    "schema_version": 1,
+    "model": "gemini-3.5-flash",
+    "prompt_id": "QC_V1",
+    "thinking_level": "medium",
+    "attempts": 1,
+    "usage": {
+      "prompt_token_count": 2309,
+      "candidates_token_count": 72,
+      "thoughts_token_count": 337,
+      "total_token_count": 2718
+    },
+    "timestamp": "2026-07-02T21:22:29.610801+00:00"
+  }
+}

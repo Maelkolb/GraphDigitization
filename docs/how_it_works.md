@@ -42,7 +42,10 @@ Normalizes the input image to PNG under `pages/`, records dimensions + sha256 in
   non-chart page raises a blocking review flag instead of being force-digitized;
 - **calibration mode evidence**: does the y-axis carry readable numeric labels
   (`y_axis_labels_present`)? are values written along the curve
-  (`value_labels_on_curve`)? linear or log scale?
+  (`value_labels_on_curve`)? linear or log scale? TWO different vertical scales
+  (`dual_y_axis`)?
+- **series census**: how many distinct data curves each panel contains (`n_series`) and
+  their names from the legend (`series_labels`) — this drives per-series extraction;
 - **panels**: outer bbox + inner plot area per chart panel (0–1000 normalized coords,
   converted and clamped in `geometry.py`); on grid charts (danube profile) the plot-area
   x-edges are snapped to the strongest printed vertical gridline (a 1-px x error equals a
@@ -57,12 +60,16 @@ Per panel (parallel workers, on an enlarged crop saved to `panels/<pid>.png`), t
 chosen by the triage classification:
 
 1. **Axis ticks** (default): Gemini reads *every* legible tick (position, value, verbatim
-   label) — prompt `CALIB_V1`, retried once with `CALIB_V1_RETRY` if it finds nothing
-   although triage saw labels. A least-squares line with iterative MAD outlier rejection
-   (`calibration/fit.py`) turns the ticks into `value = slope·pixel + intercept`, with
-   gates on R² (≥ 0.995), relative residual, and tick count. A single misread tick is
-   rejected automatically — this is the self-verification the paper's manual two-anchor
-   method could not provide. The paper-compatible two-anchor form is stored as
+   label, **panel side**) — prompt `CALIB_V1`, retried once with `CALIB_V1_RETRY` if it
+   finds nothing although triage saw labels. A least-squares line with iterative MAD
+   outlier rejection (`calibration/fit.py`) turns the ticks into
+   `value = slope·pixel + intercept`, with gates on R² (≥ 0.995), relative residual, and
+   tick count. A single misread tick is rejected automatically — this is the
+   self-verification the paper's manual two-anchor method could not provide. On
+   **dual-scale charts** (percent left, counts right) each side is fitted separately and
+   the better-supported scale wins — mixing two scales in one fit is what used to
+   collapse it. When the declared scale fits poorly the alternative (linear↔log) is
+   tried automatically. The paper-compatible two-anchor form is stored as
    `anchor_equivalent`.
 2. **Curve labels** (axis-less charts): when values are written directly along the curve,
    Gemini reads each (curve point, value) pair (`CURVE_LABELS_V1`) and the *same* fitting
@@ -105,13 +112,23 @@ All backends run the same standalone worker logic (`scripts/lineformer_infer.py`
 calls mmdet directly so the detection score is preserved (LineFormer's own helper hides it,
 but candidate selection needs it).
 
-### 7. select — pick the right polyline
+### 7. select — one polyline PER DATA SERIES
 Per candidate: **coverage** = fraction of x-slices containing a point, and the paper's
-selection score `s_α = 0.31·confidence + 0.69·coverage` (Eq. 12). The best `s_α` wins;
-when the top two viable candidates are nearly tied (margin < 0.05), a Gemini **visual
-pick** arbitrates on a color-coded composite — the paper showed human visual choice beats
-score-based selection (0.968 vs 0.937), and the MLLM stands in for that human (verified:
-it recovered a 0.039 → 0.955 month in the live tests).
+selection score `s_α = 0.31·confidence + 0.69·coverage` (Eq. 12; the coverage viability
+bound is profile-dependent — 0.985 for full-month Danube curves, 0.90 for generic charts
+whose curves legitimately start/end inside the plot).
+
+*Single-series charts*: best `s_α` wins; when the top two viable candidates are nearly
+tied (margin < 0.05), a Gemini **visual pick** arbitrates on a color-coded composite —
+the paper showed human visual choice beats score-based selection (0.968 vs 0.937), and
+the MLLM stands in for that human (verified: it recovered a 0.039 → 0.955 month live).
+
+*Multi-series charts* (`n_series > 1` from triage): the best-scoring **mutually
+distinct** candidates are accepted greedily (median vertical separation above ~1.5% of
+tile height — duplicates of the same stroke collapse), then a Gemini **assignment** call
+maps each accepted polyline to a named series from the legend and calls out artifacts
+(gridlines, fill edges), which are replaced by the next distinct candidate. Every
+selection carries its series id + label through the rest of the pipeline.
 
 ### 8. series — the digitized graph
 Map the selected polyline to page space, apply baseline correction if enabled, partition

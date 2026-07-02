@@ -15,6 +15,7 @@ class Profile(BaseModel):
     refine_x_edges: bool = False  # snap panel x-edges to printed gridlines (day grids)
     check_orientation: bool = True  # dedicated 4-way upright check before triage
     coverage_viable: float | None = None  # None = use Gates default (danube-tuned 0.985)
+    extract_margin: float = 0.03  # tile safety margin around the plot area
 
 
 DANUBE = Profile(
@@ -26,6 +27,8 @@ DANUBE = Profile(
     panel_prompt_variant="danube",
     refine_x_edges=True,
     check_orientation=False,  # archival tiles/sheets are consistently upright
+    extract_margin=0.0,  # dataset tiles already carry a margin; more would expose
+    #                      slivers of the neighboring months' curves
 )
 
 # arbitrary charts: curves legitimately start/end inside the plot area, so the

@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "triage",
+      "panel_id": "",
+      "reason": "multi-series chart: 3 curves (RED CORPUSCLES, HAEMOGLOBIN, COLORLESS CORPUSCLES)",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01_s1",
+      "reason": "6 empty slice(s): 1, 2, 3, 22, 23...",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01_s2",
+      "reason": "9 empty slice(s): 1, 2, 3, 4, 5...",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01_s3",
+      "reason": "3 empty slice(s): 88, 89, 90",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01_s1",
+      "reason": "QC rejected candidate; reselected cand 85",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01_s1",
+      "reason": "3 empty slice(s): 1, 2, 3",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01_s1",
+      "reason": "major deviation persists: The overlay starts on the lower curve, switches to the upper curve, and exhibits significant vertical offsets in several segments where it does not follow either line closely.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p01_s1.png"
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01_s3",
+      "reason": "QC rejected candidate; reselected cand 31",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01_s3",
+      "reason": "3 empty slice(s): 2, 89, 90",
+      "severity": "warning",
+      "artifact_ref": ""
+    }
+  ]
+}

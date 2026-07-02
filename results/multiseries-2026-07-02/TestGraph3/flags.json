@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "triage",
+      "panel_id": "",
+      "reason": "multi-series chart: 2 curves (14-18 åringar., under 14 år.)",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01_s2",
+      "reason": "QC rejected candidate; reselected cand 0",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01_s2",
+      "reason": "major deviation persists: The extracted curve tracks along the absolute bottom margin of the image instead of following the dashed line representing 'under 14 år'.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p01_s2.png"
+    }
+  ]
+}

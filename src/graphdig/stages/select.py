@@ -46,6 +46,18 @@ def _n_slices(cal, tile_id: str) -> int:
     return FALLBACK_SLICES
 
 
+def _plot_extent_in_tile(tile: Tile, panel) -> tuple[float, float]:
+    """The plot-area x-extent in tile coordinates - the honest coverage denominator.
+
+    Tiles may carry a safety margin around the plot; measuring coverage over the whole
+    tile would penalize every candidate for not covering margin pixels no curve reaches.
+    """
+    area = panel.plot_area_px or panel.bbox_px
+    xs = tile.transform.page_to_tile([[area.x, area.y], [area.right, area.y]])[:, 0]
+    lo, hi = float(min(xs)), float(max(xs))
+    return max(0.0, lo), min(float(tile.width), hi)
+
+
 def _viable_gate(ctx: Context) -> float:
     if ctx.cfg.profile.coverage_viable is not None:
         return ctx.cfg.profile.coverage_viable
@@ -146,6 +158,10 @@ def _select_single(ctx: Context, tile: Tile, ranked, viable, gates) -> Selection
 def _select_multi(ctx: Context, tile: Tile, ranked, n_series: int,
                   labels: list[str], gates) -> list[Selection]:
     accepted = distinct_candidates(ranked, n_series, tile.height)
+    if len(accepted) < n_series:
+        # tightly bundled series (converging curves) fall under the separation
+        # threshold; retry once with half the threshold before giving up
+        accepted = distinct_candidates(ranked, n_series, tile.height // 2)
     label_by_cand: dict[int, str] = {}
     method = "s_alpha_distinct"
     if len(accepted) >= 1 and labels:
@@ -199,14 +215,16 @@ def run(ctx: Context) -> None:
     n_series = max(1, cls.n_series)
     labels = cls.series_labels or [f"series {i + 1}" for i in range(n_series)]
 
+    panels_by_id = {p.panel_id: p for p in panels_art.panels}
     for tile_id, tl in lines.tiles.items():
         if tl.error or not tl.candidates:
             continue
         tile = tiles_by_id[tile_id]
         n = _n_slices(cal, tile_id)
+        x_lo, x_hi = _plot_extent_in_tile(tile, panels_by_id[tile.panel_id])
         for c in tl.candidates:
             pts = np.asarray(c.points_px_tile, dtype=float).reshape(-1, 2)
-            c.coverage = coverage(pts, 0.0, float(tile.width), n)
+            c.coverage = coverage(pts, x_lo, x_hi, n)
             c.s_alpha = s_alpha(c.confidence, c.coverage, gates.alpha_coverage)
             c.viable = c.coverage >= viable_gate
 

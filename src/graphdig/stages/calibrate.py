@@ -162,7 +162,16 @@ def _pick_axis_side(pairs, dual_expected: bool, flags: list[str]):
     unknowns = [t for t, s in pairs if s not in ("left", "right")]
     two_sided = len(lefts) >= 2 and len(rights) >= 2
     if dual_expected and not two_sided:
-        flags.append("dual_axis_expected_but_sides_untagged")
+        # fallback: two scales usually differ by orders of magnitude (percent vs counts);
+        # split at the largest log10 gap and fit the clusters separately
+        split = _magnitude_split([t for t, _ in pairs])
+        if split is not None:
+            lefts, rights = split
+            unknowns = []
+            two_sided = True
+            flags.append("dual_axis:magnitude_split")
+        else:
+            flags.append("dual_axis_expected_but_sides_untagged")
     if two_sided:
         best_side, best_ticks, best_fit = None, None, None
         for side, group in (("left", lefts + unknowns), ("right", rights + unknowns)):
@@ -177,6 +186,27 @@ def _pick_axis_side(pairs, dual_expected: bool, flags: list[str]):
             flags.append(f"dual_axis:{best_side}_scale_used")
             return best_ticks
     return [t for t, _ in pairs]
+
+
+def _magnitude_split(ticks: list[Tick]):
+    """Split ticks into two clusters at the largest >1.5-decade value gap, if any."""
+    import math
+
+    positive = [t for t in ticks if t.value > 0]
+    if len(positive) < 4 or len(positive) < len(ticks) - 2:
+        return None
+    ordered = sorted(positive, key=lambda t: t.value)
+    gaps = [(math.log10(ordered[i + 1].value / ordered[i].value), i)
+            for i in range(len(ordered) - 1) if ordered[i + 1].value > ordered[i].value]
+    if not gaps:
+        return None
+    best_gap, idx = max(gaps)
+    if best_gap < 1.5:
+        return None
+    low, high = ordered[:idx + 1], ordered[idx + 1:]
+    if len(low) < 2 or len(high) < 2:
+        return None
+    return low, high
 
 
 def _fit_y_axis(ctx: Context, ticks: list[Tick], scale: str, unit_text: str,

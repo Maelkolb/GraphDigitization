@@ -63,6 +63,21 @@ def test_pick_axis_side_prefers_consistent_scale():
     assert 500_000 not in values or 50.0 not in values  # one side only
 
 
+def test_magnitude_split_fallback():
+    """Untagged dual-scale ticks (percent vs counts) split at the big value gap."""
+    from graphdig.stages.calibrate import _pick_axis_side
+
+    pct = [(Tick(pixel=float(900 - v * 8), value=float(v)), "unknown")
+           for v in range(10, 111, 10)]
+    counts = [(Tick(pixel=float(860 - v * 0.00016), value=float(v)), "unknown")
+              for v in (500_000, 1_000_000, 2_000_000, 5_000_000)]
+    flags: list[str] = []
+    ticks = _pick_axis_side(pct + counts, dual_expected=True, flags=flags)
+    assert "dual_axis:magnitude_split" in flags
+    values = {t.value for t in ticks}
+    assert not ({10.0, 500_000.0} <= values)  # never both scales in one fit
+
+
 def test_scale_fallback_picks_log():
     # decade ticks equally spaced in pixels: linear fit is poor, log fit is exact
     ticks = [Tick(pixel=float(900 - i * 200), value=float(10 ** i)) for i in range(4)]
