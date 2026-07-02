@@ -173,6 +173,7 @@ def _build_x_axis(resp: AxisCalResponse, panel: Panel) -> XAxisCal:
 def run(ctx: Context) -> None:
     panels_art = ctx.load(PanelsArtifact, "panels.json")
     page = Image.open(ctx.run_dir / panels_art.image.path)
+    page.load()  # decode now: lazy loading is not thread-safe across panel workers
 
     art = CalibrationArtifact()
     with ThreadPoolExecutor(max_workers=ctx.cfg.workers) as pool:
