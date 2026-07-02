@@ -1,0 +1,24 @@
+# secrets
+.env
+credentials.json
+token.json
+
+# python
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+.venv/
+.venvs/
+.pytest_cache/
+.ruff_cache/
+
+# heavy / generated data (kept out of git)
+data/zenodo/*
+!data/zenodo/.gitkeep
+data/cache/*
+!data/cache/.gitkeep
+outputs/*
+!outputs/.gitkeep
+external/*
+!external/.gitkeep
