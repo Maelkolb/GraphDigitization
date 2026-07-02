@@ -24,7 +24,40 @@ Full architecture: `docs/how_it_works.md`.
 
 ## Live results
 
-(filled by the verification battery — see the tables and per-run folders below)
+**Full annual sheets, digitized in ONE run each** (12/12 panels segmented, month
+identities correct, per-month series vs pixel GT; `fullpage_eval.csv` has every month):
+
+| pseudo-page | panels | mean IoU | median \|edge error\| | peak score mean / median |
+|---|---|---|---|---|
+| Neu-Ulm 1839 (210018) | 12/12 | 0.853 | 1.92 days | 0.871 / 0.861 |
+| Vilshofen 1844 (290022) | 12/12 | 0.892 | **0.26 days** | **0.967 / 0.981** |
+| Passau 1848 (300026) | 12/12 | 0.952 | 0.29 days | 0.891 / 0.925 |
+
+Vilshofen's full-page run reaches the paper's human-assisted accuracy level (its
+tile-by-tile pilot scored 0.96 on the same months). Reference: paper's human-picked mean
+on the whole GT sample was 0.968.
+
+**Extractor benchmark — LineFormer vs gemini_points, 12 GT months (Neu-Ulm 1839) with
+identical seeded calibration** (`extractor_bench.csv`, `comparison_*.md`):
+
+| backend | peak mean | peak median | min | wall/month |
+|---|---|---|---|---|
+| lineformer_local (CPU) | 0.965 | 0.973 | 0.912 | 11.6 s |
+| gemini_points | 0.964 | **0.986** | 0.817 | 26.9 s |
+
+A statistical tie — gemini_points wins 8 of 12 months. Practical consequence: **the
+pipeline digitizes hydrograph-class charts at near-equal quality with no LineFormer
+environment at all** (no pinned venv, no GPU, no Colab). LineFormer stays the default
+for its consistency (higher minimum) and speed.
+
+**Weak cases (dense log grids, faint dotted curves)**: gemini_points did NOT rescue
+them — QC majors for both backends on TestGraph6 and forestry A381-II. Precise tracing
+on dense/degraded multi-curve material remains the open bottleneck for BOTH approaches;
+fine-tuning LineFormer on historical charts is the remaining lever. Every weak curve is
+honestly QC-flagged, never silently wrong.
+
+**Regression guard**: Danube Feb 1839 single-tile run = 0.9835, bit-identical through
+all six phases. Offline suite: 112 tests; live smokes green.
 
 ## A bug the evaluation caught (worth reading)
 

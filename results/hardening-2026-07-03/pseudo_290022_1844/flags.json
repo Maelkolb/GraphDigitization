@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "triage",
+      "panel_id": "",
+      "reason": "no axis labels and no curve labels: absolute calibration impossible from this image alone (relative digitization only)",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "triage",
+      "panel_id": "p06",
+      "reason": "panel width implies 28.5 days, month has 30 (possible edge error)",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "triage",
+      "panel_id": "p12",
+      "reason": "panel width implies 31.7 days, month has 31 (possible edge error)",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p04",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p03",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p02",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p01",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p05",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p06",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p07",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p08",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p09",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p10",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p11",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p12",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p01",
+      "reason": "best candidate coverage 0.968 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p03",
+      "reason": "best candidate coverage 0.968 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p01",
+      "reason": "1 empty slice(s): 1844-01-06",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p03",
+      "reason": "1 empty slice(s): 1844-03-01",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p01",
+      "reason": "minor deviation: The overlay is mostly accurate but has a minor vertical tracking artifact near the first dip after the steep rise.",
+      "severity": "warning",
+      "artifact_ref": "overlays/curve_p01.png"
+    }
+  ]
+}

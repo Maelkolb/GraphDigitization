@@ -1,0 +1,5 @@
+source,backend,peak_score,rmse,mae,pearson_r,coverage,qc_verdicts,wall_s,tokens,error,run_dir
+TestGraph6,lineformer_local,,,,,0.9499999999999998,p01_s1:minor p01_s2:minor p01_s3:major,74.05600190162659,0,,outputs\eval\bench_img\runs_lineformer_local\20260703-013843-TestGraph6
+forestry_A381_II_067,lineformer_local,,,,,0.21000000000000002,p02:minor,247.2174835205078,0,,outputs\eval\bench_img\runs_lineformer_local\20260703-013957-forestry_A381_II_067
+TestGraph6,gemini_points,,,,,0.7777777777777778,p01_s1:major p01_s2:major p01_s3:major,122.71670269966125,12436,,outputs\eval\bench_img\runs_gemini_points\20260703-014405-TestGraph6
+forestry_A381_II_067,gemini_points,,,,,0.37,p01:major p02:major,303.68032026290894,22606,,outputs\eval\bench_img\runs_gemini_points\20260703-014607-forestry_A381_II_067

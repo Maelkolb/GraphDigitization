@@ -1,0 +1,437 @@
+{
+  "schema_version": 1,
+  "flags": [
+    {
+      "schema_version": 1,
+      "stage": "triage",
+      "panel_id": "",
+      "reason": "no axis labels and no curve labels: absolute calibration impossible from this image alone (relative digitization only)",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "triage",
+      "panel_id": "p02",
+      "reason": "panel width implies 27.5 days, month has 29 (possible edge error)",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "triage",
+      "panel_id": "p05",
+      "reason": "panel width implies 30.0 days, month has 31 (possible edge error)",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "triage",
+      "panel_id": "p06",
+      "reason": "panel width implies 28.2 days, month has 30 (possible edge error)",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "triage",
+      "panel_id": "p08",
+      "reason": "panel width implies 30.3 days, month has 31 (possible edge error)",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p04",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p01",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p03",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p05",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p02",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p06",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p07",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p08",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p09",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p11",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p10",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "calibrate",
+      "panel_id": "p12",
+      "reason": "only 2 calibration points; using two-anchor mapping",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p03",
+      "reason": "best candidate coverage 0.968 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p04",
+      "reason": "best candidate coverage 0.800 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p06",
+      "reason": "best candidate coverage 0.933 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p07",
+      "reason": "best candidate coverage 0.774 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p08",
+      "reason": "best candidate coverage 0.903 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p09",
+      "reason": "best candidate coverage 0.967 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p10",
+      "reason": "best candidate coverage 0.839 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "select",
+      "panel_id": "p12",
+      "reason": "best candidate coverage 0.935 below viability gate 0.985",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p03",
+      "reason": "1 empty slice(s): 1848-03-31",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p04",
+      "reason": "6 empty slice(s): 1848-04-01, 1848-04-02, 1848-04-03, 1848-04-15, 1848-04-29...",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p06",
+      "reason": "2 empty slice(s): 1848-06-10, 1848-06-11",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p07",
+      "reason": "7 empty slice(s): 1848-07-01, 1848-07-02, 1848-07-03, 1848-07-04, 1848-07-05...",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p08",
+      "reason": "3 empty slice(s): 1848-08-20, 1848-08-21, 1848-08-26",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p09",
+      "reason": "1 empty slice(s): 1848-09-27",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p10",
+      "reason": "5 empty slice(s): 1848-10-01, 1848-10-02, 1848-10-12, 1848-10-17, 1848-10-31",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p12",
+      "reason": "2 empty slice(s): 1848-12-30, 1848-12-31",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p02",
+      "reason": "minor deviation: The red curve slightly flattens and misses the peak of the smaller secondary crest on the right.",
+      "severity": "warning",
+      "artifact_ref": "overlays/curve_p02.png"
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p03",
+      "reason": "minor deviation: The extracted curve slightly rounds out the sharp valley and peak points instead of following their exact tips.",
+      "severity": "warning",
+      "artifact_ref": "overlays/curve_p03.png"
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p04",
+      "reason": "QC rejected candidate; reselected cand 4",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p04",
+      "reason": "5 empty slice(s): 1848-04-01, 1848-04-02, 1848-04-03, 1848-04-08, 1848-04-09",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p04",
+      "reason": "major deviation persists: The red curve cuts straight through the second peak and fails to track the rising curve at the right end.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p04.png"
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p06",
+      "reason": "QC rejected candidate; reselected cand 2",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p06",
+      "reason": "7 empty slice(s): 1848-06-01, 1848-06-07, 1848-06-09, 1848-06-10, 1848-06-11...",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p06",
+      "reason": "major deviation persists: The red curve fails to capture the main high peak and the third broad peak, cutting straight through them.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p06.png"
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p07",
+      "reason": "QC rejected candidate; reselected cand 2",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p07",
+      "reason": "7 empty slice(s): 1848-07-01, 1848-07-02, 1848-07-10, 1848-07-11, 1848-07-12...",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p07",
+      "reason": "major deviation persists: The red curve shortcuts through the central rising edge, misses the high peak on the second plateau, and fails to trace the oscillations on the right.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p07.png"
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p08",
+      "reason": "QC rejected candidate; reselected cand 2",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p08",
+      "reason": "4 empty slice(s): 1848-08-20, 1848-08-21, 1848-08-26, 1848-08-27",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p08",
+      "reason": "major deviation persists: The red curve completely misses the large peak in the right-middle section, cutting straight across instead of following the curve.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p08.png"
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p10",
+      "reason": "QC rejected candidate; reselected cand 89",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p10",
+      "reason": "major deviation persists: The red curve completely misses all major peaks, tracing a flat baseline instead.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p10.png"
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p11",
+      "reason": "QC rejected candidate; reselected cand 24",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p11",
+      "reason": "minor deviation: The red curve flatlines below the plateau in the first half and has noisy spikes around the sharp peak.",
+      "severity": "warning",
+      "artifact_ref": "overlays/curve_p11.png"
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p12",
+      "reason": "QC rejected candidate; reselected cand 3",
+      "severity": "info",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "series",
+      "panel_id": "p12",
+      "reason": "4 empty slice(s): 1848-12-01, 1848-12-07, 1848-12-30, 1848-12-31",
+      "severity": "warning",
+      "artifact_ref": ""
+    },
+    {
+      "schema_version": 1,
+      "stage": "qc",
+      "panel_id": "p12",
+      "reason": "major deviation persists: The extracted curve completely misses the hand-drawn line on the left half, tracing a flat horizontal path instead.",
+      "severity": "blocking",
+      "artifact_ref": "overlays/curve_p12.png"
+    }
+  ]
+}

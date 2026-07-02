@@ -82,14 +82,19 @@ Local GPU is deliberately unsupported: LineFormer's pinned CUDA 11.7 stack canno
 Blackwell-generation cards. LineFormer publishes no license, so its code is cloned into
 gitignored `external/`, never vendored.
 
-## Pilot results (automated, no human in the loop)
+## Results (automated, no human in the loop)
 
-36 gauge-months (Neu-Ulm 1839, Vilshofen 1844, Passau 1848), local CPU extraction,
-pure s_α selection (no Gemini QC — no API key configured): median peak-aware score
-**0.961** vs **0.980** for the paper's human-picked candidates on the same months;
-30/36 months ≥ 0.9, and several months beat the human-picked result. The two failure
-months are near-tie wrong-line cases that the Gemini visual pick is designed to catch
-(it was skipped without a key). Details: `docs/pilot_results.md`.
+- **Full annual sheets** (12 monthly panels segmented + digitized + stitched to a year
+  series in one run): Vilshofen 1844 pseudo-page scores peak-aware **0.967 mean /
+  0.981 median** vs pixel ground truth — the paper's human-assisted level; Passau 1848
+  0.891/0.925, Neu-Ulm 1839 0.871/0.861; 12/12 panels on every page, median edge errors
+  down to 0.26 days. `results/hardening-2026-07-03/`.
+- **Monthly tiles** (36 gauge-months pilot): median peak-aware score **0.961** vs 0.980
+  for the paper's human-picked candidates on the same months. `docs/pilot_results.md`.
+- **Extractor benchmark**: `gemini_points` statistically ties LineFormer on clean
+  hydrograph months (0.964 vs 0.965 mean; wins 8/12) — the pipeline runs at near-equal
+  quality with no LineFormer environment at all. Dense/faint multi-curve material
+  remains QC-flagged for both backends.
 
 ## Development
 
