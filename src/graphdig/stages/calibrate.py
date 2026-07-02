@@ -302,6 +302,62 @@ def _lenient_float(label: str) -> float | None:
     return float(m.group(0).replace(",", ".")) if m else None
 
 
+# ---------------------------------------------------------------- user-anchor path
+
+def _x_axis_from_hint(ph, panel: Panel) -> XAxisCal | None:
+    if ph is None or not (ph.x_start or ph.x_end):
+        return None
+    kind = "date" if parse_date_label(ph.x_start) or parse_date_label(ph.x_end) else "numeric"
+    x = _build_x_axis(kind, ph.x_start, ph.x_end, panel, confidence=1.0)
+    x.flags.append("user_hint:x_extent")
+    return x
+
+
+def _calibrate_from_user_anchors(ctx: Context, page: Image.Image, panel: Panel,
+                                 cls: PageClassification, user_ticks, crop, crop_box):
+    """Hints provide the calibration; Gemini (if labels exist) only cross-checks."""
+    from graphdig.hints import panel_hint_for
+
+    hints = ctx.hints
+    scale = hints.y_scale or (cls.y_scale_guess if cls.y_scale_guess != "unknown"
+                              else "linear")
+    y_axis, fit = _fit_y_axis(ctx, user_ticks, scale, hints.unit, 1.0,
+                              panel.panel_id, ["user_hint:y_anchors"])
+    if y_axis.fit is not None:
+        y_axis.fit.method = "user_anchors"
+
+    provenance = Provenance(model="user_hint", prompt_id="hints.json")
+    if cls.y_axis_labels_present and fit is not None:
+        _resp, pairs, result = _ticks_from_axis(ctx, crop, crop_box, expect_labels=False)
+        if result is not None and result.ok and pairs:
+            provenance = _provenance(result)
+            try:
+                gemini_fit = fit_axis(_pick_axis_side(pairs, cls.dual_y_axis, []),
+                                      scale=scale if scale in ("linear", "log")
+                                      else "linear")
+                span = abs(value_at(fit, crop_box.y)
+                           - value_at(fit, crop_box.bottom)) or 1.0
+                worst = max(abs(float(value_at(gemini_fit, t.pixel)) - t.value)
+                            for t in user_ticks)
+                if worst / span > 0.05:
+                    y_axis.flags.append("hint_gemini_mismatch")
+                    ctx.add_flag("calibrate",
+                                 f"Gemini axis reading disagrees with user anchors by "
+                                 f"{worst / span:.1%} of the span (hint wins)",
+                                 panel_id=panel.panel_id, severity="warning")
+            except ValueError:
+                pass
+
+    ph = panel_hint_for(hints, panel.panel_id, getattr(panel, "month", None))
+    x_axis = (_x_axis_from_hint(ph, panel)
+              or _build_x_axis("unknown", "", "", panel, 1.0))
+    cal = PanelCalibration(y_axis=y_axis, x_axis=x_axis,
+                           review_required="unusable" in y_axis.flags)
+    draw_calibration(page, panel, cal, fit,
+                     ctx.run_dir / "overlays" / f"cal_{panel.panel_id}.png")
+    return panel.panel_id, cal, provenance
+
+
 # --------------------------------------------------------------------------- stage
 
 def _calibrate_panel(ctx: Context, page: Image.Image, panel: Panel,
@@ -309,6 +365,13 @@ def _calibrate_panel(ctx: Context, page: Image.Image, panel: Panel,
     crop_box = crop_box_for(panel, page.width, page.height)
     crop = page.crop((crop_box.x, crop_box.y, crop_box.right, crop_box.bottom))
     crop.save(ctx.run_dir / "panels" / f"{panel.panel_id}.png")
+
+    from graphdig.hints import hint_ticks
+
+    user_ticks = hint_ticks(ctx.hints, panel.panel_id, getattr(panel, "month", None))
+    if len(user_ticks) >= 2:
+        return _calibrate_from_user_anchors(ctx, page, panel, cls, user_ticks,
+                                            crop, crop_box)
 
     pre_flags: list[str] = []
     use_curve_labels = cls.value_labels_on_curve and not cls.y_axis_labels_present

@@ -169,27 +169,33 @@ def run(ctx: Context) -> None:
     img.load()
 
     prompt_id, prompt = triage_prompt(ctx.cfg.profile.panel_prompt_variant)
+    hints = ctx.hints
 
-    # dedicated 4-way upright check first (cheap, low thinking), then triage as backstop
     total_rotation = 0
-    if ctx.cfg.profile.check_orientation:
-        deg = _orientation_check(ctx, img)
-        if deg:
-            total_rotation = deg
-            img = img.rotate(-deg, expand=True)  # PIL rotates counter-clockwise
-
-    # iterative refinement: rotate until triage also reports upright (max 3 turns)
-    result = _detect(ctx, img, prompt_id, prompt)
-    for _turn in range(MAX_ROTATION_TURNS):
-        deg = _norm_rotation(result.data.rotation_deg)
-        if deg == 0:
-            break
-        total_rotation = (total_rotation + deg) % 360
-        img = img.rotate(-deg, expand=True)  # PIL rotates counter-clockwise
+    if hints is not None and hints.rotation_deg is not None:
+        # a rotation hint is authoritative: skip both orientation mechanisms
+        total_rotation = _norm_rotation(hints.rotation_deg)
+        if total_rotation:
+            img = img.rotate(-total_rotation, expand=True)
         result = _detect(ctx, img, prompt_id, prompt)
     else:
-        ctx.add_flag("triage", "orientation did not converge after "
-                     f"{MAX_ROTATION_TURNS} turns", severity="warning")
+        # dedicated 4-way upright check first (cheap), then triage loop as backstop
+        if ctx.cfg.profile.check_orientation:
+            deg = _orientation_check(ctx, img)
+            if deg:
+                total_rotation = deg
+                img = img.rotate(-deg, expand=True)  # PIL rotates counter-clockwise
+        result = _detect(ctx, img, prompt_id, prompt)
+        for _turn in range(MAX_ROTATION_TURNS):
+            deg = _norm_rotation(result.data.rotation_deg)
+            if deg == 0:
+                break
+            total_rotation = (total_rotation + deg) % 360
+            img = img.rotate(-deg, expand=True)  # PIL rotates counter-clockwise
+            result = _detect(ctx, img, prompt_id, prompt)
+        else:
+            ctx.add_flag("triage", "orientation did not converge after "
+                         f"{MAX_ROTATION_TURNS} turns", severity="warning")
     orientation = Orientation(rotation_applied_deg=total_rotation,
                               reason="triage: labels not upright" if total_rotation else "")
     if total_rotation:
@@ -222,7 +228,12 @@ def run(ctx: Context) -> None:
     panels, flags = _to_panels(resp, img.width, img.height, ctx.cfg.gates.panel_conf_min)
     for reason in flags:
         ctx.add_flag("triage", reason)
-    expected = ctx.cfg.profile.expected_panels
+    if hints is not None and any(ph.bbox_px for ph in hints.panels):
+        panels = _panels_from_hints(hints, img.width, img.height)
+        ctx.add_flag("triage", f"panel geometry taken from hints ({len(panels)} panels)",
+                     severity="info")
+    expected = (hints.expected_panels if hints and hints.expected_panels
+                else ctx.cfg.profile.expected_panels)
     if expected and len(panels) not in (1, expected):
         ctx.add_flag("triage", f"expected 1 or {expected} panels, got {len(panels)}")
     if not panels:
@@ -230,21 +241,51 @@ def run(ctx: Context) -> None:
     if ctx.cfg.profile.refine_x_edges and panels:
         _refine_x_edges(img, panels)
 
+    metadata = MetadataArtifact(
+        title=resp.title, station=resp.station, year=resp.year or None,
+        date_range=resp.date_range, y_unit_declared=resp.y_unit,
+        unit_transition=UnitTransition(present=resp.unit_transition_present,
+                                       date=resp.unit_transition_date or None),
+        language=resp.language, handwritten_annotations=resp.handwritten_annotations,
+        notes=resp.notes, confidence=resp.confidence,
+    )
+    if hints is not None:
+        from graphdig.hints import apply_triage_hints
+
+        apply_triage_hints(hints, classification, metadata, ctx)
+
     provenance = Provenance(model=result.model, prompt_id=result.prompt_id,
                             thinking_level=result.thinking_level,
                             attempts=result.attempts, usage=result.usage)
+    metadata.provenance = provenance
     ctx.save(PanelsArtifact(
         page_id=page_path.stem,
         image=ImageRef(path=f"pages/{page_path.name}", width=img.width, height=img.height),
         orientation=orientation, classification=classification,
         panels=panels, provenance=provenance,
     ), "panels.json")
-    ctx.save(MetadataArtifact(
-        title=resp.title, station=resp.station, year=resp.year or None,
-        date_range=resp.date_range, y_unit_declared=resp.y_unit,
-        unit_transition=UnitTransition(present=resp.unit_transition_present,
-                                       date=resp.unit_transition_date or None),
-        language=resp.language, handwritten_annotations=resp.handwritten_annotations,
-        notes=resp.notes, confidence=resp.confidence, provenance=provenance,
-    ), "metadata.json")
+    ctx.save(metadata, "metadata.json")
     draw_panels(img, panels, ctx.run_dir / "overlays" / "panels.png")
+
+
+def _panels_from_hints(hints, width: int, height: int) -> list[Panel]:
+    """Explicit bbox hints replace detected panels (the manual escape hatch)."""
+    panels = []
+    for i, ph in enumerate(sorted(hints.panels, key=lambda p: p.index or 0), start=1):
+        if not ph.bbox_px:
+            continue
+        x, y, w, h = ph.bbox_px
+        bbox = BoxPx(x=max(0, x), y=max(0, y),
+                     w=min(w, width - max(0, x)), h=min(h, height - max(0, y)))
+        plot = bbox
+        if ph.plot_area_px:
+            px, py, pw, phh = ph.plot_area_px
+            plot = BoxPx(x=max(0, px), y=max(0, py),
+                         w=min(pw, width - max(0, px)), h=min(phh, height - max(0, py)))
+        panels.append(Panel(
+            panel_id=f"p{ph.index or i:02d}", label=ph.label, bbox_px=bbox,
+            plot_area_px=plot,
+            x_extent_hint=XExtentHint(kind="unknown", start_label=ph.x_start,
+                                      end_label=ph.x_end),
+            confidence=1.0, flags=["user_hint:bbox"]))
+    return panels

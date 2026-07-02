@@ -37,6 +37,53 @@ from graphdig.runs import create_run_dir, init_manifest, save_manifest, sha256_f
 from graphdig.units import danube_unit_for
 
 
+def tile_anchor_rows(ann, month: int, tile_w: int, tile_h: int) -> tuple[float, float]:
+    """The LOW/HIGH anchor pixel rows mapped from full-page into monthly-tile coords.
+
+    Tiles are 1:1 crops of the month bbox plus a symmetric margin (verified empirically);
+    tile row = page row - (bbox_y0 - margin_y).
+    """
+    _bx0, by0, _bx1, by1 = ann.boxes[month].edges_px(ann.width, ann.height)
+    margin_y = (tile_h - (by1 - by0)) / 2.0
+    offset = by0 - margin_y
+    c_low, c_high = ann.anchors_px
+    return c_low - offset, c_high - offset
+
+
+def hints_from_annotations(scan_id: str, year: int, month: int | None = None,
+                           paths: ZenodoPaths | None = None):
+    """Zenodo month annotations expressed as user hints (the generalized danube-prep).
+
+    month given: anchors in that monthly tile's coordinates (for `graphdig run <tile>`).
+    month None: anchors in full-page coordinates (for full sheets / pseudo-pages).
+    """
+    from graphdig.hints import Hints, PanelHint, YAnchorHint
+
+    paths = paths or ZenodoPaths()
+    ann = load_month_yolo(paths.month_yolo(scan_id))
+    unit = danube_unit_for(month_span(year, month or 1)[0])
+    if month is not None:
+        tile = Image.open(paths.tile(scan_id, month))
+        c_low, c_high = tile_anchor_rows(ann, month, tile.width, tile.height)
+        d0, d1 = month_span(year, month)
+        panels = [PanelHint(index=1, month=month,
+                            x_start=d0.isoformat(), x_end=d1.isoformat())]
+        expected = 1
+    else:
+        c_low, c_high = ann.anchors_px
+        panels = [PanelHint(index=m, month=m) for m in sorted(ann.boxes)]
+        expected = len(panels)
+    return Hints(
+        station=scan_id[:2], year=year, unit=unit.canonical,
+        y_scale="linear", rotation_deg=0, expected_panels=expected,
+        panel_layout="row" if expected > 1 else "single",
+        y_anchors=[YAnchorHint(pixel=c_low, value=ann.low_value),
+                   YAnchorHint(pixel=c_high, value=ann.high_value)],
+        panels=panels,
+        notes=f"generated from Zenodo monthannotations for {scan_id}",
+    )
+
+
 def prepare_run(scan_id: str, month: int, year: int,
                 cfg: RunConfig, paths: ZenodoPaths | None = None) -> Path:
     """Create a run dir with ingest/panels/calibrate/metadata pre-seeded from annotations."""
@@ -74,10 +121,8 @@ def prepare_run(scan_id: str, month: int, year: int,
 
     save_artifact(panels_art, run_dir / "panels.json")
 
-    # y calibration: anchors are page rows; tile row = page row - (by0 - margin_y)
-    offset = by0 - margin_y
-    c_low, c_high = ann.anchors_px  # page rows of LOW/HIGH values
-    c_low_t, c_high_t = c_low - offset, c_high - offset
+    # y calibration: anchors mapped from page rows into tile rows
+    c_low_t, c_high_t = tile_anchor_rows(ann, month, img.width, img.height)
     fit = two_anchor_fit(c_low_t, ann.low_value, c_high_t, ann.high_value)
     unit = danube_unit_for(month_span(year, month)[0])
     d0, d1 = month_span(year, month)

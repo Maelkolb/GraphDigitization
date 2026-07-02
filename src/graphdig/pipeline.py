@@ -51,6 +51,20 @@ class Context:
             self._gemini = GeminiClient(self.cfg.gemini)
         return self._gemini
 
+    @property
+    def hints(self):
+        """User hints: the run-dir copy wins (resume/Colab safety), else cfg.hints_path."""
+        if not hasattr(self, "_hints"):
+            from graphdig.hints import HINTS_FILENAME, load_hints
+
+            self._hints = None
+            run_copy = self.run_dir / HINTS_FILENAME
+            if run_copy.exists():
+                self._hints = load_hints(run_copy)
+            elif self.cfg.hints_path and Path(self.cfg.hints_path).exists():
+                self._hints = load_hints(self.cfg.hints_path)
+        return self._hints
+
     # ---- artifact paths -------------------------------------------------
     def path(self, name: str) -> Path:
         return self.run_dir / name

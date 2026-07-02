@@ -16,6 +16,14 @@ def run(ctx: Context) -> None:
     if not input_path.exists():
         raise FileNotFoundError(f"input image not found: {input_path}")
 
+    # persist hints inside the run dir so resumed/remote runs see identical inputs
+    if ctx.cfg.hints_path and Path(ctx.cfg.hints_path).exists():
+        from graphdig.hints import HINTS_FILENAME
+
+        dest = ctx.run_dir / HINTS_FILENAME
+        if not dest.exists():
+            dest.write_bytes(Path(ctx.cfg.hints_path).read_bytes())
+
     img = Image.open(input_path)
     if img.mode not in ("RGB", "L"):
         img = img.convert("RGB")

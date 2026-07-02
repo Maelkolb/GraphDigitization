@@ -90,6 +90,8 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--extractor", choices=["lineformer_local", "colab_bundle", "stub"],
                      default=None, help="line extraction backend (default: profile setting)")
     run.add_argument("--force", action="store_true", help="re-run stages even if done")
+    run.add_argument("--hints", default=None,
+                     help="user metadata hints JSON (station, year, unit, anchors, ...)")
     run.add_argument("--workers", type=int, default=4)
     run.set_defaults(func=_cmd_run)
 

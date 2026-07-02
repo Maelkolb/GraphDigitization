@@ -55,6 +55,7 @@ class RunConfig(BaseModel):
     x_stretch: float = 2.0  # paper Sect. 4.5.2, fixed s=2.0
     lineformer_max_per_image: int = 100
     baseline_enabled: bool | None = None  # None = profile default
+    hints_path: Path | None = None  # user metadata hints (see graphdig.hints)
     workers: int = 4
     gemini: GeminiConfig = Field(default_factory=GeminiConfig)
     gates: Gates = Field(default_factory=Gates)
@@ -80,5 +81,6 @@ class RunConfig(BaseModel):
             stages=stages,
             force=args.force,
             extractor=args.extractor or "lineformer_local",
+            hints_path=Path(args.hints) if getattr(args, "hints", None) else None,
             workers=args.workers,
         )
