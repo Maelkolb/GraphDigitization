@@ -248,6 +248,7 @@ class TileLines(ArtifactModel):
     selected: Selection | None = None  # first/primary selection (back-compat)
     selections: list[Selection] = Field(default_factory=list)  # one per data series
     rejected: list[int] = Field(default_factory=list)  # cand_ids vetoed by QC reselection
+    fallback_used: bool = False  # the fallback extractor merged candidates once
     error: str | None = None
 
 

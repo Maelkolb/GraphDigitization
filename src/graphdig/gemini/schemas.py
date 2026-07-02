@@ -164,6 +164,29 @@ class PickResponse(BaseModel):
     confidence: float = 0.0
 
 
+class GSeriesPoint(BaseModel):
+    x_1000: int
+    y_1000: int
+    visible: bool = Field(default=True,
+                          description="false where this curve is absent, occluded or "
+                                      "illegible at the requested x - never interpolate")
+
+
+class GSeriesTrace(BaseModel):
+    series_label: str
+    points: list[GSeriesPoint] = Field(description="one entry per requested x position, "
+                                                   "in the same order")
+    confidence: float = 0.0
+
+
+class PointsResponse(BaseModel):
+    """Direct curve reading: y of each named series at the requested x positions."""
+
+    series: list[GSeriesTrace]
+    notes: str = ""
+    confidence: float = 0.0
+
+
 class GAssignment(BaseModel):
     cand_id: int
     series_label: str = Field(description="which data series this candidate follows, "

@@ -102,8 +102,12 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--profile", choices=["danube", "generic"], default="generic")
     run.add_argument("--stages", default=None,
                      help="comma-separated subset of stages to (re)run")
-    run.add_argument("--extractor", choices=["lineformer_local", "colab_bundle", "stub"],
+    run.add_argument("--extractor",
+                     choices=["lineformer_local", "colab_bundle", "gemini_points", "stub"],
                      default=None, help="line extraction backend (default: profile setting)")
+    run.add_argument("--extractor-fallback",
+                     choices=["lineformer_local", "gemini_points", "stub"], default=None,
+                     help="backend tried once per tile when QC majors persist")
     run.add_argument("--force", action="store_true", help="re-run stages even if done")
     run.add_argument("--hints", default=None,
                      help="user metadata hints JSON (station, year, unit, anchors, ...)")
@@ -161,10 +165,17 @@ def build_parser() -> argparse.ArgumentParser:
 
     ev = sub.add_parser("evaluate", help="evaluate against ground truth")
     ev.add_argument("component",
-                    choices=["panels", "calibration", "series", "fullpage", "all"])
+                    choices=["panels", "calibration", "series", "fullpage",
+                             "extractors", "all"])
     ev.add_argument("--runs", default=None, help="run directory glob for series eval")
     ev.add_argument("--scan-ids", default=None,
                     help="comma-separated scan ids for the panels eval")
+    ev.add_argument("--gauge-months", default=None,
+                    help="extractor bench danube set, e.g. '210018:1839:1-12'")
+    ev.add_argument("--backends", default="lineformer_local,gemini_points",
+                    help="extractor bench backends (comma-separated)")
+    ev.add_argument("--images", default=None,
+                    help="extractor bench image paths (comma-separated)")
     ev.add_argument("--out", default=None, help="output directory (default outputs/eval/<date>)")
     ev.set_defaults(func=_cmd_evaluate)
 

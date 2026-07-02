@@ -27,6 +27,7 @@ class GeminiConfig(BaseModel):
     thinking_baseline: str = "medium"
     thinking_qc: str = "medium"
     thinking_pick: str = "low"
+    thinking_points: str = "high"  # direct curve tracing needs care
 
 
 class Gates(BaseModel):
@@ -51,7 +52,11 @@ class RunConfig(BaseModel):
     profile_name: Literal["danube", "generic"] = "generic"
     stages: list[str] | None = None  # None = all
     force: bool = False
-    extractor: Literal["lineformer_local", "colab_bundle", "stub"] = "lineformer_local"
+    extractor: Literal["lineformer_local", "colab_bundle", "gemini_points",
+                       "stub"] = "lineformer_local"
+    extractor_fallback: Literal["lineformer_local", "gemini_points",
+                                "stub"] | None = None  # tried once when QC majors persist
+    gemini_points_k: int = 40  # sample cap for the gemini_points backend
     x_stretch: float = 2.0  # paper Sect. 4.5.2, fixed s=2.0
     lineformer_max_per_image: int = 100
     baseline_enabled: bool | None = None  # None = profile default
@@ -81,6 +86,7 @@ class RunConfig(BaseModel):
             stages=stages,
             force=args.force,
             extractor=args.extractor or "lineformer_local",
+            extractor_fallback=getattr(args, "extractor_fallback", None),
             hints_path=Path(args.hints) if getattr(args, "hints", None) else None,
             workers=args.workers,
         )

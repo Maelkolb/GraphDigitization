@@ -90,6 +90,10 @@ def _eval_series(out: Path, lines: list[str], runs_glob: str | None) -> None:
 
 
 def evaluate_cli(args) -> int:
+    if args.component == "extractors":
+        from graphdig.eval.extractor_bench import bench_cli
+
+        return bench_cli(args)
     out = _out_dir(args)
     lines: list[str] = [f"# GraphDigitization evaluation — {date.today().isoformat()}", ""]
     component = args.component

@@ -9,7 +9,7 @@ from graphdig.pipeline import Context
 
 def run(ctx: Context) -> None:
     tiles_art = ctx.load(TilesArtifact, "tiles.json")
-    extractor = get_extractor(ctx.cfg.extractor)
+    extractor = get_extractor(ctx.cfg.extractor, ctx)
     params = ExtractParams(max_per_image=ctx.cfg.lineformer_max_per_image)
     art = extractor.extract(tiles_art.tiles, ctx.run_dir, params)
     for tile_id, tl in art.tiles.items():

@@ -50,6 +50,49 @@ def _judge(ctx: Context, key: str, series_label: str) -> tuple[PanelQc | None, P
     return qc, prov
 
 
+def _fallback_extract(ctx: Context, tile, panel, cal_art, lines) -> bool:
+    """Merge candidates from the fallback backend into this tile's pool (once)."""
+    import numpy as np
+
+    from graphdig.extractors import ExtractParams, get_extractor
+    from graphdig.series.resample import coverage, s_alpha
+    from graphdig.stages.select import _n_slices, _plot_extent_in_tile, _viable_gate
+
+    tl = lines.tiles[tile.tile_id]
+    if tl.fallback_used or not ctx.cfg.extractor_fallback:
+        return False
+    tl.fallback_used = True
+    try:
+        backend = get_extractor(ctx.cfg.extractor_fallback, ctx)
+        sub = backend.extract([tile], ctx.run_dir,
+                              ExtractParams(max_per_image=ctx.cfg.lineformer_max_per_image))
+    except Exception as exc:
+        ctx.add_flag("qc", f"fallback extractor failed: {exc}", panel_id=tile.tile_id)
+        return False
+    sub_tl = sub.tiles.get(tile.tile_id)
+    if sub_tl is None or sub_tl.error or not sub_tl.candidates:
+        ctx.add_flag("qc", "fallback extractor returned no candidates",
+                     panel_id=tile.tile_id, severity="info")
+        return False
+
+    offset = max((c.cand_id for c in tl.candidates), default=-1) + 1
+    n = _n_slices(cal_art, tile.tile_id)
+    x_lo, x_hi = _plot_extent_in_tile(tile, panel)
+    gate = _viable_gate(ctx)
+    for c in sub_tl.candidates:
+        c.cand_id += offset
+        pts = np.asarray(c.points_px_tile, dtype=float).reshape(-1, 2)
+        c.coverage = coverage(pts, x_lo, x_hi, n)
+        c.s_alpha = s_alpha(c.confidence, c.coverage, ctx.cfg.gates.alpha_coverage)
+        c.viable = c.coverage >= gate
+        tl.candidates.append(c)
+    lines.backend_meta[f"fallback:{tile.tile_id}"] = ctx.cfg.extractor_fallback
+    ctx.add_flag("qc", f"merged {len(sub_tl.candidates)} candidate(s) from fallback "
+                 f"backend {ctx.cfg.extractor_fallback}", panel_id=tile.tile_id,
+                 severity="info")
+    return True
+
+
 def _reselect(ctx: Context, lines, tile, series_id: str) -> int | None:
     """Reject this series' candidate and pick an alternative; None if none remains.
 
@@ -100,7 +143,10 @@ def run(ctx: Context) -> None:
     for key in list(series_art.panels):
         ps = series_art.panels[key]
         pid = ps.panel_id or key
-        for attempt in range(gates.qc_max_reselect + 1):
+        if pid not in tiles_by_id:  # stitched entries ("annual") have no tile to judge
+            continue
+        budget = gates.qc_max_reselect + (1 if ctx.cfg.extractor_fallback else 0)
+        for attempt in range(budget + 1):
             try:
                 qc, prov = _judge(ctx, key, ps.series_label)
             except GeminiUnavailable as exc:
@@ -114,10 +160,13 @@ def run(ctx: Context) -> None:
                 art.provenance = prov
             if qc.verdict not in gates.qc_block_on or not gates.qc_auto_reselect:
                 break
-            if attempt >= gates.qc_max_reselect:
+            if attempt >= budget:
                 break
             tile = tiles_by_id[pid]
             new_cand = _reselect(ctx, lines, tile, ps.series_id)
+            if new_cand is None and _fallback_extract(ctx, tile,
+                                                      panels_by_id[pid], cal_art, lines):
+                new_cand = _reselect(ctx, lines, tile, ps.series_id)
             if new_cand is None:
                 ctx.add_flag("qc", "major verdict but no alternative candidate left",
                              panel_id=key, severity="blocking")

@@ -228,6 +228,10 @@ def run(ctx: Context) -> None:
             c.s_alpha = s_alpha(c.confidence, c.coverage, gates.alpha_coverage)
             c.viable = c.coverage >= viable_gate
 
+        if tl.selections:  # backend pre-assigned series (gemini_points): keep them
+            tl.selected = tl.selections[0]
+            continue
+
         ranked = sorted(tl.candidates, key=lambda c: -(c.s_alpha or 0.0))
         viable = [c for c in ranked if c.viable]
         pool = viable or ranked

@@ -123,6 +123,15 @@ For each candidate, state which data series it follows (using exactly the given 
 another candidate). Each series name should be assigned to at most one candidate - the one
 that follows it best."""
 
+POINTS_V1 = f"""This is a chart tile from a historical scan containing these data series:
+{{series_list}}.
+For EACH named series, report the y position of its drawn curve at each of the following
+x positions (0-1000 coords): {{x_positions}}.
+Return the points in the same order as the x positions. Where a curve is absent, occluded
+or illegible at some x, mark that point visible=false instead of guessing - NEVER
+interpolate across gaps or invent a smooth curve. Follow the actually drawn strokes.
+{COORD_RULES}"""
+
 QC_SERIES_SUFFIX = """
 Judge specifically the curve that represents the data series: {series_label}."""
 
@@ -136,6 +145,7 @@ PROMPTS: dict[str, str] = {
     "CALIB_V1_RETRY": CALIB_V1_RETRY,
     "CURVE_LABELS_V1": CURVE_LABELS_V1,
     "BASELINE_V1": BASELINE_V1,
+    "POINTS_V1": POINTS_V1,
     "QC_V1": QC_V1,
     "PICK_V1": PICK_V1,
 }
