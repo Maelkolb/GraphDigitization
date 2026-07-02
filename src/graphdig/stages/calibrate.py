@@ -51,6 +51,21 @@ def crop_box_for(panel: Panel, width: int, height: int):
     return b.expand(int(CROP_MARGIN * b.w), int(CROP_MARGIN * b.h), width, height)
 
 
+def _margin_crop_box(panel: Panel, width: int, height: int, edge: str):
+    """Edge panels retry with a crop extended to the page margin, where full sheets
+    carry their value labels (outside every panel bbox)."""
+    from graphdig.geometry import BoxPx
+
+    b = panel.bbox_px
+    my = int(0.12 * b.h)
+    y0, y1 = max(0, b.y - my), min(height, b.bottom + my)
+    if edge == "left":
+        x1 = min(width, b.right + int(0.05 * b.w))
+        return BoxPx(x=0, y=y0, w=x1, h=y1 - y0)
+    x0 = max(0, b.x - int(0.05 * b.w))
+    return BoxPx(x=x0, y=y0, w=width - x0, h=y1 - y0)
+
+
 def _provenance(result) -> Provenance:
     return Provenance(model=result.model, prompt_id=result.prompt_id,
                       thinking_level=result.thinking_level,
@@ -262,6 +277,56 @@ def _fit_y_axis(ctx: Context, ticks: list[Tick], scale: str, unit_text: str,
     return y, fit
 
 
+def _prefer_month_hint(x_axis: XAxisCal, panel: Panel) -> XAxisCal:
+    """A date x-extent from the month assignment beats bare numeric day labels
+    ('1'..'31') read off the axis - the danube multi-panel date fix."""
+    hint = panel.x_extent_hint
+    if hint.kind != "date":
+        return x_axis
+    d0 = parse_date_label(hint.start_label)
+    d1 = parse_date_label(hint.end_label, default_year=d0.year if d0 else None)
+    if not (d0 and d1 and d1 >= d0):
+        return x_axis
+    if x_axis.kind == "date" and x_axis.n_samples:
+        return x_axis
+    return XAxisCal(kind="date", start=d0.isoformat(), end=d1.isoformat(),
+                    n_samples=(d1 - d0).days + 1,
+                    confidence=max(x_axis.confidence, 0.9),
+                    flags=[*x_axis.flags, "x_from_month_hint"])
+
+
+def _share_y_fit(art: CalibrationArtifact, ctx: Context) -> None:
+    """Annual sheets share one value scale: the best-supported panel fit becomes the
+    donor for panels whose own labels were unreadable; usable fits are checked against
+    the donor for consistency."""
+    def score(pc: PanelCalibration) -> float:
+        f = pc.y_axis.fit
+        return f.r2 * min(1.0, f.n_used / 3) if f else -1.0
+
+    usable = {pid: pc for pid, pc in art.panels.items()
+              if pc.y_axis.fit is not None and "unusable" not in pc.y_axis.flags}
+    if not usable:
+        return
+    donor_pid, donor = max(usable.items(), key=lambda kv: score(kv[1]))
+    donor_slope = donor.y_axis.fit.slope
+    for pid, pc in art.panels.items():
+        if pid == donor_pid:
+            continue
+        if pc.y_axis.fit is None or "unusable" in pc.y_axis.flags:
+            shared = donor.y_axis.model_copy(deep=True)
+            shared.flags = [*shared.flags, f"y_fit_shared_from:{donor_pid}"]
+            pc.y_axis = shared
+            pc.review_required = False
+            ctx.add_flag("calibrate", f"y calibration shared from {donor_pid}",
+                         panel_id=pid, severity="info")
+        elif donor_slope and abs(pc.y_axis.fit.slope - donor_slope) / abs(donor_slope) > 0.03:
+            pc.y_axis.flags.append("y_fit_inconsistent")
+            ctx.add_flag("calibrate",
+                         f"y-fit slope differs from donor {donor_pid} by "
+                         f"{abs(pc.y_axis.fit.slope - donor_slope) / abs(donor_slope):.1%}",
+                         panel_id=pid, severity="warning")
+
+
 def _build_x_axis(kind: str, start_label: str, end_label: str, panel: Panel,
                   confidence: float) -> XAxisCal:
     start_label = start_label or panel.x_extent_hint.start_label
@@ -348,9 +413,9 @@ def _calibrate_from_user_anchors(ctx: Context, page: Image.Image, panel: Panel,
             except ValueError:
                 pass
 
-    ph = panel_hint_for(hints, panel.panel_id, getattr(panel, "month", None))
+    ph = panel_hint_for(hints, panel.panel_id, panel.month)
     x_axis = (_x_axis_from_hint(ph, panel)
-              or _build_x_axis("unknown", "", "", panel, 1.0))
+              or _prefer_month_hint(_build_x_axis("unknown", "", "", panel, 1.0), panel))
     cal = PanelCalibration(y_axis=y_axis, x_axis=x_axis,
                            review_required="unusable" in y_axis.flags)
     draw_calibration(page, panel, cal, fit,
@@ -361,14 +426,14 @@ def _calibrate_from_user_anchors(ctx: Context, page: Image.Image, panel: Panel,
 # --------------------------------------------------------------------------- stage
 
 def _calibrate_panel(ctx: Context, page: Image.Image, panel: Panel,
-                     cls: PageClassification):
+                     cls: PageClassification, edge: str | None = None):
     crop_box = crop_box_for(panel, page.width, page.height)
     crop = page.crop((crop_box.x, crop_box.y, crop_box.right, crop_box.bottom))
     crop.save(ctx.run_dir / "panels" / f"{panel.panel_id}.png")
 
     from graphdig.hints import hint_ticks
 
-    user_ticks = hint_ticks(ctx.hints, panel.panel_id, getattr(panel, "month", None))
+    user_ticks = hint_ticks(ctx.hints, panel.panel_id, panel.month)
     if len(user_ticks) >= 2:
         return _calibrate_from_user_anchors(ctx, page, panel, cls, user_ticks,
                                             crop, crop_box)
@@ -406,8 +471,22 @@ def _calibrate_panel(ctx: Context, page: Image.Image, panel: Panel,
                      panel_id=panel.panel_id, severity="blocking")
         return panel.panel_id, PanelCalibration(review_required=True), _provenance(result)
 
+    # edge panels of full sheets retry with a crop extended into the page margin,
+    # where the value labels actually live
+    if not ticks and edge and cls.y_axis_labels_present and not use_curve_labels:
+        mbox = _margin_crop_box(panel, page.width, page.height, edge)
+        mcrop = page.crop((mbox.x, mbox.y, mbox.right, mbox.bottom))
+        resp_m, pairs_m, result_m = _ticks_from_axis(ctx, mcrop, mbox,
+                                                     expect_labels=False)
+        if result_m is not None and result_m.ok and pairs_m:
+            ticks = _pick_axis_side(pairs_m, cls.dual_y_axis, pre_flags)
+            pre_flags.append("margin_crop_retry")
+            unit_text = unit_text or (resp_m.y_unit_text if resp_m else "")
+            result = result_m
+
     y_axis, fit = _fit_y_axis(ctx, ticks, scale, unit_text, confidence,
                               panel.panel_id, pre_flags)
+    x_axis = _prefer_month_hint(x_axis, panel)
     cal = PanelCalibration(y_axis=y_axis, x_axis=x_axis,
                            review_required="unusable" in y_axis.flags)
     draw_calibration(page, panel, cal, fit,
@@ -420,12 +499,22 @@ def run(ctx: Context) -> None:
     page = Image.open(ctx.run_dir / panels_art.image.path)
     page.load()  # decode now: lazy loading is not thread-safe across panel workers
 
+    panels = panels_art.panels
+    edges: dict[str, str] = {}
+    if len(panels) > 1:  # leftmost/rightmost panels sit next to the labeled page margins
+        by_x = sorted(panels, key=lambda p: p.bbox_px.x)
+        edges[by_x[0].panel_id] = "left"
+        edges[by_x[-1].panel_id] = "right"
+
     art = CalibrationArtifact()
     with ThreadPoolExecutor(max_workers=ctx.cfg.workers) as pool:
-        futures = [pool.submit(_calibrate_panel, ctx, page, p, panels_art.classification)
-                   for p in panels_art.panels]
+        futures = [pool.submit(_calibrate_panel, ctx, page, p,
+                               panels_art.classification, edges.get(p.panel_id))
+                   for p in panels]
         for fut in futures:
             panel_id, cal, provenance = fut.result()
             art.panels[panel_id] = cal
             art.provenance = provenance
+    if ctx.cfg.profile.shared_y_scale and len(art.panels) > 1:
+        _share_y_fit(art, ctx)
     ctx.save(art, "calibration.json")

@@ -156,6 +156,55 @@ def load_context_artifacts(ctx: Context):
     return panels_art, cal_art, lines, tiles_art, baseline_art
 
 
+def stitch_annual(ctx: Context, art: SeriesArtifact) -> None:
+    """Concatenate the per-panel daily series of an annual sheet into one year series.
+
+    Multi-series pages get one annual series per series_id (`annual`, `annual_s2`, ...).
+    Gaps or overlaps at panel joins are flagged.
+    """
+    by_sid: dict[str, list[PanelSeries]] = {}
+    for key, ps in art.panels.items():
+        if ps.x_kind == "date" and not key.startswith("annual"):
+            by_sid.setdefault(ps.series_id, []).append(ps)
+    for sid, entries in by_sid.items():
+        if len(entries) < 2:
+            continue
+        rows: dict[str, list[str]] = {}
+        label = ""
+        for ps in entries:
+            label = label or ps.series_label
+            with open(ctx.run_dir / ps.csv_path, encoding="utf-8") as fh:
+                for row in csv.reader(fh):
+                    if row and row[0] != "x_key":
+                        if row[0] in rows:
+                            ctx.add_flag("series", f"annual join overlap at {row[0]}",
+                                         severity="warning")
+                        rows[row[0]] = row
+        key = "annual" if sid == "s1" else f"annual_{sid}"
+        csv_rel = f"series/{key}.csv"
+        ordered = sorted(rows)
+        with open(ctx.run_dir / csv_rel, "w", newline="", encoding="utf-8") as fh:
+            writer = csv.writer(fh)
+            writer.writerow(CSV_COLUMNS)
+            writer.writerows(rows[k] for k in ordered)
+        gaps = [k for k in ordered if not rows[k][1]]
+        try:
+            d0, d1 = date.fromisoformat(ordered[0]), date.fromisoformat(ordered[-1])
+            expected = (d1 - d0).days + 1
+            if expected != len(ordered):
+                ctx.add_flag("series", f"annual series misses {expected - len(ordered)} "
+                             "day(s) between panel joins", severity="warning")
+        except ValueError:
+            pass
+        art.panels[key] = PanelSeries(
+            csv_path=csv_rel, panel_id="annual", series_id=sid, series_label=label,
+            n=len(ordered), x_kind="date", gaps=gaps,
+            baseline_applied=any(ps.baseline_applied for ps in entries),
+            confidence_chain={"panels": min((ps.confidence_chain.get("extraction", 0.0)
+                                             for ps in entries), default=0.0)},
+        )
+
+
 def run(ctx: Context) -> None:
     panels_art, cal_art, lines, tiles_art, baseline_art = load_context_artifacts(ctx)
     panels_by_id = {p.panel_id: p for p in panels_art.panels}
@@ -182,4 +231,6 @@ def run(ctx: Context) -> None:
             art.panels[key] = build_panel_series(
                 ctx, tile, panels_by_id[pid], cal, cand, baseline,
                 key=key, series_id=sel.series_id, series_label=sel.series_label)
+    if ctx.cfg.profile.daily_sampling:
+        stitch_annual(ctx, art)
     ctx.save(art, "series.json")

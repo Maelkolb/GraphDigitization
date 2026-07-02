@@ -16,6 +16,7 @@ class Profile(BaseModel):
     check_orientation: bool = True  # dedicated 4-way upright check before triage
     coverage_viable: float | None = None  # None = use Gates default (danube-tuned 0.985)
     extract_margin: float = 0.03  # tile safety margin around the plot area
+    shared_y_scale: bool = False  # panels on one page share one value scale (annual sheets)
 
 
 DANUBE = Profile(
@@ -29,6 +30,7 @@ DANUBE = Profile(
     check_orientation=False,  # archival tiles/sheets are consistently upright
     extract_margin=0.0,  # dataset tiles already carry a margin; more would expose
     #                      slivers of the neighboring months' curves
+    shared_y_scale=True,  # all 12 monthly panels share the gauge's value scale
 )
 
 # arbitrary charts: curves legitimately start/end inside the plot area, so the

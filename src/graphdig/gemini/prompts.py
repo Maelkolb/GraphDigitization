@@ -34,6 +34,25 @@ In ONE pass, characterize this page:
    a data curator should know. Report only what is visible; use empty values otherwise.
 {COORD_RULES}"""
 
+TRIAGE_V2_DANUBE = f"""You analyze scans of nineteenth-century Bavarian river gauge charts.
+A full annual sheet contains 12 monthly chart panels arranged left to right in CALENDAR
+ORDER (January leftmost through December); a page may also be a single monthly tile
+(then report exactly one panel covering the chart area).
+In ONE pass, characterize this page:
+1. Orientation: clockwise rotation (0/90/180/270) needed so labels read horizontally and
+   upright; 0 if already upright.
+2. Classification: page kind; whether the vertical axis carries readable numeric tick
+   labels; whether values are written along the curve; linear or logarithmic scale.
+3. Panels IN CALENDAR ORDER: for each report its outer bounding box and its inner plot
+   area (the region between the FIRST and LAST day gridline - precise horizontal edges
+   matter: one gridline interval equals one day), the month name exactly as printed as
+   the panel label, and the first and last day-number labels of its horizontal axis.
+4. Metadata: station, calendar year (critical - look at headers and margins), date range,
+   unit (Bavarian Fuss before 1872-04-01, millimetres after - if this sheet spans that
+   date the change is visible at the March/April boundary), language, handwritten
+   annotations, curator notes.
+{COORD_RULES}"""
+
 TRIAGE_V1_DANUBE = f"""You analyze scans of nineteenth-century Bavarian river gauge charts.
 A full annual sheet contains 12 monthly chart panels arranged left to right (January to
 December), each with a day grid and a hand-drawn water-level curve; a page may also be a
@@ -112,6 +131,7 @@ PROMPTS: dict[str, str] = {
     "ASSIGN_V1": ASSIGN_V1,
     "TRIAGE_V1_GENERIC": TRIAGE_V1_GENERIC,
     "TRIAGE_V1_DANUBE": TRIAGE_V1_DANUBE,
+    "TRIAGE_V2_DANUBE": TRIAGE_V2_DANUBE,
     "CALIB_V1": CALIB_V1,
     "CALIB_V1_RETRY": CALIB_V1_RETRY,
     "CURVE_LABELS_V1": CURVE_LABELS_V1,
@@ -122,5 +142,5 @@ PROMPTS: dict[str, str] = {
 
 
 def triage_prompt(variant: str) -> tuple[str, str]:
-    pid = "TRIAGE_V1_DANUBE" if variant == "danube" else "TRIAGE_V1_GENERIC"
+    pid = "TRIAGE_V2_DANUBE" if variant == "danube" else "TRIAGE_V1_GENERIC"
     return pid, PROMPTS[pid]

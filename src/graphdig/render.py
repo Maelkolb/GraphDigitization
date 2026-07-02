@@ -115,6 +115,32 @@ def draw_polyline_overlay(tile: Image.Image, points_xy: np.ndarray,
 SERIES_COLORS = ["#c22", "#1a6fba", "#2a8f3c", "#d98618", "#8145a8", "#0f9c9c"]
 
 
+def annual_figure(series: list[tuple[str, list[str], list[float]]], unit: str,
+                  out_path: Path, title: str = "") -> Path:
+    """Full-year stitched series (no scan above - it spans 12 separate panels)."""
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots(figsize=(14, 4.2))
+    for i, (label, x_labels, values) in enumerate(series):
+        color = SERIES_COLORS[i % len(SERIES_COLORS)]
+        ax.plot(range(len(values)), values, color=color, lw=1.1,
+                label=label or "digitized series")
+        step = max(1, len(x_labels) // 16)
+        ax.set_xticks(range(0, len(x_labels), step))
+        ax.set_xticklabels(x_labels[::step], rotation=45, ha="right", fontsize=7)
+    ax.set_ylabel(f"value [{unit}]")
+    ax.set_title(title or "annual series", fontsize=11)
+    ax.grid(alpha=0.3)
+    ax.legend(loc="best", fontsize=8)
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=130)
+    plt.close(fig)
+    return out_path
+
+
 def reconstruction_figure(tile: Image.Image, values: list[float], x_labels: list[str],
                           unit: str, out_path: Path, title: str = "",
                           gt_values: list[float] | None = None,

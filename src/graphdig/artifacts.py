@@ -46,6 +46,7 @@ class XExtentHint(ArtifactModel):
 class Panel(ArtifactModel):
     panel_id: str
     label: str = ""
+    month: int | None = None  # calendar month identity (danube annual sheets)
     bbox_px: BoxPx
     plot_area_px: BoxPx | None = None
     x_edge_refined: bool = False

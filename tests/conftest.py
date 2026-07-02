@@ -96,3 +96,79 @@ def synth_chart(tmp_path):
     path = tmp_path / "synth_chart.png"
     img.save(path)
     return path, spec
+
+
+GERMAN_MONTH_NAMES = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
+                      "August", "September", "Oktober", "November", "Dezember"]
+
+
+@dataclass(frozen=True)
+class SynthYearPage:
+    """Analytic ground truth of the synthetic 12-panel annual sheet."""
+
+    year: int = 1849
+    margin_left: int = 80
+    plot_top: int = 60
+    plot_h: int = 300
+    ppd: float = 6.0  # pixels per day
+    y_zero: float = 360.0  # pixel row of value 0; value = (y_zero - y) / 10
+    y_slope: float = -0.1
+
+    def value_at(self, y_px: float) -> float:
+        return (self.y_zero - y_px) / 10.0
+
+    def pixel_at(self, value: float) -> float:
+        return self.y_zero - value * 10.0
+
+    def month_value(self, month: int, t: float) -> float:
+        """Analytic per-month curve, t in [0, 1] across the month."""
+        return 12.0 + 8.0 * np.sin(2 * np.pi * t) + 0.5 * month
+
+    def panel_boxes(self) -> list[tuple[int, int, int, int]]:
+        """Plot-area (x0, y0, x1, y1) per month, left to right."""
+        import calendar
+
+        out = []
+        x = self.margin_left
+        for m in range(1, 13):
+            w = round(self.ppd * calendar.monthrange(self.year, m)[1])
+            out.append((x, self.plot_top, x + w, self.plot_top + self.plot_h))
+            x += w
+        return out
+
+    @property
+    def width(self) -> int:
+        return self.panel_boxes()[-1][2] + 20
+
+    @property
+    def height(self) -> int:
+        return self.plot_top + self.plot_h + 60
+
+
+def make_synthetic_year_page(spec: SynthYearPage | None = None):
+    spec = spec or SynthYearPage()
+    img = Image.new("RGB", (spec.width, spec.height), (246, 241, 230))
+    d = ImageDraw.Draw(img)
+
+    for value in range(0, 31, 5):  # margin value labels + shared gridlines
+        y = spec.pixel_at(value)
+        d.line([(spec.margin_left, y), (spec.width - 20, y)], fill=(205, 200, 190))
+        d.text((10, y - 6), f"{value}", fill=(60, 60, 60))
+
+    for m, (x0, y0, x1, y1) in enumerate(spec.panel_boxes(), start=1):
+        d.rectangle([x0, y0, x1, y1], outline=(70, 70, 70), width=2)
+        d.text((x0 + 4, 30), GERMAN_MONTH_NAMES[m - 1], fill=(40, 40, 40))
+        xs = np.arange(x0, x1)
+        ts = (xs - x0) / (x1 - x0)
+        ys = spec.pixel_at(spec.month_value(m, ts))
+        d.line(list(zip(xs.tolist(), ys.tolist(), strict=False)), fill=(40, 40, 120), width=2)
+    d.text((spec.width // 2 - 40, 8), f"Pegel Synthetic {spec.year}", fill=(30, 30, 30))
+    return img, spec
+
+
+@pytest.fixture
+def synth_year_page(tmp_path):
+    img, spec = make_synthetic_year_page()
+    path = tmp_path / "synth_year.png"
+    img.save(path)
+    return path, spec

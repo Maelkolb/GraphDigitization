@@ -34,6 +34,23 @@ def _read_series_csv(ctx: Context, csv_rel: str) -> tuple[list[str], list[float]
     return xs, values, unit
 
 
+def _annual_plot(ctx: Context, entries) -> str | None:
+    from graphdig.render import annual_figure
+
+    series, unit = [], ""
+    for _key, ps in entries:
+        xs, values, u = _read_series_csv(ctx, ps.csv_path)
+        unit = unit or u
+        if values:
+            series.append((ps.series_label, xs, values))
+    if not series:
+        return None
+    rel = "overlays/reconstruction_annual.png"
+    annual_figure(series, unit or "?", ctx.run_dir / rel,
+                  title=f"{ctx.manifest.run_id} — annual series")
+    return rel
+
+
 def _panel_reconstruction(ctx: Context, panel_id: str, entries) -> str | None:
     """One reconstruction figure per panel with ALL of its digitized series."""
     from PIL import Image
@@ -124,6 +141,17 @@ def run(ctx: Context) -> None:
         by_panel: dict[str, list] = {}
         for key, ps in sorted(series.panels.items()):
             by_panel.setdefault(ps.panel_id or key, []).append((key, ps))
+        annual = by_panel.pop("annual", None)
+        if annual:
+            plot_rel = _annual_plot(ctx, annual)
+            lines_out.append("### Annual series (stitched from all monthly panels)")
+            for key, ps in annual:
+                label = f" **{ps.series_label}**" if ps.series_label else ""
+                lines_out.append(f"-{label} csv: `{ps.csv_path}` "
+                                 f"({ps.n} days, {len(ps.gaps)} gaps)")
+            if plot_rel:
+                lines_out.append(f"\n![annual]({plot_rel})")
+            lines_out.append("")
         for panel_id, entries in sorted(by_panel.items()):
             plot_rel = _panel_reconstruction(ctx, panel_id, entries)
             lines_out.append(f"### {panel_id}"
