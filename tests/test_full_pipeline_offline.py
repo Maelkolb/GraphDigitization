@@ -98,5 +98,5 @@ def test_qc_and_report(full_run):
     report = (run_dir / "report.md").read_text(encoding="utf-8")
     assert "## Panels" in report and "## Series" in report
     assert (run_dir / "overlays" / "curve_p01.png").exists()
-    assert (run_dir / "overlays" / "series_p01.png").exists()
+    assert (run_dir / "overlays" / "reconstruction_p01.png").exists()
     assert (run_dir / "qc.json").exists()

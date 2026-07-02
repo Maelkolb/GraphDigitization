@@ -1,5 +1,11 @@
 # Live test run — 2026-07-02 (Gemini 3.5 Flash active)
 
+**Start with the `reconstruction_*.png` figures in each run folder** — they show the
+original scan on top and the digitized series below on a shared x-axis (dashed green =
+the paper's manual ground truth where available). The machine-readable digitized graph
+itself is `series_p01.csv` (one row per day: date, value in native units, value in mm,
+source pixel provenance).
+
 First runs with all Gemini stages live: panel detection, axis calibration, metadata,
 candidate arbitration, and QC. Four test cases: the two forestry generalization charts
 (full automated path, `--profile generic`) and re-runs of the two Danube months the

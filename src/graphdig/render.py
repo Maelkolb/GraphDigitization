@@ -112,6 +112,46 @@ def draw_polyline_overlay(tile: Image.Image, points_xy: np.ndarray,
     return out_path
 
 
+def reconstruction_figure(tile: Image.Image, values: list[float], x_labels: list[str],
+                          unit: str, out_path: Path, title: str = "",
+                          gt_values: list[float] | None = None,
+                          gt_label: str = "ground truth") -> Path:
+    """The 'digitized graph' deliverable: original tile on top, reconstructed series
+    below on the same x-axis, optionally with ground truth overlaid."""
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    n = len(values)
+    fig, (ax_img, ax_plot) = plt.subplots(
+        2, 1, figsize=(12, 7), gridspec_kw={"height_ratios": [1, 1.1]}, sharex=True)
+    ax_img.imshow(np.asarray(tile.convert("RGB")), extent=(0.0, float(n), 0.0, 1.0),
+                  aspect="auto")
+    ax_img.set_yticks([])
+    ax_img.set_title(title or "original scan", fontsize=10)
+
+    xs = np.arange(1, n + 1, dtype=float)  # last-in-slice sample sits at the slice end
+    vals = np.asarray(values, dtype=float)
+    ax_plot.plot(xs, vals, color="#c22", lw=1.6, label="digitized series")
+    ax_plot.plot(xs, vals, "o", color="#c22", ms=2.5)
+    if gt_values is not None:
+        ax_plot.plot(xs, np.asarray(gt_values, dtype=float), color="#2a7", lw=1.2,
+                     ls="--", label=gt_label)
+    step = max(1, n // 15)
+    ax_plot.set_xticks(xs[::step])
+    ax_plot.set_xticklabels([x_labels[i] for i in range(0, n, step)],
+                            rotation=45, ha="right", fontsize=7)
+    ax_plot.set_ylabel(f"value [{unit}]")
+    ax_plot.grid(alpha=0.3)
+    ax_plot.legend(loc="best", fontsize=8)
+    ax_plot.set_xlim(0, n)
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=130)
+    plt.close(fig)
+    return out_path
+
+
 def draw_candidates(tile: Image.Image, candidates: list[tuple[int, np.ndarray]],
                     out_path: Path) -> Path:
     """All candidate polylines in distinct colors with an id legend (for Gemini pick)."""

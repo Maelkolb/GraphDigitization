@@ -18,6 +18,10 @@ Analysis: [`docs/pilot_results.md`](../../docs/pilot_results.md).
 
 ## Contents
 
+**The digitized graphs:** each run folder has `reconstruction_p01.png` (original scan on
+top, reconstructed series below on the same x-axis, dashed green = manual ground truth)
+and `series_p01.csv` (the digitized data: one row per day).
+
 - `eval_report.md`, `series_eval.csv` — per-month metrics vs. pixel ground truth, with the
   paper's best-candidate scores on the same months for comparison
 - `runs/<scan>_tif_M<month>/` — per-run `report.md` + digitized daily series

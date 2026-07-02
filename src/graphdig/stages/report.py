@@ -24,30 +24,27 @@ def _load_optional(ctx: Context, cls, name: str):
 
 
 def _series_plot(ctx: Context, pid: str, csv_rel: str) -> str | None:
-    import matplotlib
+    """Reconstruction figure: scan on top, digitized series below, shared x-axis."""
+    from PIL import Image
 
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
+    from graphdig.render import reconstruction_figure
 
-    xs, values = [], []
+    xs, values, unit = [], [], ""
     with open(ctx.run_dir / csv_rel, encoding="utf-8") as fh:
         for row in csv.DictReader(fh):
             v = row["value_native"]
             values.append(float(v) if v else math.nan)
             xs.append(row["x_key"])
+            unit = unit or row["native_unit"]
     if not values:
         return None
-    fig, ax = plt.subplots(figsize=(10, 3.2))
-    ax.plot(range(len(values)), values, lw=1.2)
-    step = max(1, len(xs) // 12)
-    ax.set_xticks(range(0, len(xs), step))
-    ax.set_xticklabels(xs[::step], rotation=45, ha="right", fontsize=7)
-    ax.set_title(f"{pid} digitized series (native units)")
-    ax.grid(alpha=0.3)
-    fig.tight_layout()
-    rel = f"overlays/series_{pid}.png"
-    fig.savefig(ctx.run_dir / rel, dpi=120)
-    plt.close(fig)
+    tile_path = ctx.run_dir / "tiles" / f"{pid}.png"
+    if not tile_path.exists():
+        return None
+    rel = f"overlays/reconstruction_{pid}.png"
+    reconstruction_figure(Image.open(tile_path), values, xs, unit or "?",
+                          ctx.run_dir / rel,
+                          title=f"{ctx.manifest.run_id} — {pid}")
     return rel
 
 
