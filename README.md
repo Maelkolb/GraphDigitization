@@ -74,10 +74,12 @@ gitignored `external/`, never vendored.
 
 ## Pilot results (automated, no human in the loop)
 
-First real gauge-month (Neu-Ulm, February 1839): peak-aware score **0.984** vs the
-paper's human-picked candidate **0.989** on the same month (Pearson r 0.999), with
-s_α-selection over 99 LineFormer candidates. Full pilot tables land in `outputs/eval/`
-via `graphdig evaluate`.
+36 gauge-months (Neu-Ulm 1839, Vilshofen 1844, Passau 1848), local CPU extraction,
+pure s_α selection (no Gemini QC — no API key configured): median peak-aware score
+**0.961** vs **0.980** for the paper's human-picked candidates on the same months;
+30/36 months ≥ 0.9, and several months beat the human-picked result. The two failure
+months are near-tie wrong-line cases that the Gemini visual pick is designed to catch
+(it was skipped without a key). Details: `docs/pilot_results.md`.
 
 ## Development
 
