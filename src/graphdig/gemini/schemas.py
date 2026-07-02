@@ -30,8 +30,10 @@ class GPanel(BaseModel):
 
 
 class PanelsResponse(BaseModel):
-    rotation_deg: Literal[0, 90, 180, 270] = Field(
-        description="clockwise rotation needed so axis labels read horizontally; 0 if upright")
+    # plain int: Gemini's schema converter rejects integer Literal enums
+    rotation_deg: int = Field(
+        description="clockwise rotation in degrees (0, 90, 180 or 270) needed so axis "
+                    "labels read horizontally; 0 if upright")
     page_kind: str = Field(default="", description="short free-text page characterization, "
                                                    "e.g. 'annual sheet with 12 monthly panels'")
     panels: list[GPanel]

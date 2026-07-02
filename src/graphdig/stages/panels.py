@@ -101,8 +101,8 @@ def run(ctx: Context) -> None:
     result = _detect(ctx, img, prompt_id, prompt)
     orientation = Orientation()
 
-    if result.data.rotation_deg:
-        deg = result.data.rotation_deg
+    deg = round((result.data.rotation_deg % 360) / 90) * 90 % 360
+    if deg:
         img = img.rotate(-deg, expand=True)  # PIL rotates counter-clockwise
         rot_path = page_path.with_name(page_path.stem + f"_rot{deg}.png")
         img.save(rot_path)

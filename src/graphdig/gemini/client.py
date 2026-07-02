@@ -32,7 +32,8 @@ _MEDIA_RESOLUTION = {
     "low": "MEDIA_RESOLUTION_LOW",
     "medium": "MEDIA_RESOLUTION_MEDIUM",
     "high": "MEDIA_RESOLUTION_HIGH",
-    "ultra_high": "MEDIA_RESOLUTION_ULTRA_HIGH",
+    # the generativelanguage v1beta API rejects ULTRA_HIGH (400); cap at HIGH
+    "ultra_high": "MEDIA_RESOLUTION_HIGH",
 }
 
 
@@ -155,6 +156,9 @@ class GeminiClient:
                 last_error = f"request error: {exc}"
                 break
             except Exception as exc:  # transient API/network errors
+                if "media_resolution" in str(exc) and "media_resolution" in config_kwargs:
+                    config_kwargs.pop("media_resolution")  # backend rejected the enum
+                    continue
                 last_error = f"api error: {exc}"
                 time.sleep(2.0 * (attempt + 1))
                 continue
