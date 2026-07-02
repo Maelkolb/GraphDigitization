@@ -112,12 +112,18 @@ def draw_polyline_overlay(tile: Image.Image, points_xy: np.ndarray,
     return out_path
 
 
+SERIES_COLORS = ["#c22", "#1a6fba", "#2a8f3c", "#d98618", "#8145a8", "#0f9c9c"]
+
+
 def reconstruction_figure(tile: Image.Image, values: list[float], x_labels: list[str],
                           unit: str, out_path: Path, title: str = "",
                           gt_values: list[float] | None = None,
-                          gt_label: str = "ground truth") -> Path:
+                          gt_label: str = "ground truth",
+                          series_label: str = "digitized series",
+                          more_series: list[tuple[str, list[float]]] | None = None) -> Path:
     """The 'digitized graph' deliverable: original tile on top, reconstructed series
-    below on the same x-axis, optionally with ground truth overlaid."""
+    below on the same x-axis - all of a panel's series together, plus optional ground
+    truth overlay."""
     import matplotlib
 
     matplotlib.use("Agg")
@@ -132,9 +138,12 @@ def reconstruction_figure(tile: Image.Image, values: list[float], x_labels: list
     ax_img.set_title(title or "original scan", fontsize=10)
 
     xs = np.arange(1, n + 1, dtype=float)  # last-in-slice sample sits at the slice end
-    vals = np.asarray(values, dtype=float)
-    ax_plot.plot(xs, vals, color="#c22", lw=1.6, label="digitized series")
-    ax_plot.plot(xs, vals, "o", color="#c22", ms=2.5)
+    for i, (label, series_vals) in enumerate([(series_label, values),
+                                              *(more_series or [])]):
+        color = SERIES_COLORS[i % len(SERIES_COLORS)]
+        vals = np.asarray(series_vals, dtype=float)[:n]
+        ax_plot.plot(xs[:len(vals)], vals, color=color, lw=1.6, label=label)
+        ax_plot.plot(xs[:len(vals)], vals, "o", color=color, ms=2.5)
     if gt_values is not None:
         ax_plot.plot(xs, np.asarray(gt_values, dtype=float), color="#2a7", lw=1.2,
                      ls="--", label=gt_label)

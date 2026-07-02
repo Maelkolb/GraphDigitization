@@ -28,11 +28,14 @@ from test_stages_offline import _canned_responses
 
 def _write_sidecar_bad_first(run_dir, spec):
     """Wrong line (fill edge) with HIGH confidence + full coverage, correct curve lower."""
-    x0, y0, x1, _ = spec.plot
+    from graphdig.artifacts import TilesArtifact
+
+    transform = load_artifact(TilesArtifact, run_dir / "tiles.json").tiles[0].transform
+    x0, _, x1, _ = spec.plot
     xs_page = np.arange(x0, x1, 0.5)
-    good = np.column_stack([(xs_page - x0) * 2.0, spec.curve_y(xs_page) - y0])
-    flat = np.column_stack([(xs_page - x0) * 2.0,
-                            np.full(len(xs_page), spec.baseline_y - y0 - 3)])
+    good = transform.page_to_tile(np.column_stack([xs_page, spec.curve_y(xs_page)]))
+    flat = transform.page_to_tile(np.column_stack(
+        [xs_page, np.full(len(xs_page), spec.baseline_y - 3)]))
     payload = [
         {"confidence": 0.95, "points": flat.tolist()},   # wrong line, wins s_alpha
         {"confidence": 0.60, "points": good.tolist()},   # correct curve

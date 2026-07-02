@@ -74,10 +74,11 @@ def _unit_for(ctx: Context, cal: PanelCalibration, x_key: str) -> Unit:
 
 
 def build_panel_series(ctx: Context, tile: Tile, panel: Panel, cal: PanelCalibration,
-                       cand: LineCandidate,
-                       baseline: PanelBaseline | None) -> PanelSeries:
-    """Digitize one panel from one selected candidate; writes CSV + curve overlay."""
-    pid = tile.panel_id
+                       cand: LineCandidate, baseline: PanelBaseline | None,
+                       key: str | None = None, series_id: str = "s1",
+                       series_label: str = "") -> PanelSeries:
+    """Digitize one series of one panel; writes CSV + curve overlay under `key`."""
+    pid = key or tile.panel_id
     pts_tile = np.asarray(cand.points_px_tile, dtype=float).reshape(-1, 2)
     pts_page = tile.transform.tile_to_page(pts_tile)
 
@@ -131,7 +132,8 @@ def build_panel_series(ctx: Context, tile: Tile, panel: Panel, cal: PanelCalibra
                           ctx.run_dir / "overlays" / f"curve_{pid}.png")
 
     return PanelSeries(
-        csv_path=csv_rel, n=n, x_kind=cal.x_axis.kind, gaps=gaps,
+        csv_path=csv_rel, panel_id=tile.panel_id, series_id=series_id,
+        series_label=series_label, n=n, x_kind=cal.x_axis.kind, gaps=gaps,
         cand_id=cand.cand_id, baseline_applied=baseline_applied,
         confidence_chain={
             "panel": panel.confidence,
@@ -162,7 +164,9 @@ def run(ctx: Context) -> None:
     for tile in tiles_art.tiles:
         pid = tile.panel_id
         tl = lines.tiles.get(tile.tile_id)
-        if tl is None or tl.selected is None:
+        selections = (tl.selections if tl and tl.selections
+                      else ([tl.selected] if tl and tl.selected else []))
+        if not selections:
             ctx.add_flag("series", "no selected polyline", panel_id=pid, severity="blocking")
             continue
         cal = cal_art.panels.get(pid)
@@ -170,8 +174,12 @@ def run(ctx: Context) -> None:
             ctx.add_flag("series", "no usable axis calibration", panel_id=pid,
                          severity="blocking")
             continue
-        cand = next(c for c in tl.candidates if c.cand_id == tl.selected.cand_id)
         baseline = baseline_art.panels.get(pid) if baseline_art else None
-        art.panels[pid] = build_panel_series(ctx, tile, panels_by_id[pid], cal,
-                                             cand, baseline)
+        multi = len(selections) > 1
+        for sel in selections:
+            cand = next(c for c in tl.candidates if c.cand_id == sel.cand_id)
+            key = f"{pid}_{sel.series_id}" if multi else pid
+            art.panels[key] = build_panel_series(
+                ctx, tile, panels_by_id[pid], cal, cand, baseline,
+                key=key, series_id=sel.series_id, series_label=sel.series_label)
     ctx.save(art, "series.json")

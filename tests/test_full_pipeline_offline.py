@@ -21,13 +21,15 @@ from test_stages_offline import _canned_responses
 
 
 def _write_sidecar(run_dir, spec):
-    """Candidates in TILE coordinates (plot-area crop, x-stretch 2.0)."""
+    """Candidates in TILE coordinates, derived via the recorded tile transform."""
     import json
 
-    x0, y0, x1, _ = spec.plot
+    from graphdig.artifacts import TilesArtifact
+
+    transform = load_artifact(TilesArtifact, run_dir / "tiles.json").tiles[0].transform
+    x0, _, x1, _ = spec.plot
     xs_page = np.arange(x0, x1, 0.5)
-    ys_page = spec.curve_y(xs_page)
-    good = np.column_stack([(xs_page - x0) * 2.0, ys_page - y0])
+    good = transform.page_to_tile(np.column_stack([xs_page, spec.curve_y(xs_page)]))
     half = good[: len(good) // 2]
     payload = [
         {"confidence": 0.55, "points": good.tolist()},

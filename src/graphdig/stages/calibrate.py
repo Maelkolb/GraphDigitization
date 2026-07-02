@@ -42,7 +42,8 @@ from graphdig.gemini.schemas import AxisCalResponse, CurveLabelsResponse
 from graphdig.pipeline import Context
 from graphdig.render import draw_calibration
 
-CROP_MARGIN = 0.08  # fraction of panel size added around the bbox for the calibration crop
+CROP_MARGIN = 0.12  # fraction of panel size added around the bbox for the calibration crop
+#                     (generous: axis labels often sit well outside the detected panel box)
 
 
 def crop_box_for(panel: Panel, width: int, height: int):
@@ -59,7 +60,11 @@ def _provenance(result) -> Provenance:
 # ------------------------------------------------------------------ tick collection
 
 def _ticks_from_axis(ctx: Context, crop, crop_box, expect_labels: bool):
-    """Axis-tick reading, with one emphasized retry when triage promised labels."""
+    """Axis-tick reading, with one emphasized retry when triage promised labels.
+
+    Returns ticks together with their reported panel side ('left'/'right'/'unknown') so
+    dual-scale charts can be fitted per side.
+    """
     for prompt_id in ("CALIB_V1", "CALIB_V1_RETRY"):
         result = ctx.gemini.generate_json(
             images=[crop], prompt=PROMPTS[prompt_id], schema=AxisCalResponse,
@@ -68,14 +73,25 @@ def _ticks_from_axis(ctx: Context, crop, crop_box, expect_labels: bool):
         )
         if not result.ok:
             return None, [], result
-        ticks = _dedupe([
-            Tick(pixel=crop_box.y + t.pos_1000 / 1000.0 * crop_box.h,
-                 value=t.value, label_text=t.label_text)
+        pairs = _dedupe_sided([
+            (Tick(pixel=crop_box.y + t.pos_1000 / 1000.0 * crop_box.h,
+                  value=t.value, label_text=t.label_text), t.side)
             for t in result.data.y_ticks if t.legible
         ])
-        if ticks or not expect_labels:
-            return result.data, ticks, result
+        if pairs or not expect_labels:
+            return result.data, pairs, result
     return result.data, [], result  # retried and still empty
+
+
+def _dedupe_sided(pairs):
+    seen: set[tuple[int, float]] = set()
+    out = []
+    for tick, side in pairs:
+        key = (round(tick.pixel), tick.value)
+        if key not in seen:
+            seen.add(key)
+            out.append((tick, side))
+    return out
 
 
 def _ticks_from_curve_labels(ctx: Context, crop, crop_box):
@@ -108,19 +124,71 @@ def _dedupe(ticks: list[Tick]) -> list[Tick]:
 
 # ------------------------------------------------------------------------- fitting
 
+def _fit_with_scale_fallback(ticks: list[Tick], scale: str, gates,
+                             flags: list[str]):
+    """Fit with the declared scale; when unknown or clearly failing, try the other."""
+    candidates: list = []
+    primary = scale if scale in ("linear", "log") else "linear"
+    for s in dict.fromkeys([primary, "log" if primary == "linear" else "linear"]):
+        if s == "log" and any(t.value <= 0 for t in ticks):
+            continue
+        try:
+            candidates.append(fit_axis(ticks, scale=s))
+        except ValueError as exc:
+            flags.append(f"fit failed ({s}): {exc}")
+    if not candidates:
+        return None
+    best = max(candidates, key=lambda f: f.r2)
+    # keep the declared scale unless the alternative is clearly better
+    declared = next((f for f in candidates if f.scale == primary), None)
+    if (declared is not None and scale in ("linear", "log")
+            and best.scale != primary and best.r2 - declared.r2 < 0.05):
+        best = declared
+    if best.scale != primary and scale in ("linear", "log"):
+        flags.append(f"scale_auto:{best.scale}")
+    return best
+
+
+def _pick_axis_side(pairs, dual_expected: bool, flags: list[str]):
+    """On dual-scale charts fit each side separately and keep the better one.
+
+    Mixing ticks from two different scales is what breaks charts like the 1890s medical
+    diagrams (percent left, absolute counts right): one linear map cannot satisfy both,
+    so the fit collapses. Fitting per side and keeping the better-supported scale keeps
+    the calibration valid (values then refer to that scale, recorded in the flags).
+    """
+    lefts = [t for t, s in pairs if s == "left"]
+    rights = [t for t, s in pairs if s == "right"]
+    unknowns = [t for t, s in pairs if s not in ("left", "right")]
+    two_sided = len(lefts) >= 2 and len(rights) >= 2
+    if dual_expected and not two_sided:
+        flags.append("dual_axis_expected_but_sides_untagged")
+    if two_sided:
+        best_side, best_ticks, best_fit = None, None, None
+        for side, group in (("left", lefts + unknowns), ("right", rights + unknowns)):
+            try:
+                fit = fit_axis(group)
+            except ValueError:
+                continue
+            score = fit.r2 * min(1.0, fit.n_used / 3)
+            if best_fit is None or score > best_fit.r2 * min(1.0, best_fit.n_used / 3):
+                best_side, best_ticks, best_fit = side, group, fit
+        if best_side is not None:
+            flags.append(f"dual_axis:{best_side}_scale_used")
+            return best_ticks
+    return [t for t, _ in pairs]
+
+
 def _fit_y_axis(ctx: Context, ticks: list[Tick], scale: str, unit_text: str,
-                confidence: float, panel_id: str, method_flag: str | None):
+                confidence: float, panel_id: str, pre_flags: list[str]):
     from graphdig.units import canonicalize
 
     gates = ctx.cfg.gates
     unit = canonicalize(unit_text)
-    flags: list[str] = [method_flag] if method_flag else []
+    flags: list[str] = list(pre_flags)
     fit = None
     if len(ticks) >= 2:
-        try:
-            fit = fit_axis(ticks, scale=scale)
-        except ValueError as exc:
-            flags.append(f"fit failed: {exc}")
+        fit = _fit_with_scale_fallback(ticks, scale, gates, flags)
 
     unit_model = UnitModel(raw=unit_text, canonical=unit.canonical, to_mm=unit.to_mm)
     if fit is None:
@@ -212,21 +280,22 @@ def _calibrate_panel(ctx: Context, page: Image.Image, panel: Panel,
     crop = page.crop((crop_box.x, crop_box.y, crop_box.right, crop_box.bottom))
     crop.save(ctx.run_dir / "panels" / f"{panel.panel_id}.png")
 
+    pre_flags: list[str] = []
     use_curve_labels = cls.value_labels_on_curve and not cls.y_axis_labels_present
     if use_curve_labels:
         resp, ticks, result = _ticks_from_curve_labels(ctx, crop, crop_box)
         unit_text = resp.unit_text if resp else ""
         scale = cls.y_scale_guess
         confidence = resp.confidence if resp else 0.0
-        method_flag = "curve_labels"
+        pre_flags.append("curve_labels")
         x_axis = _build_x_axis("unknown", "", "", panel, confidence)
     else:
-        resp, ticks, result = _ticks_from_axis(ctx, crop, crop_box,
+        resp, pairs, result = _ticks_from_axis(ctx, crop, crop_box,
                                                expect_labels=cls.y_axis_labels_present)
+        ticks = _pick_axis_side(pairs, cls.dual_y_axis, pre_flags)
         unit_text = resp.y_unit_text if resp else ""
         scale = resp.y_scale if resp else "linear"
         confidence = resp.confidence if resp else 0.0
-        method_flag = None
         x_axis = (_build_x_axis(resp.x_kind, resp.x_start_label, resp.x_end_label,
                                 panel, confidence) if resp
                   else _build_x_axis("unknown", "", "", panel, 0.0))
@@ -237,7 +306,7 @@ def _calibrate_panel(ctx: Context, page: Image.Image, panel: Panel,
                 ticks, result = ticks2, result2
                 unit_text = unit_text or (resp2.unit_text if resp2 else "")
                 confidence = max(confidence, resp2.confidence if resp2 else 0.0)
-                method_flag = "curve_labels"
+                pre_flags.append("curve_labels")
 
     if result is not None and not result.ok:
         ctx.add_flag("calibrate", f"Gemini call failed: {result.error}",
@@ -245,7 +314,7 @@ def _calibrate_panel(ctx: Context, page: Image.Image, panel: Panel,
         return panel.panel_id, PanelCalibration(review_required=True), _provenance(result)
 
     y_axis, fit = _fit_y_axis(ctx, ticks, scale, unit_text, confidence,
-                              panel.panel_id, method_flag)
+                              panel.panel_id, pre_flags)
     cal = PanelCalibration(y_axis=y_axis, x_axis=x_axis,
                            review_required="unusable" in y_axis.flags)
     draw_calibration(page, panel, cal, fit,

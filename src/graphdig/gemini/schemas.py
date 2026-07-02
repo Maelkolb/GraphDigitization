@@ -55,6 +55,18 @@ class TriageResponse(BaseModel):
         description="true if numeric values are written directly along the curve/points "
                     "instead of (or in addition to) an axis scale")
     y_scale_guess: Literal["linear", "log", "unknown"] = "unknown"
+    dual_y_axis: bool = Field(
+        default=False,
+        description="true if the chart carries TWO DIFFERENT vertical scales "
+                    "(e.g. percent on the left, absolute counts on the right)")
+    n_series: int = Field(
+        default=1,
+        description="number of distinct data curves/series drawn in each panel")
+    series_labels: list[str] = Field(
+        default_factory=list,
+        description="name of each data series from the legend or line labels, in a "
+                    "consistent order (e.g. ['A Geryk pump', 'B motor', 'C hand']); "
+                    "empty if unlabelled")
     panels: list[GPanel]
     # page-level metadata (was a separate call)
     title: str = ""
@@ -78,6 +90,10 @@ class GTick(BaseModel):
     value: float = Field(description="numeric value of the tick label")
     label_text: str = Field(default="", description="the label exactly as printed")
     legible: bool = Field(default=True, description="false if partially cut off or uncertain")
+    side: Literal["left", "right", "unknown"] = Field(
+        default="unknown",
+        description="which edge of the panel this tick belongs to (vertical-axis ticks "
+                    "on charts with two scales MUST be tagged left or right)")
 
 
 class AxisCalResponse(BaseModel):
@@ -145,4 +161,19 @@ class PickResponse(BaseModel):
     best_cand_id: int = Field(description="id of the candidate polyline that best follows "
                                           "the actually drawn data curve")
     reason: str = ""
+    confidence: float = 0.0
+
+
+class GAssignment(BaseModel):
+    cand_id: int
+    series_label: str = Field(description="which data series this candidate follows, "
+                                          "using the given series names; 'artifact' if it "
+                                          "follows no real data curve (gridline, fill "
+                                          "edge, duplicate)")
+
+
+class AssignResponse(BaseModel):
+    """Maps extracted candidate polylines to the chart's data series."""
+
+    assignments: list[GAssignment]
     confidence: float = 0.0

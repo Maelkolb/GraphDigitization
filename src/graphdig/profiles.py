@@ -14,6 +14,7 @@ class Profile(BaseModel):
     panel_prompt_variant: str = "generic"  # selects prompt flavor in gemini/prompts.py
     refine_x_edges: bool = False  # snap panel x-edges to printed gridlines (day grids)
     check_orientation: bool = True  # dedicated 4-way upright check before triage
+    coverage_viable: float | None = None  # None = use Gates default (danube-tuned 0.985)
 
 
 DANUBE = Profile(
@@ -27,6 +28,8 @@ DANUBE = Profile(
     check_orientation=False,  # archival tiles/sheets are consistently upright
 )
 
-GENERIC = Profile(name="generic")
+# arbitrary charts: curves legitimately start/end inside the plot area, so the
+# danube-tuned coverage bound (full-month curves) is far too strict
+GENERIC = Profile(name="generic", coverage_viable=0.90)
 
 PROFILES: dict[str, Profile] = {p.name: p for p in (DANUBE, GENERIC)}

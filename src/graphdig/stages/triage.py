@@ -99,6 +99,7 @@ def _to_panels(resp: TriageResponse, width: int, height: int,
     for gp in resp.panels:
         bbox = bbox_1000_to_px(Box1000(**gp.box.model_dump()), width, height, min_size=20)
         plot = bbox_1000_to_px(Box1000(**gp.plot_area.model_dump()), width, height, min_size=10)
+        plot = _clamp_plot_area(plot, bbox)
         panels.append(Panel(
             panel_id="", label=gp.label, bbox_px=bbox, plot_area_px=plot,
             x_extent_hint=XExtentHint(kind="unknown", start_label=gp.x_start_label,
@@ -122,6 +123,19 @@ def _to_panels(resp: TriageResponse, width: int, height: int,
     for i, p in enumerate(kept, start=1):
         p.panel_id = f"p{i:02d}"
     return kept, flags
+
+
+def _clamp_plot_area(plot: BoxPx, bbox: BoxPx) -> BoxPx:
+    """The plot area must sit inside the panel bbox; degenerate answers fall back to it."""
+    x0 = min(max(plot.x, bbox.x), bbox.right - 1)
+    y0 = min(max(plot.y, bbox.y), bbox.bottom - 1)
+    x1 = max(min(plot.right, bbox.right), x0 + 1)
+    y1 = max(min(plot.bottom, bbox.bottom), y0 + 1)
+    clamped = BoxPx(x=x0, y=y0, w=x1 - x0, h=y1 - y0)
+    # implausibly small plot areas (< 25% of the bbox) are usually hallucinated
+    if clamped.w * clamped.h < 0.25 * bbox.w * bbox.h:
+        return bbox
+    return clamped
 
 
 def _refine_x_edges(page: Image.Image, panels: list[Panel]) -> None:
@@ -187,8 +201,16 @@ def run(ctx: Context) -> None:
         chart_kind=resp.chart_kind, page_kind=resp.page_kind,
         y_axis_labels_present=resp.y_axis_labels_present,
         value_labels_on_curve=resp.value_labels_on_curve,
-        y_scale_guess=resp.y_scale_guess, confidence=resp.confidence,
+        y_scale_guess=resp.y_scale_guess,
+        dual_y_axis=resp.dual_y_axis,
+        n_series=max(1, resp.n_series),
+        series_labels=[s for s in resp.series_labels if s][:max(1, resp.n_series)],
+        confidence=resp.confidence,
     )
+    if classification.n_series > 1:
+        ctx.add_flag("triage", f"multi-series chart: {classification.n_series} curves "
+                     f"({', '.join(classification.series_labels) or 'unlabelled'})",
+                     severity="info")
     if resp.chart_kind not in DIGITIZABLE_KINDS:
         ctx.add_flag("triage", f"page classified as '{resp.chart_kind}' - "
                      "not a digitizable line chart", severity="blocking")

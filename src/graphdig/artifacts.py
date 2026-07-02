@@ -74,6 +74,9 @@ class PageClassification(ArtifactModel):
     y_axis_labels_present: bool = True
     value_labels_on_curve: bool = False
     y_scale_guess: Literal["linear", "log", "unknown"] = "unknown"
+    dual_y_axis: bool = False
+    n_series: int = 1
+    series_labels: list[str] = Field(default_factory=list)
     confidence: float = 0.0
 
 
@@ -235,11 +238,14 @@ class Selection(ArtifactModel):
     alpha_coverage: float = 0.69
     gemini_pick: int | None = None
     agreement: bool | None = None
+    series_id: str = "s1"
+    series_label: str = ""
 
 
 class TileLines(ArtifactModel):
     candidates: list[LineCandidate] = Field(default_factory=list)
-    selected: Selection | None = None
+    selected: Selection | None = None  # first/primary selection (back-compat)
+    selections: list[Selection] = Field(default_factory=list)  # one per data series
     rejected: list[int] = Field(default_factory=list)  # cand_ids vetoed by QC reselection
     error: str | None = None
 
@@ -255,6 +261,9 @@ class LinesArtifact(ArtifactModel):
 
 class PanelSeries(ArtifactModel):
     csv_path: str
+    panel_id: str = ""
+    series_id: str = "s1"
+    series_label: str = ""
     n: int = 0
     x_kind: Literal["date", "numeric", "unknown"] = "unknown"
     gaps: list[str] = Field(default_factory=list)

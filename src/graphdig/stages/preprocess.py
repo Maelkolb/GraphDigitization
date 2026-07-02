@@ -15,6 +15,9 @@ from graphdig.geometry import Transform2D
 from graphdig.pipeline import Context
 from graphdig.runs import sha256_file
 
+EXTRACT_MARGIN = 0.03  # safety margin around the plot area so curves touching the frame
+#                        are not clipped; resampling still uses the exact plot-area extent
+
 
 def run(ctx: Context) -> None:
     panels_art = ctx.load(PanelsArtifact, "panels.json")
@@ -23,7 +26,10 @@ def run(ctx: Context) -> None:
 
     art = TilesArtifact()
     for panel in panels_art.panels:
-        area = panel.plot_area_px or panel.bbox_px
+        plot = panel.plot_area_px or panel.bbox_px
+        area = plot.expand(max(4, int(EXTRACT_MARGIN * plot.w)),
+                           max(4, int(EXTRACT_MARGIN * plot.h)),
+                           page.width, page.height)
         crop = page.crop((area.x, area.y, area.right, area.bottom))
         if stretch != 1.0:
             crop = crop.resize((max(1, round(crop.width * stretch)), crop.height),

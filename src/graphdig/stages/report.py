@@ -23,12 +23,7 @@ def _load_optional(ctx: Context, cls, name: str):
     return load_artifact(cls, path) if path.exists() else None
 
 
-def _series_plot(ctx: Context, pid: str, csv_rel: str) -> str | None:
-    """Reconstruction figure: scan on top, digitized series below, shared x-axis."""
-    from PIL import Image
-
-    from graphdig.render import reconstruction_figure
-
+def _read_series_csv(ctx: Context, csv_rel: str) -> tuple[list[str], list[float], str]:
     xs, values, unit = [], [], ""
     with open(ctx.run_dir / csv_rel, encoding="utf-8") as fh:
         for row in csv.DictReader(fh):
@@ -36,15 +31,32 @@ def _series_plot(ctx: Context, pid: str, csv_rel: str) -> str | None:
             values.append(float(v) if v else math.nan)
             xs.append(row["x_key"])
             unit = unit or row["native_unit"]
-    if not values:
-        return None
-    tile_path = ctx.run_dir / "tiles" / f"{pid}.png"
+    return xs, values, unit
+
+
+def _panel_reconstruction(ctx: Context, panel_id: str, entries) -> str | None:
+    """One reconstruction figure per panel with ALL of its digitized series."""
+    from PIL import Image
+
+    from graphdig.render import reconstruction_figure
+
+    tile_path = ctx.run_dir / "tiles" / f"{panel_id}.png"
     if not tile_path.exists():
         return None
-    rel = f"overlays/reconstruction_{pid}.png"
-    reconstruction_figure(Image.open(tile_path), values, xs, unit or "?",
-                          ctx.run_dir / rel,
-                          title=f"{ctx.manifest.run_id} — {pid}")
+    _primary_key, primary = entries[0]
+    xs, values, unit = _read_series_csv(ctx, primary.csv_path)
+    if not values:
+        return None
+    more = []
+    for _key, ps in entries[1:]:
+        _xs2, vals2, _u2 = _read_series_csv(ctx, ps.csv_path)
+        more.append((ps.series_label or ps.series_id, vals2))
+    rel = f"overlays/reconstruction_{panel_id}.png"
+    reconstruction_figure(
+        Image.open(tile_path), values, xs, unit or "?", ctx.run_dir / rel,
+        title=f"{ctx.manifest.run_id} — {panel_id}",
+        series_label=(primary.series_label or "digitized series"),
+        more_series=more or None)
     return rel
 
 
@@ -109,20 +121,25 @@ def run(ctx: Context) -> None:
 
     if series:
         lines_out += ["## Series", ""]
-        for pid, ps in sorted(series.panels.items()):
-            plot_rel = _series_plot(ctx, pid, ps.csv_path)
-            lines_out.append(f"### {pid}")
-            lines_out.append(f"- csv: `{ps.csv_path}` ({ps.n} samples, "
-                             f"{len(ps.gaps)} gaps, baseline "
-                             f"{'applied' if ps.baseline_applied else 'off'})")
-            chain = ", ".join(f"{k}={v:.2f}" for k, v in ps.confidence_chain.items())
-            lines_out.append(f"- confidence chain: {chain}")
-            if qc and pid in qc.panels:
-                q = qc.panels[pid]
-                lines_out.append(f"- QC: **{q.verdict}** {q.reason}")
-            lines_out.append(f"\n![curve](overlays/curve_{pid}.png)")
+        by_panel: dict[str, list] = {}
+        for key, ps in sorted(series.panels.items()):
+            by_panel.setdefault(ps.panel_id or key, []).append((key, ps))
+        for panel_id, entries in sorted(by_panel.items()):
+            plot_rel = _panel_reconstruction(ctx, panel_id, entries)
+            lines_out.append(f"### {panel_id}"
+                             + (f" ({len(entries)} series)" if len(entries) > 1 else ""))
+            for key, ps in entries:
+                label = f" **{ps.series_label}**" if ps.series_label else ""
+                lines_out.append(f"-{label} csv: `{ps.csv_path}` ({ps.n} samples, "
+                                 f"{len(ps.gaps)} gaps, baseline "
+                                 f"{'applied' if ps.baseline_applied else 'off'})")
+                chain = ", ".join(f"{k}={v:.2f}" for k, v in ps.confidence_chain.items())
+                lines_out.append(f"  - confidence chain: {chain}")
+                if qc and key in qc.panels:
+                    q = qc.panels[key]
+                    lines_out.append(f"  - QC: **{q.verdict}** {q.reason}")
             if plot_rel:
-                lines_out.append(f"![series]({plot_rel})")
+                lines_out.append(f"\n![series]({plot_rel})")
             lines_out.append("")
 
     if review and review.flags:

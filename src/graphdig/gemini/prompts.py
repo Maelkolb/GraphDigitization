@@ -21,7 +21,9 @@ In ONE pass, characterize this page:
    horizontally AND upright. Report 0 only if the page is already upright.
 2. Classification: what kind of page this is (line chart, multi-panel line chart, table,
    text page, ...); whether the vertical axis carries readable numeric tick labels; whether
-   numeric values are written directly along the curve/points; linear or logarithmic scale.
+   numeric values are written directly along the curve/points; linear or logarithmic scale;
+   whether there are TWO different vertical scales (left/right); how many distinct data
+   curves each panel contains and their names from the legend or line labels.
 3. Panels: every chart panel (a region with a value axis and a data curve). For each report
    its outer bounding box (including axis tick labels), its inner plot area (the data region
    strictly inside the axes), the panel title/label verbatim, and the first and last tick
@@ -54,7 +56,9 @@ Read the axis calibration:
 1. Vertical axis: report EVERY legible numeric tick label with its exact vertical position
    (the y of the gridline or label center) and its numeric value. Include the printed unit
    text if any. State whether the scale is linear or logarithmic. Mark ticks you cannot read
-   with certainty as not legible instead of guessing.
+   with certainty as not legible instead of guessing. Tag each tick with the panel edge it
+   belongs to (left/right) - this matters on charts that carry two different vertical
+   scales; never mix values from two scales without tagging their sides.
 2. Horizontal axis: state whether it encodes calendar time or plain numbers, give the labels
    at its left and right ends verbatim, and report numeric ticks if present.
 Report values exactly as printed - do not convert units.
@@ -92,8 +96,20 @@ PICK_V1 = """This image shows a chart tile from a historical scan with several a
 extracted candidate curves drawn in distinct colors; the legend maps colors to candidate ids.
 Pick the candidate that best follows the actually drawn data curve over the full width."""
 
+ASSIGN_V1 = """This image shows a chart tile from a historical scan with several
+automatically extracted candidate curves drawn in distinct colors; the legend maps colors
+to candidate ids. The chart contains these data series: {series_list}.
+For each candidate, state which data series it follows (using exactly the given names), or
+'artifact' if it follows no real data curve (a gridline, a fill edge, a duplicate of
+another candidate). Each series name should be assigned to at most one candidate - the one
+that follows it best."""
+
+QC_SERIES_SUFFIX = """
+Judge specifically the curve that represents the data series: {series_label}."""
+
 PROMPTS: dict[str, str] = {
     "ORIENT_V1": ORIENT_V1,
+    "ASSIGN_V1": ASSIGN_V1,
     "TRIAGE_V1_GENERIC": TRIAGE_V1_GENERIC,
     "TRIAGE_V1_DANUBE": TRIAGE_V1_DANUBE,
     "CALIB_V1": CALIB_V1,
